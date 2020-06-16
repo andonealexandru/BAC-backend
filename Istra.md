@@ -1,3 +1,0 @@
-```
-Fisier de test
-```
