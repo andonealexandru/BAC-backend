@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from keras.models import Sequential
 from keras import layers
+import matplotlib.pyplot as plt
 
 
 # custom layer for transforming rnn output (32, 1, 512) into (32, 80) for ctc layer
@@ -63,20 +64,29 @@ class NeuralNetwork:
                 RnnToCtc()
             ]
         )
-
-        # model.add(layers.Lambda(rnn_to_ctc(model.layers[12].output)))
         self.model.summary()
-        # trebuie sa aplicam conv2d pe outputul anterior
-        # atrous-conv2d primeste ca aparametrii:
-        # value - pe ce aplica
-        # filters - e [filter_height, filter_width, in_channels, out_channels]
-        # rate = 1 => conv2d simplu
 
+    def compile(self):
+        self.model.compile(
+            optimizer='adam',
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=['accuracy']
+        )
 
-        # kernel = tf.Variable(tf.random.truncated_normal([1, 1, 512, 80], stddev=0.1))
-        # print(kernel.shape)
-        # rnnOut3d = tf.squeeze(tf.nn.atrous_conv2d(value=model.layers[12].output, filters=kernel, rate=1, padding='SAME'),
-        #                       axis=[2])
-        #
-        # ctcIn3dTBC = tf.transpose(rnnOut3d, [1, 0, 2])
-        # print(rnnOut3d.shape)
+    def train(self, train_images, train_labels, test_images, test_labels):
+        self.compile()
+        history = self.model.fit(
+            train_images,
+            train_labels,
+            epochs=10,
+            validation_data=(test_images, test_labels)
+        )
+
+        # show a graphic to see accuracy
+        plt.plot(history.history['accuracy'], label='accuracy')
+        plt.plot(history.history['val_accuracy'], label='val_accuracy')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.ylim([0.5, 1])
+        plt.legend(loc='lower right')
+        plt.show()
