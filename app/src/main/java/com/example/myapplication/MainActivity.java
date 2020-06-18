@@ -18,15 +18,26 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int IMAGE_CAPTURE_CODE = 1001;
     public static final int GALLERY_PERMISSION_CODE = 1002;
     public static final int GALLERY_CODE = 1003;
-    Button btn_start, btn_capture, btn_select;
+    Button btn_start, btn_capture, btn_select, btn_send;
     RadioGroup radioGroup;
     RadioButton selectedButton;
     ImageView imgView;
@@ -49,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         btn_capture = findViewById(R.id.btnCapture);
         imgView = findViewById(R.id.imgView);
         btn_select = findViewById(R.id.button_select);
+        btn_send = findViewById(R.id.sendImageButton);
 
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 else openCamera(); // nu e nevoie de acces, deschidem camera
             }
         });
+
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectServer();
+            }
+        });
     }
 
     private void openGallery(){
@@ -125,6 +144,60 @@ public class MainActivity extends AppCompatActivity {
             else Toast.makeText(MainActivity.this, "Permission denied...", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    void connectServer(){
+
+        String postUrl= "http://192.168.1.2:5000/";
+
+        String postBodyText="Hello";
+        MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
+        RequestBody postBody = RequestBody.create(mediaType, postBodyText);
+
+        postRequest(postUrl, postBody);
+    }
+
+    void postRequest(String postUrl, RequestBody postBody) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(postBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Cancel the post on failure.
+                call.cancel();
+
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView responseText = findViewById(R.id.statusTextView);
+                        responseText.setText("Failed to Connect to Server");
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView responseText = findViewById(R.id.statusTextView);
+                        try {
+                            responseText.setText(response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
