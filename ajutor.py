@@ -1,3 +1,3 @@
-import main
+import ModelFunctional
 
-NN = main.NeuralNetwork()
+NN = ModelFunctional.NeuralNetwork(80, 50)

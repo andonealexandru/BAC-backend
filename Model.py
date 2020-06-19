@@ -5,7 +5,6 @@ from keras import layers
 import matplotlib.pyplot as plt
 
 
-# custom layer for transforming rnn output (32, 1, 512) into (32, 80) for ctc layer
 class RnnToCtc(layers.Layer):
     def __init__(self):
         super(RnnToCtc, self).__init__()
