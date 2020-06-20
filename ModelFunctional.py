@@ -59,7 +59,7 @@ class NeuralNetwork:
     def compile(self):
         self.model.compile(
             optimizer='adam',
-            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),  #trebuie modificat
+            loss={'ctc', lambda y_true, y_pred:y_pred},
             metrics=['accuracy']
         )
 
