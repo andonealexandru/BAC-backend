@@ -4,8 +4,8 @@ from bitmap import BitMap
 import base64
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = "mongodb://localhost:27017/bac_test"
-mongo = PyMongo(app)
+# app.config['MONGO_URI'] = "mongodb://localhost:27017/bac_test"
+# mongo = PyMongo(app)
 
 
 @app.route("/upload", methods=['POST'])
@@ -18,4 +18,4 @@ def handle_request():
     return "ok"
 
 
-app.run(host="0.0.0.0", debug=False)
+app.run(debug=False)
