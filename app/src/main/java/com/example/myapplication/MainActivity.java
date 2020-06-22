@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectServer();
+                connectServer(null);
             }
         });
     }
 
     private void openGallery(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         intent.setType("image/*");
         startActivityForResult(intent, GALLERY_CODE);
     }
@@ -146,13 +153,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void connectServer(){
+    void connectServer(String data){
 
-        String postUrl= "http://192.168.1.2:5000/";
+        String postUrl= "http://192.168.1.2:5000/upload";
 
-        String postBodyText="Hello";
-        MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
-        RequestBody postBody = RequestBody.create(mediaType, postBodyText);
+
+        JSONObject imageJSON = new JSONObject();
+        try {
+            imageJSON.put("key", data);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
+
+
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+        RequestBody postBody = RequestBody.create(mediaType, imageJSON.toString());
+
 
         postRequest(postUrl, postBody);
     }
@@ -168,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, final IOException e) {
                 // Cancel the post on failure.
                 call.cancel();
 
@@ -177,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         TextView responseText = findViewById(R.id.statusTextView);
-                        responseText.setText("Failed to Connect to Server");
+                        responseText.setText("Failed to Connect to Server" + e.getMessage());
                     }
                 });
             }
@@ -200,11 +217,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp=Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK)
+        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
             imgView.setImageURI(image_uri);
+            InputStream is = null;
+            try {
+                is = getContentResolver().openInputStream(image_uri);
+                Bitmap imgBitmap = BitmapFactory.decodeStream(is);
+                connectServer(BitMapToString(imgBitmap));
+            } catch (FileNotFoundException e) {
+                Toast.makeText(MainActivity.this, "Oops", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
         if (requestCode == GALLERY_CODE && resultCode == RESULT_OK)
         {
             if(Build.VERSION.SDK_INT >= 16) {
@@ -230,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         InputStream is = getContentResolver().openInputStream(imageURI);
                         Bitmap newBitmap = BitmapFactory.decodeStream(is);
-
+                        connectServer(BitMapToString(newBitmap));
                         bitmaps.add(newBitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -259,4 +294,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

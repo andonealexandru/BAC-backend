@@ -1,1 +1,6 @@
-http://127.0.0.1:5000/
+POST http://127.0.0.1:5000/upload
+Content-Type: application/json
+
+{
+    "key": "1242341234413413413"
+}
