@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 import pickle
 from tensorflow.keras import layers
 from tensorflow import keras
-
+import Alphabet as alp
+from math import log
 
 class NeuralNetwork:
 
     def __init__(self, max_text_len):
         self.setup_model(max_text_len)
+
 
     @staticmethod
     def setup_model(max_text_len):
@@ -35,7 +37,7 @@ class NeuralNetwork:
         # sa avem nevoie de doua layere
         resh2 = layers.Reshape((32, 1, 512), name='resahpeForCtc')(bid)
 
-        kernel = tf.Variable(tf.random.truncated_normal([1, 1, 512, 80], stddev=0.1))
+        kernel = tf.Variable(tf.random.truncated_normal([1, 1, 512, alp.alp_len + 1], stddev=0.1))
         rnn_to_ctc = tf.squeeze(tf.nn.atrous_conv2d(value=resh2, filters=kernel, rate=1, padding='SAME'), axis=[2],
                                 name='squeeze_pentru_ctc')
 
@@ -43,17 +45,17 @@ class NeuralNetwork:
         ctcin3dtbc = tf.transpose(rnn_to_ctc, [1, 0, 2])
 
         # CTC
-        # y_true = keras.Input(name='truth_labels', shape=(max_text_len,))  # (samples, max_string_length)
-        # y_pred = rnn_to_ctc  # am observat ca multa lume foloseste outputul de la inca un layer de activation(softmax)
-        # # sau time-distributed, nu stiu daca e necesar...
-        # input_length = keras.Input(name='input_length', shape=(1,))  # lungimea cuvantului din imagine din y_pred
-        # label_length = keras.Input(name='label_length', shape=(1,))  # lungimea cuvantului din imaginea din y_true
-        # loss_out = layers.Lambda(
-        #     ctc_loss, output_shape=(1,), name='ctc'
-        # )([y_pred, y_true, label_length, input_length])
+        y_true = keras.Input(name='truth_labels', shape=(max_text_len,))  # (samples, max_string_length)
+        y_pred = rnn_to_ctc  # am observat ca multa lume foloseste outputul de la inca un layer de activation(softmax)
+        # sau time-distributed, nu stiu daca e necesar...
+        input_length = keras.Input(name='input_length', shape=(1,))  # lungimea cuvantului din imagine din y_pred
+        label_length = keras.Input(name='label_length', shape=(1,))  # lungimea cuvantului din imaginea din y_true
+        loss_out = layers.Lambda(
+            ctc_loss, output_shape=(1,), name='ctc'
+        )([y_pred, y_true, label_length, input_length])
 
-        #model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
-        model = keras.Model(inputs=inputs, outputs=rnn_to_ctc)
+        model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
+        #model = keras.Model(inputs=inputs, outputs=rnn_to_ctc)
         model.summary()
         save_model(model)
 
@@ -63,11 +65,10 @@ class NeuralNetwork:
     @staticmethod
     def compile():
         model = retrieve_model()
-        model_loss = ctc_loss_fnct(50, 32)
 
         model.compile(
             optimizer='adam',
-            loss=model_loss,
+            loss={'ctc', lambda y_true, y_pred: y_pred},
             metrics=['accuracy']
         )
 
@@ -135,11 +136,6 @@ class NeuralNetwork:
             with open('acc.pickle', 'wb') as f:
                 pickle.dump(history.history['accuracy'], f)
 
-
-def ctc_loss_fnct(label_length, input_length):
-    def ctc(y_true, y_pred):
-        return ctc_loss([y_pred, y_true, label_length, input_length])
-    return ctc
 
 
 def ctc_loss(args):
