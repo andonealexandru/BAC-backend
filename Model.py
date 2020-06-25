@@ -7,6 +7,7 @@ import pickle
 from tensorflow.keras import layers
 from tensorflow import keras
 import Alphabet as alp
+from BeamSearch import ctcBeamSearch
 from math import log
 
 class NeuralNetwork:
@@ -42,7 +43,7 @@ class NeuralNetwork:
                                 name='squeeze_pentru_ctc')
 
         # din BxTxC in TxBxC - pentru beam search
-        ctcin3dtbc = tf.transpose(rnn_to_ctc, [1, 0, 2])
+        # ctcin3dtbc = tf.transpose(rnn_to_ctc, [1, 0, 2])
 
         # CTC
         y_true = keras.Input(name='truth_labels', shape=(max_text_len,))  # (samples, max_string_length)
@@ -55,7 +56,7 @@ class NeuralNetwork:
         )([y_pred, y_true, label_length, input_length])
 
         model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
-        #model = keras.Model(inputs=inputs, outputs=rnn_to_ctc)
+        # model = keras.Model(inputs=inputs, outputs=rnn_to_ctc)
         model.summary()
         save_model(model)
 
@@ -107,8 +108,13 @@ class NeuralNetwork:
     @staticmethod
     def predict(image):
         model = retrieve_model()
-        prediction = model.predict(image)
+        model2 = keras.Model(model.input, model.get_layer('tf_op_layer_squeeze_pentru_ctc').output)
+        prediction = model2.predict(image)
         return prediction
+
+    def return_text(self, image):
+        mat = self.predict(image)
+        return ctcBeamSearch(mat, alp.alphabet, None)
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):
