@@ -18,7 +18,7 @@ class NeuralNetwork:
 
     @staticmethod
     def setup_model(max_text_len):
-        inputs = keras.Input(shape=(128, 32, 3))
+        inputs = keras.Input(shape=(128, 32, 3), name='input')
 
         # layers pentru CNN
         conv1 = layers.Conv2D(32, 5, activation='relu', padding='SAME', name="layer1")(inputs)
@@ -46,11 +46,11 @@ class NeuralNetwork:
         # ctcin3dtbc = tf.transpose(rnn_to_ctc, [1, 0, 2])
 
         # CTC
-        y_true = keras.Input(name='truth_labels', shape=(max_text_len,))  # (samples, max_string_length)
+        y_true = keras.Input(name='truth_labels', shape=[32])  # (samples, max_string_length)
         y_pred = rnn_to_ctc  # am observat ca multa lume foloseste outputul de la inca un layer de activation(softmax)
         # sau time-distributed, nu stiu daca e necesar...
-        input_length = keras.Input(name='input_length', shape=(1,))  # lungimea cuvantului din imagine din y_pred
-        label_length = keras.Input(name='label_length', shape=(1,))  # lungimea cuvantului din imaginea din y_true
+        input_length = keras.Input(name='input_length', shape=[1])  # lungimea cuvantului din imagine din y_pred
+        label_length = keras.Input(name='label_length', shape=[1])  # lungimea cuvantului din imaginea din y_true
         loss_out = layers.Lambda(
             ctc_loss, output_shape=(1,), name='ctc'
         )([y_pred, y_true, label_length, input_length])
@@ -58,6 +58,7 @@ class NeuralNetwork:
         model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
         # model = keras.Model(inputs=inputs, outputs=rnn_to_ctc)
         model.summary()
+
         save_model(model)
 
         # self.model = tf.keras.Model(inputs=self.inputs, outputs=rnntoCtc, name='retea')
@@ -69,26 +70,52 @@ class NeuralNetwork:
 
         model.compile(
             optimizer='adam',
-            loss={'ctc', lambda y_true, y_pred: y_pred},
+            loss={'ctc': lambda y_true, y_pred: y_pred},
             metrics=['accuracy']
         )
 
         save_model(model)
 
-    def train(self, train_images, train_labels, test_images, test_labels):
+    def train(self, train_images, train_labels, label_length, input_length, test_images, test_labels):
         # compile the model
-        self.compile()
+        #self.compile()
 
         model = retrieve_model()
+        train_images = np.asarray(train_images)
+        train_labels = np.asarray(train_labels)
+        label_length = np.asarray(label_length)
+        input_length = np.asarray(input_length)
+        print(train_images.shape)
+        print(train_labels.shape)
+        print(label_length.shape)
+        print(input_length.shape)
+
+        inputs = {
+            'input': train_images,
+            'truth_labels': train_labels,
+            'input_length': input_length,
+            'label_length': label_length
+
+        }
+        print('Compiling')
+        model.compile(
+            optimizer='adam',
+            loss={'ctc': lambda y_true, y_pred: y_pred},
+            metrics=['accuracy']
+        )
+        print('Done compiling')
 
         # train the model
+        outputs = {'ctc': np.zeros([32])}
+        print('Fitting')
         history = model.fit(
-            train_images,
-            train_labels,
+            inputs,
+            outputs,
+            batch_size=32,
             epochs=10,
-            validation_data=(test_images, test_labels)
+            # validation_data=(test_images, test_labels)
         )
-
+        print('Done')
         # saving accuracy in acc.pickle file
         accuracy = history.history['accuracy']
         with open('acc.pickle', 'wb') as f:
@@ -98,7 +125,7 @@ class NeuralNetwork:
 
         # show a graphic to see accuracy
         plt.plot(history.history['accuracy'], label='accuracy')
-        plt.plot(history.history['val_accuracy'], label='val_accuracy')
+        # plt.plot(history.history['val_accuracy'], label='val_accuracy')
         plt.xlabel('Epoch')
         plt.ylabel('Accuracy')
         plt.ylim([0.5, 1])
@@ -145,7 +172,10 @@ class NeuralNetwork:
 
 
 def ctc_loss(args):
-    y_pred, labels, label_length, input_length = args
+    y_pred = args[0]
+    labels = args[1]
+    label_length = args[2]
+    input_length = args[3]
     return tf.keras.backend.ctc_batch_cost(labels, y_pred, input_length, label_length)
 
 
