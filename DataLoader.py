@@ -8,21 +8,24 @@ class Data:
         self.label = lbl
         self.label_length = len(lbl)
 
+
 training_data = []
-X = []
-y = []
+Xsir = []
+labels = []
 label_length = []
+input_length = []
+
 
 def text_to_label(text):
     alphabet = ' {}[]!”#&’()*+,-./|\\0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     ret = []
-    for char in text:
-        ret.append(alphabet.find(char))
+    for idx in range(0, 32):
+        if idx < len(text):
+            ret.append(alphabet.find(text[idx]))
+        else:
+            ret.append(len(alphabet))  # blank character
     return ret
 
-def init_input_length():
-    inp = numpy.ones(len(label_length), dtype=int)*32
-    return inp
 
 def add_list(root_path, data, line):
     words = line.split()
@@ -34,10 +37,7 @@ def add_list(root_path, data, line):
     data.append(Data(path_to_img, line_label))
 
 
-
-
 def init_train_dataset(path_to_data_root):
-
 
     path_to_trainset = 'D:/Handwriting DB/New folder/short_trainset.txt'
     with open(path_to_trainset, "r") as train_file:
@@ -60,30 +60,31 @@ def init_train_dataset(path_to_data_root):
         elif found_at_least_once:
             index_train += 1
             found_at_least_once = False
-            if index_train > 2:
+            print(str(len(txt_train_file)) + ' ' + str(index_train))
+            if index_train >= len(txt_train_file):
                 return
+
             prefix_str = line[:(len(txt_train_file[index_train]) - 1)]
+
             if prefix_str == txt_train_file[index_train][:len(prefix_str)]:
                 found_at_least_once = True
                 add_list(path_to_data_root, training_data, line)
-    print(index_train)
 
 def feed_NN():
     """returneaza imagini, label, label_length, input_lengh"""
     for data in training_data:
         image = resize_img(data.path_to_image, "images/save_me_here.png", False)
-        print("Processing image " + data.path_to_image)
-        img_as_array = numpy.asarray(image)
-        X.append(img_as_array)
-        y.append(text_to_label(data.label))
+        print("Processing image " + data.path_to_image + ' size ' + str(image.size))
+        img_as_array = numpy.transpose(numpy.asarray(image), (1, 0, 2))
+        Xsir.append(img_as_array)
+        labels.append(text_to_label(data.label))
         label_length.append(data.label_length)
+        input_length.append(32)
 
-    return X, y, label_length, init_input_length()
+    labels_as_numpy = numpy.asarray(labels)
+    print(labels_as_numpy.shape)
+    return Xsir, labels_as_numpy, label_length, input_length
     # model.fit(X, y, batch_size = 64, epochs = 2)
-
-
-
-
 
 
 def get_lines(input_path):
@@ -141,6 +142,7 @@ def resize_img(path, output_path, save):
     if save:
         new_image.save(output_path)
     return new_image
+
 
 init_train_dataset('D:/Mirela/Desktop/Projects_dpit_technovation_etc/DPIT-2020/training_data/')
 feed_NN()
