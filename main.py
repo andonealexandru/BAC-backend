@@ -1,12 +1,26 @@
-from Model2 import NeuralNetwork
-import DataLoader
+from Model import NeuralNetwork
 from PIL import Image
-
-data = DataLoader.feed_NN()  # x, y, label_length, input_length
+import numpy as np
+import Alphabet as alp
+import DataLoader
+from  BeamSearch import ctcBeamSearch
 
 NN = NeuralNetwork(50)
-print(len(data[0]))
-NN.train(data[0][:44], data[1][:44], data[2][:44], data[3][:44], 0, 0)
+
+
+# NN = NeuralNetwork(50)
+# print(len(data[0]))
+# print('minimum pixel:' + str(np.amin(data[0])))
+# print('minimum label:' + str(np.amin(data[1])))
+# print('minimum label_length:' + str(np.amin(data[2])))
+# print('minimum input_length:' + str(np.amin(data[3])))
+# if np.amin(data[1]) < 0:
+#     print('negative values found')
+# else:
+#     # training
+#     NN.train(data[0], data[1], data[2], data[3], 0, 0, 32, 3)
+#     mat = NN.return_text(data[0][1]) # expected: MOVE
+#     print('text gasit:' + mat)
 # img = Image.open('pixil-frame-0.png')
 # print(img.shape)
 # NN.predict(img)

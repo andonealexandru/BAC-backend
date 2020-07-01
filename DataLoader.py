@@ -15,13 +15,25 @@ labels = []
 label_length = []
 input_length = []
 
+validation_data = []
+validation_img = []
+validation_label = []
+val_label_length = []
+val_input_length = []
 
 def text_to_label(text):
-    alphabet = ' {}[]!”#&’()*+,-./|\\0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    alphabet = ' {}[]!"#&’()*+,-./|\\0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     ret = []
     for idx in range(0, 32):
         if idx < len(text):
-            ret.append(alphabet.find(text[idx]))
+            if text[idx] == '\'':
+                ret.append(9)
+                continue
+            if alphabet.find(text[idx]) == -1:
+                print('could not recognize:' + text[idx])
+                ret.append(0)
+            else:
+                ret.append(alphabet.find(text[idx]))
         else:
             ret.append(len(alphabet))  # blank character
     return ret
@@ -37,9 +49,42 @@ def add_list(root_path, data, line):
     data.append(Data(path_to_img, line_label))
 
 
+def init_validationset(path_to_data_root):
+    path_to_val = 'D:/Handwriting DB/New folder/validationset.txt'
+    with open(path_to_val, "r") as train_file:
+        txt_validation_file = train_file.readlines()
+    index_train = 0
+    path_to_labels = 'D:/Handwriting DB/words/words.txt'
+
+    with open(path_to_labels, "r") as labels_file:
+        txt_labels_file = labels_file.readlines()
+
+    found_at_least_once = False
+    txt_validation_file.sort()
+    txt_labels_file.sort()
+    for line in txt_labels_file:
+        prefix_str = line[:(len(txt_validation_file[index_train]) - 1)]
+
+        if prefix_str == txt_validation_file[index_train][:len(prefix_str)]:
+            found_at_least_once = True
+            add_list(path_to_data_root, validation_data, line)
+        elif found_at_least_once:
+            index_train += 1
+            found_at_least_once = False
+            print(str(len(txt_validation_file)) + ' ' + str(index_train))
+            if index_train >= len(txt_validation_file):
+                return
+
+            prefix_str = line[:(len(txt_validation_file[index_train]) - 1)]
+
+            if prefix_str == txt_validation_file[index_train][:len(prefix_str)]:
+                found_at_least_once = True
+                add_list(path_to_data_root, validation_data, line)
+
+
 def init_train_dataset(path_to_data_root):
 
-    path_to_trainset = 'D:/Handwriting DB/New folder/short_trainset.txt'
+    path_to_trainset = 'D:/Handwriting DB/New folder/trainset.txt'
     with open(path_to_trainset, "r") as train_file:
         txt_train_file = train_file.readlines()
     index_train = 0
@@ -70,19 +115,43 @@ def init_train_dataset(path_to_data_root):
                 found_at_least_once = True
                 add_list(path_to_data_root, training_data, line)
 
+
 def feed_NN():
+    init_train_dataset('D:/Mirela/Desktop/Projects_dpit_technovation_etc/DPIT-2020/training_data/')
+    # init_validationset('D:/Mirela/Desktop/Projects_dpit_technovation_etc/DPIT-2020/training_data/')
     """returneaza imagini, label, label_length, input_lengh"""
     for data in training_data:
-        image = resize_img(data.path_to_image, "images/save_me_here.png", False)
-        print("Processing image " + data.path_to_image + ' size ' + str(image.size))
-        img_as_array = numpy.transpose(numpy.asarray(image), (1, 0, 2))
-        Xsir.append(img_as_array)
+        try:
+            image = resize_img(data.path_to_image, "images/save_me_here.png", False)
+            print("Processing image " + data.path_to_image + ' size ' + str(image.size))
+            img_as_array = numpy.transpose(numpy.asarray(image), (1, 0, 2))
+        except:
+            print('error')
+            continue
         labels.append(text_to_label(data.label))
         label_length.append(data.label_length)
         input_length.append(32)
+        Xsir.append(img_as_array)
 
     labels_as_numpy = numpy.asarray(labels)
     print(labels_as_numpy.shape)
+
+    # for data in validation_data:
+    #     try:
+    #         image = resize_img(data.path_to_image, "images/save_me_here.png", False)
+    #         print("Processing image " + data.path_to_image + ' size ' + str(image.size))
+    #         img_as_array = numpy.transpose(numpy.asarray(image), (1, 0, 2))
+    #     except:
+    #         print('error')
+    #         continue
+    #     validation_label.append(text_to_label(data.label))
+    #     val_label_length.append(data.label_length)
+    #     val_input_length.append(32)
+    #     validation_img.append(img_as_array)
+    #
+    # val_labels_numpy = numpy.asarray(validation_label)
+    # , validation_img, val_labels_numpy, val_label_length, val_input_length
+
     return Xsir, labels_as_numpy, label_length, input_length
     # model.fit(X, y, batch_size = 64, epochs = 2)
 
@@ -142,7 +211,3 @@ def resize_img(path, output_path, save):
     if save:
         new_image.save(output_path)
     return new_image
-
-
-init_train_dataset('D:/Mirela/Desktop/Projects_dpit_technovation_etc/DPIT-2020/training_data/')
-feed_NN()

@@ -10,6 +10,7 @@ import Alphabet as alp
 from BeamSearch import ctcBeamSearch
 from math import log
 
+
 class NeuralNetwork:
 
     def __init__(self, max_text_len):
@@ -66,15 +67,41 @@ class NeuralNetwork:
 
         save_model(model)
 
-    def train(self, train_images, train_labels, label_length, input_length, test_images, test_labels):
+    def train(self, train_images, train_labels, label_length, input_length, test_images, test_labels, batch_size, epochs):
         # compile the model
         #self.compile()
 
         model = retrieve_model()
+
+        # make them numpy arrays
         train_images = np.asarray(train_images)
         train_labels = np.asarray(train_labels)
         label_length = np.asarray(label_length)
         input_length = np.asarray(input_length)
+
+        # check good size
+        print(train_images.shape)
+        print(train_labels.shape)
+        print(label_length.shape)
+        print(input_length.shape)
+
+        # compiling
+        print('Compiling')
+        model.compile(
+            optimizer='adam',
+            loss={'ctc': lambda y_true, y_pred: y_pred}
+        )
+        print('Done compiling')
+
+        # create batches without nans
+        nmb_batches = int(train_images.shape[0] / batch_size) * batch_size
+        train_images = train_images[0:nmb_batches]
+        train_labels = train_labels[0:nmb_batches]
+        label_length = label_length[0:nmb_batches]
+        input_length = input_length[0:nmb_batches]
+
+        # check good size
+        print('After trimimng to size multiple of 32')
         print(train_images.shape)
         print(train_labels.shape)
         print(label_length.shape)
@@ -87,21 +114,16 @@ class NeuralNetwork:
             'label_length': label_length
 
         }
-        print('Compiling')
-        model.compile(
-            optimizer='adam',
-            loss={'ctc': lambda y_true, y_pred: y_pred}
-        )
-        print('Done compiling')
 
         # train the model
-        outputs = {'ctc': np.zeros([32])}
+        outputs = {'ctc': np.zeros([nmb_batches])}
         print('Fitting')
         history = model.fit(
             inputs,
             outputs,
-            batch_size=32,
-            epochs=10,
+            batch_size=batch_size,
+            epochs=epochs,
+            verbose=1
             # validation_data=(test_images, test_labels)
         )
         print('Done')
@@ -117,15 +139,21 @@ class NeuralNetwork:
         # plt.plot(history.history['val_accuracy'], label='val_accuracy')
         plt.xlabel('Epoch')
         plt.ylabel('loss')
-        plt.ylim([0.5, 1])
         plt.legend(loc='lower right')
         plt.show()
 
     @staticmethod
     def predict(image):
+        print('predicting')
         model = retrieve_model()
-        model2 = keras.Model(model.input, model.get_layer('time_distributed_1').output)
+        model2 = keras.Model(model.get_layer('input').input, model.get_layer('time_distributed_1').output)
+        model2.summary()
+        image = np.expand_dims(image, axis=0)
         prediction = model2.predict(image)
+        print('done predicting')
+        prediction = np.squeeze(prediction, axis=0)
+        plt.imshow(prediction)
+        plt.imsave('test.jpg', prediction)
         return prediction
 
     def return_text(self, image):
@@ -157,7 +185,6 @@ class NeuralNetwork:
             save_model(model)
             with open('acc.pickle', 'wb') as f:
                 pickle.dump(history.history['accuracy'], f)
-
 
 
 def ctc_loss(args):

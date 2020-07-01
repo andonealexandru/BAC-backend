@@ -11,14 +11,14 @@ from BeamSearch import ctcBeamSearch
 import random
 from math import log
 
+
 class NeuralNetwork:
 
     def __init__(self, max_text_len):
         self.setup_model(max_text_len)
 
-
     def setup_model(self, max_text_len):
-        inputs = keras.Input(shape=(128, 32, 3), name='input')
+        inputs = keras.Input(shape=(128, 32, 3), name='input') # imaginile
 
         # layers pentru CNN
         conv1 = layers.Conv2D(32, 5, activation='relu', padding='SAME', name="layer1")(inputs)
@@ -37,20 +37,9 @@ class NeuralNetwork:
         bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True), name='bidirectLayer')(resh)  # posibil
         dense = layers.TimeDistributed(layers.Dense(alp.alp_len+1))(bid)
         y_pred = layers.TimeDistributed(layers.Activation('softmax', name='softmax'))(dense)
-        # sa avem nevoie de doua layere
-        # resh2 = layers.Reshape((32, 1, 512), name='resahpeForCtc')(bid)
-        #
-        # kernel = tf.Variable(tf.random.truncated_normal([1, 1, 512, alp.alp_len + 1], stddev=0.1))
-        # rnn_to_ctc = tf.squeeze(tf.nn.atrous_conv2d(value=resh2, filters=kernel, rate=1, padding='SAME'), axis=[2],
-        #                         name='squeeze_pentru_ctc')
-
-        # din BxTxC in TxBxC - pentru beam search
-        # ctcin3dtbc = tf.transpose(rnn_to_ctc, [1, 0, 2])
 
         # CTC
         y_true = keras.Input(name='truth_labels', shape=[32])  # (samples, max_string_length)
-        # y_pred = rnn_to_ctc  # am observat ca multa lume foloseste outputul de la inca un layer de activation(softmax)
-        # sau time-distributed, nu stiu daca e necesar...
         input_length = keras.Input(name='input_length', shape=[1])  # lungimea cuvantului din imagine din y_pred
         label_length = keras.Input(name='label_length', shape=[1])  # lungimea cuvantului din imaginea din y_true
         loss_out = layers.Lambda(
@@ -77,24 +66,22 @@ class NeuralNetwork:
 
         save_model(model)
 
-    def train(self, train_images, train_labels, label_length, input_length, test_images, test_labels):
+    def train(self, train_images, train_labels, label_length, input_length, test_images, test_labels, batch_size, epochs):
+
+        # make them numpy arrays
         train_images = np.asarray(train_images)
         train_labels = np.asarray(train_labels)
         label_length = np.asarray(label_length)
         input_length = np.asarray(input_length)
+
+        # check good size
         print(train_images.shape)
         print(train_labels.shape)
         print(label_length.shape)
         print(input_length.shape)
         model = self.model
 
-        inputs = {
-            'input': train_images,
-            'truth_labels': train_labels,
-            'input_length': input_length,
-            'label_length': label_length
-
-        }
+        # compiling
         print('Compiling')
         model.compile(
             optimizer='adam',
@@ -102,14 +89,37 @@ class NeuralNetwork:
         )
         print('Done compiling')
 
+        # create batches without nans
+        nmb_batches = int(train_images.shape[0]/batch_size)*batch_size
+        train_images = train_images[0:nmb_batches]
+        train_labels = train_labels[0:nmb_batches]
+        label_length = label_length[0:nmb_batches]
+        input_length = input_length[0:nmb_batches]
+
+        # check good size
+        print('After trimimng to size multiple of 32')
+        print(train_images.shape)
+        print(train_labels.shape)
+        print(label_length.shape)
+        print(input_length.shape)
+
+        inputs = {
+            'input': train_images,
+            'truth_labels': train_labels,
+            'input_length': input_length,
+            'label_length': label_length
+        }
+
+
         # train the model
-        outputs = {'ctc': np.zeros([44])}
+        outputs = {'ctc': np.zeros([nmb_batches])}
         print('Fitting')
         history = model.fit(
             inputs,
             outputs,
-            batch_size=44,
-            epochs=2,
+            batch_size=batch_size,
+            epochs=epochs,
+            verbose=1
             # validation_data=(test_images, test_labels)
         )
         print('Done')
@@ -120,24 +130,28 @@ class NeuralNetwork:
         # # saving model in saved_model folder
         # save_model(model)
 
-        # show a graphic to see accuracy
+        # show a graphic to see loss over epochs
         plt.plot(history.history['loss'], label='loss')
-        # plt.plot(history.history['val_accuracy'], label='val_accuracy')
         plt.xlabel('Epoch')
         plt.ylabel('loss')
-        plt.ylim([0.5, 1])
         plt.legend(loc='lower right')
         plt.show()
 
-    @staticmethod
-    def predict(image):
-        model = retrieve_model()
-        model2 = keras.Model(model.input, model.get_layer('tf_op_layer_squeeze_pentru_ctc').output)
+    def predicting(self, image):
+        print('predicting')
+        model = self.model
+        model2 = keras.Model(model.get_layer('input').input, model.get_layer('time_distributed_1').output)
+        model2.summary()
+        image = np.expand_dims(image, axis=0)
         prediction = model2.predict(image)
+        print('done predicting')
+        prediction = np.squeeze(prediction, axis=0)
+        plt.imshow(prediction)
+        plt.imsave('test.jpg', prediction)
         return prediction
 
     def return_text(self, image):
-        mat = self.predict(image)
+        mat = self.predicting(image)
         return ctcBeamSearch(mat, alp.alphabet, None)
 
     @staticmethod

@@ -13,6 +13,7 @@ def text_to_label(text):
 
 def labels_to_text(labels):
     res = ''
-    for l in labels:
-        res += alphabet[l]
+    for i in range(0, len(labels)):
+        if int(labels[i]) < len(alphabet):
+            res =res + alphabet[labels[i]]
     return res
