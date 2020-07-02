@@ -3,10 +3,19 @@ from PIL import Image
 import numpy as np
 import Alphabet as alp
 import DataLoader
+from src import mainWordSegmentation as wordSegm
 from  BeamSearch import ctcBeamSearch
 
 NN = NeuralNetwork(50)
 
+
+def get_images_from_word_segmentation():
+    images_for_predict = wordSegm.getImages()
+    # for img in images_for_predict:
+    #     text = NN.return_text(img)
+    #     print(text)
+
+get_images_from_word_segmentation()
 
 # NN = NeuralNetwork(50)
 # print(len(data[0]))

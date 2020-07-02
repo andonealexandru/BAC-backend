@@ -1,3 +1,5 @@
 saved_model
 .idea
 __pycache__
+.idea/test.iml
+.idea/misc.xml
