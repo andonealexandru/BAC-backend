@@ -15,7 +15,7 @@ def handle_request():
     # img = dict(img)
     # with open("imageToSave.png", "wb") as fh:
     #     fh.write(base64.b64decode(str(img["key"])))
-    return "ok"
+    return "ok salut"
 
 
 app.run(debug=False)
