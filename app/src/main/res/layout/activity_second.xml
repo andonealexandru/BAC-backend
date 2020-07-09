@@ -7,29 +7,34 @@
     tools:context=".Second"
     android:background="@drawable/background">
 
-    <EditText
-        android:id="@+id/input_textview"
-        android:layout_width="382dp"
+    <com.example.myapplication.CodeEditText
+        android:id="@+id/input_editText"
+        android:layout_width="370dp"
         android:layout_height="377dp"
         android:ems="10"
+        android:lines="17"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:background="#ffffff"
+        android:background="@drawable/style_solid_button"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:padding="5dp"
+        android:paddingTop = "5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:layout_centerHorizontal="true"
         />
 
     <Spinner
         android:id="@+id/spinner_select_compiler"
-        android:layout_width="220dp"
+        android:layout_width="370dp"
         android:layout_height="40dp"
-        android:background="@android:drawable/btn_dropdown"
+        android:background="@drawable/style_spinner"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/input_textview"
+        android:layout_below="@+id/input_editText"
         android:layout_centerHorizontal="true"
+
         />
 
     <Button
@@ -40,7 +45,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:text="Next" />
+        android:text="Next"
+        android:background="@drawable/button_background_handler"/>
 
     <Button
         android:id="@+id/btn_back"
@@ -49,6 +55,7 @@
         android:text="Back"
         android:layout_below="@+id/spinner_select_compiler"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/button_background_handler"/>
 
 </RelativeLayout>
