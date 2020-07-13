@@ -6,8 +6,18 @@ alp_len = len(alphabet)
 # din text in label
 def text_to_label(text):
     ret = []
-    for char in text:
-        ret.append(alphabet.find(char))
+    for idx in range(0, 32):
+        if idx < len(text):
+            if text[idx] == '\'':
+                ret.append(9)
+                continue
+            if alphabet.find(text[idx]) == -1:
+                print('could not recognize:' + text[idx])
+                ret.append(0)
+            else:
+                ret.append(alphabet.find(text[idx]))
+        else:
+            ret.append(len(alphabet))  # blank character
     return ret
 
 

@@ -1,25 +1,23 @@
 import numpy as np
 import tensorflow as tf
-import keras
-from keras import layers
 import matplotlib.pyplot as plt
 import pickle
 from tensorflow.keras import layers
 from tensorflow import keras
-import Alphabet as alp
+from Alphabet import alp_len, alphabet
 from BeamSearch import ctcBeamSearch
-from math import log
+import random
+from DataLoader import extract_img
 
 
 class NeuralNetwork:
 
-    def __init__(self, max_text_len):
-        self.setup_model(max_text_len)
-
+    def __init__(self):
+        self.setup_model()
 
     @staticmethod
-    def setup_model(max_text_len):
-        inputs = keras.Input(shape=(128, 32, 3), name='input')
+    def setup_model():
+        inputs = keras.Input(shape=(128, 32, 1), name='input', dtype='float32')
 
         # layers pentru CNN
         conv1 = layers.Conv2D(32, 5, activation='relu', padding='SAME', name="layer1")(inputs)
@@ -36,7 +34,7 @@ class NeuralNetwork:
 
         # RNN
         bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True), name='bidirectLayer')(resh)  # posibil
-        dense = layers.TimeDistributed(layers.Dense(alp.alp_len + 1))(bid)
+        dense = layers.TimeDistributed(layers.Dense(alp_len + 1))(bid)
         y_pred = layers.TimeDistributed(layers.Activation('softmax', name='softmax'))(dense)
 
         # CTC
@@ -48,99 +46,58 @@ class NeuralNetwork:
         )([y_pred, y_true, label_length, input_length])
 
         model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
-        # model = keras.Model(inputs=inputs, outputs=rnn_to_ctc)
         model.summary()
 
         save_model(model)
 
-        # self.model = tf.keras.Model(inputs=self.inputs, outputs=rnntoCtc, name='retea')
-        # self.model.summary()
-
     @staticmethod
-    def compile():
+    def train(train_images, train_labels, label_length, input_length, test_images, test_labels, batch_size, epochs):
         model = retrieve_model()
-
-        model.compile(
-            optimizer='adam',
-            loss={'ctc': lambda y_true, y_pred: y_pred}
-        )
-
-        save_model(model)
-
-    def train(self, train_images, train_labels, label_length, input_length, test_images, test_labels, batch_size, epochs):
-        # compile the model
-        #self.compile()
-
-        model = retrieve_model()
-
-        # make them numpy arrays
-        train_images = np.asarray(train_images)
-        train_labels = np.asarray(train_labels)
-        label_length = np.asarray(label_length)
-        input_length = np.asarray(input_length)
-
-        # check good size
-        print(train_images.shape)
-        print(train_labels.shape)
-        print(label_length.shape)
-        print(input_length.shape)
-
-        # compiling
         print('Compiling')
         model.compile(
-            optimizer='adam',
+            optimizer=keras.optimizers.Adam(),
             loss={'ctc': lambda y_true, y_pred: y_pred}
         )
         print('Done compiling')
+        dataset_to_plot = []
+        for i in range(epochs):
+            samp = random.sample(range(train_images.shape[0]), batch_size)
+            x3 = [train_images[i] for i in samp]
+            x3 = np.array(x3)
+            y3 = [train_labels[i] for i in samp]
+            y3 = np.array(y3)
+            input_lengths2 = [input_length[i] for i in samp]
+            label_lengths2 = [label_length[i] for i in samp]
 
-        # create batches without nans
-        nmb_batches = int(train_images.shape[0] / batch_size) * batch_size
-        train_images = train_images[0:nmb_batches]
-        train_labels = train_labels[0:nmb_batches]
-        label_length = label_length[0:nmb_batches]
-        input_length = input_length[0:nmb_batches]
+            input_lengths2 = np.array(input_lengths2)
+            label_lengths2 = np.array(label_lengths2)
 
-        # check good size
-        print('After trimimng to size multiple of 32')
-        print(train_images.shape)
-        print(train_labels.shape)
-        print(label_length.shape)
-        print(input_length.shape)
+            inputs = {
+                'input': x3,
+                'truth_labels': y3,
+                'input_length': input_lengths2,
+                'label_length': label_lengths2
+            }
+            outputs = {'ctc': np.zeros([batch_size])}
+            if i % 100 == 0:
+                print(i)
+                history1 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=2)
+                dataset_to_plot.append(history1.history['loss'][0])
+            else:
+                history2 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=0)
+                dataset_to_plot.append(history2.history['loss'][0])
 
-        inputs = {
-            'input': train_images,
-            'truth_labels': train_labels,
-            'input_length': input_length,
-            'label_length': label_length
-
-        }
-
-        # train the model
-        outputs = {'ctc': np.zeros([nmb_batches])}
-        print('Fitting')
-        history = model.fit(
-            inputs,
-            outputs,
-            batch_size=batch_size,
-            epochs=epochs,
-            verbose=1
-            # validation_data=(test_images, test_labels)
-        )
         print('Done')
-        # saving accuracy in acc.pickle file
-        # accuracy = history.history['accuracy']
-        # with open('acc.pickle', 'wb') as f:
-        #     pickle.dump(accuracy, f)
-        # # saving model in saved_model folder
-        # save_model(model)
 
-        # show a graphic to see accuracy
-        plt.plot(history.history['loss'], label='loss')
-        # plt.plot(history.history['val_accuracy'], label='val_accuracy')
-        plt.xlabel('Epoch')
-        plt.ylabel('loss')
-        plt.legend(loc='lower right')
+        # show a graphic to see loss
+        plt.plot(dataset_to_plot)
+        plt.title('Training loss')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.legend()
+        plt.grid('off')
         plt.show()
+        save_model(model)
 
     @staticmethod
     def predict(image):
@@ -150,15 +107,25 @@ class NeuralNetwork:
         model2.summary()
         image = np.expand_dims(image, axis=0)
         prediction = model2.predict(image)
+        print(prediction.shape)
+        print(np.max(prediction))
         print('done predicting')
         prediction = np.squeeze(prediction, axis=0)
+        print(np.max(prediction))
         plt.imshow(prediction)
         plt.imsave('test.jpg', prediction)
         return prediction
 
-    def return_text(self, image):
+    def return_text_from_right_sized_image(self, image):  # pentru imagini care au deja 128x32x1
         mat = self.predict(image)
-        return ctcBeamSearch(mat, alp.alphabet, None)
+        return ctcBeamSearch(mat, alphabet, None)
+
+    def return_text_from_random_image(self, image):
+        image = extract_img(image)
+        image = np.transpose(image, (1, 0))
+        print(image.shape)  # ???
+        strin = self.return_text_from_right_sized_image(self, image)
+        return strin
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):

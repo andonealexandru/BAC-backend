@@ -1,213 +1,90 @@
-from PIL import Image
-import numpy
+import cv2
+import numpy as np
+from Alphabet import text_to_label
+
+path_to_file = 'D:/Handwriting DB/ascii/words.txt'  # path catre words.txt
+path_to_folder = 'D:/Handwriting DB/words/'  # path catre folderul cu cuvinte
+num_images = 100  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
 
-class Data:
-    def __init__(self, path_to_img, lbl):
-        self.path_to_image = path_to_img
-        self.label = lbl
-        self.label_length = len(lbl)
-
-
-training_data = []
-Xsir = []
-labels = []
-label_length = []
-input_length = []
-
-validation_data = []
-validation_img = []
-validation_label = []
-val_label_length = []
-val_input_length = []
-
-def text_to_label(text):
-    alphabet = ' {}[]!"#&’()*+,-./|\\0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-    ret = []
-    for idx in range(0, 32):
-        if idx < len(text):
-            if text[idx] == '\'':
-                ret.append(9)
-                continue
-            if alphabet.find(text[idx]) == -1:
-                print('could not recognize:' + text[idx])
-                ret.append(0)
-            else:
-                ret.append(alphabet.find(text[idx]))
-        else:
-            ret.append(len(alphabet))  # blank character
-    return ret
-
-
-def add_list(root_path, data, line):
-    words = line.split()
-    line_label = words[8]  # words/a01/a01-000u/a01-00u-00-00.png
-    aux = words[0].split('-')
-    path_to_img = 'D:/Handwriting DB/words/' + aux[0] + \
-                  "/" + aux[0] + "-" + aux[1] + "/" + words[0] + ".png"
-
-    data.append(Data(path_to_img, line_label))
-
-
-def init_validationset(path_to_data_root):
-    path_to_val = 'D:/Handwriting DB/New folder/validationset.txt'
-    with open(path_to_val, "r") as train_file:
-        txt_validation_file = train_file.readlines()
-    index_train = 0
-    path_to_labels = 'D:/Handwriting DB/words/words.txt'
-
-    with open(path_to_labels, "r") as labels_file:
-        txt_labels_file = labels_file.readlines()
-
-    found_at_least_once = False
-    txt_validation_file.sort()
-    txt_labels_file.sort()
-    for line in txt_labels_file:
-        prefix_str = line[:(len(txt_validation_file[index_train]) - 1)]
-
-        if prefix_str == txt_validation_file[index_train][:len(prefix_str)]:
-            found_at_least_once = True
-            add_list(path_to_data_root, validation_data, line)
-        elif found_at_least_once:
-            index_train += 1
-            found_at_least_once = False
-            print(str(len(txt_validation_file)) + ' ' + str(index_train))
-            if index_train >= len(txt_validation_file):
-                return
-
-            prefix_str = line[:(len(txt_validation_file[index_train]) - 1)]
-
-            if prefix_str == txt_validation_file[index_train][:len(prefix_str)]:
-                found_at_least_once = True
-                add_list(path_to_data_root, validation_data, line)
-
-
-def init_train_dataset(path_to_data_root):
-
-    path_to_trainset = 'D:/Handwriting DB/New folder/trainset.txt'
-    with open(path_to_trainset, "r") as train_file:
-        txt_train_file = train_file.readlines()
-    index_train = 0
-    path_to_labels = 'D:/Handwriting DB/words/words.txt'
-
-    with open(path_to_labels, "r") as labels_file:
-        txt_labels_file = labels_file.readlines()
-
-    found_at_least_once = False
-    txt_train_file.sort()
-    txt_labels_file.sort()
-    for line in txt_labels_file:
-        prefix_str = line[:(len(txt_train_file[index_train])-1)]
-
-        if prefix_str == txt_train_file[index_train][:len(prefix_str)]:
-            found_at_least_once = True
-            add_list(path_to_data_root, training_data, line)
-        elif found_at_least_once:
-            index_train += 1
-            found_at_least_once = False
-            print(str(len(txt_train_file)) + ' ' + str(index_train))
-            if index_train >= len(txt_train_file):
-                return
-
-            prefix_str = line[:(len(txt_train_file[index_train]) - 1)]
-
-            if prefix_str == txt_train_file[index_train][:len(prefix_str)]:
-                found_at_least_once = True
-                add_list(path_to_data_root, training_data, line)
-
-
-def feed_NN():
-    init_train_dataset('D:/Mirela/Desktop/Projects_dpit_technovation_etc/DPIT-2020/training_data/')
-    # init_validationset('D:/Mirela/Desktop/Projects_dpit_technovation_etc/DPIT-2020/training_data/')
-    """returneaza imagini, label, label_length, input_lengh"""
-    for data in training_data:
-        try:
-            image = resize_img(data.path_to_image, "images/save_me_here.png", False)
-            print("Processing image " + data.path_to_image + ' size ' + str(image.size))
-            img_as_array = numpy.transpose(numpy.asarray(image), (1, 0, 2))
-        except:
-            print('error')
+def get_x_y():
+    f = open(path_to_file)
+    count = 0
+    x = []  # imaginile
+    y = []  # in y sunt labelurile
+    x_new = []
+    chars = set()
+    im_path = []
+    for line in f:
+        if count > num_images:
+            break
+        if not line or line[0] == '#':
             continue
-        labels.append(text_to_label(data.label))
-        label_length.append(data.label_length)
-        input_length.append(32)
-        Xsir.append(img_as_array)
-
-    labels_as_numpy = numpy.asarray(labels)
-    print(labels_as_numpy.shape)
-
-    # for data in validation_data:
-    #     try:
-    #         image = resize_img(data.path_to_image, "images/save_me_here.png", False)
-    #         print("Processing image " + data.path_to_image + ' size ' + str(image.size))
-    #         img_as_array = numpy.transpose(numpy.asarray(image), (1, 0, 2))
-    #     except:
-    #         print('error')
-    #         continue
-    #     validation_label.append(text_to_label(data.label))
-    #     val_label_length.append(data.label_length)
-    #     val_input_length.append(32)
-    #     validation_img.append(img_as_array)
-    #
-    # val_labels_numpy = numpy.asarray(validation_label)
-    # , validation_img, val_labels_numpy, val_label_length, val_input_length
-
-    return Xsir, labels_as_numpy, label_length, input_length
-    # model.fit(X, y, batch_size = 64, epochs = 2)
+        try:
+            lineSplit = line.strip().split(' ')
+            fileNameSplit = lineSplit[0].split('-')
+            img_path = path_to_folder + fileNameSplit[0] + '/' + fileNameSplit[
+                0] + '-' + \
+                       fileNameSplit[1] + '/' + lineSplit[0] + '.png'
+            img_word = lineSplit[-1]
+            img = cv2.imread(img_path)
+            img2 = extract_img(img)
+            x_new.append(img2)
+            x.append(img)
+            y.append(img_word)
+            im_path.append(img_path)
+            count += 1
+            if count % 10 == 0:
+                print(count)
+        except Exception as e:
+            print(e)
+    return x, x_new, y
 
 
-def get_lines(input_path):
-    path = input_path + "ascii/few_words.txt"
-    training_data = []
-
-    with open(path, "r") as my_file:
-        txt_data = my_file.readlines()
-
-    for line in txt_data:
-        if line[0] != '#':
-            words = line.split()
-            line_label = words[8]  # words/a01/a01-000u/a01-00u-00-00.png
-            aux = words[0].split('-')
-            path_to_img = input_path + "words/" + aux[0] +\
-                          "/" + aux[0] + "-" + aux[1] + "/" + words[0] + ".png"
-
-            img = Image.open(path_to_img)
-            training_data.append(Data(path_to_img, line_label, img))
-
-    print(training_data[0].path_img, training_data[0].label, sep=' ')
+def create_input_label_length_and_labels(y):
+    y2 = []
+    input_lengths = np.ones((num_images, 1)) * 32
+    label_lengths = np.zeros((num_images, 1))
+    for i in range(num_images):
+        val = text_to_label(y[i])
+        if i == 5:
+            print(val)
+        y2.append(val)
+        label_lengths[i] = len(y[i])
+        input_lengths[i] = 32
+    y2 = np.asarray(y2)
+    return input_lengths, label_lengths, y2
 
 
-def recolor(image):
-    width = image.size[0]
-    height = image.size[1]
-    for x in range(width):
-        for y in range(height):
-            color = (255, 255, 255)
-            image.putpixel((x, y), color)
+def get_data():
+    x, x_new, y = get_x_y()
+    input_lengths, label_lengths, y2 = create_input_label_length_and_labels(y)
+
+    x = np.asarray(x_new[:num_images])  # pastrez doar de cate am nevoie
+    x = x[:, :, :, np.newaxis]  # Bx32x128 -> Bx32x128x1
+    x = np.transpose(x, (0, 2, 1, 3))  # Bx32x128x1 -> Bx128x32x1
+
+    # normalize images -> toate val intre 0 si 1
+    x2 = np.array(x[:num_images]) / 255
+
+    y2 = np.asarray(y2)
+    y2 = np.array(y2[:num_images])
+    y2 = np.array(y2)
+
+    input_lengths = input_lengths[:num_images]
+    label_lengths = label_lengths[:num_images]
+
+    return x2, y2, input_lengths, label_lengths
 
 
-def resize_img(path, output_path, save):
-    img = Image.open(path)  # image extension *.png,*.jpg
-    wanted_width = 128
-    wanted_height = 32
-    old_width = img.size[0]
-    old_height = img.size[1]
-    new_width = 0
-    new_height = 0
-    if old_width/wanted_width > old_height/wanted_height:
-        ratio = old_width/wanted_width
-        new_width = wanted_width
-        new_height = int(old_height/ratio)
-    else:
-        ratio = old_height/wanted_height
-        new_height = wanted_height
-        new_width = int(old_width/ratio)
-    img = img.resize((new_width, new_height), Image.ANTIALIAS)
-
-    new_image = Image.new("RGB", (wanted_width, wanted_height))
-    recolor(new_image)
-    new_image.paste(img, (0, 0))
-
-    if save:
-        new_image.save(output_path)
-    return new_image
+def extract_img(img):
+    target = np.ones((32, 128)) * 255
+    new_x = 32 / img.shape[0]
+    new_y = 128 / img.shape[1]
+    min_xy = min(new_x, new_y)
+    new_x = int(img.shape[0] * min_xy)
+    new_y = int(img.shape[1] * min_xy)
+    img2 = cv2.resize(img, (new_y, new_x))
+    target[:new_x, :new_y] = img2[:, :, 0]
+    target[new_x:, new_y:] = 255
+    return target
