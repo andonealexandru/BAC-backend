@@ -4,7 +4,7 @@ from Alphabet import text_to_label
 
 path_to_file = 'D:/Handwriting DB/ascii/words.txt'  # path catre words.txt
 path_to_folder = 'D:/Handwriting DB/words/'  # path catre folderul cu cuvinte
-num_images = 100  # pe cate imagini sa se ia din words (pe cate sa antrenam)
+num_images = 50000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
 
 def get_x_y():

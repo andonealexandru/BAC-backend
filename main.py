@@ -16,5 +16,5 @@ print(label_Lengths.shape)
 
 NN = NeuralNetwork()
 print('Training')
-NN.train(images, labels, label_Lengths, input_lengths, 0, 0, 32, 10)
+NN.train(images, labels, label_Lengths, input_lengths, 0, 0, 32, 5000)
 
