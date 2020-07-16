@@ -61,13 +61,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        btn_start = findViewById(R.id.button_start);
+        setContentView(R.layout.activity_main_gradient);
+
+
+        btn_capture = findViewById(R.id.camera_button);
+        btn_select = findViewById(R.id.gallery_button);
+        imgView = findViewById(R.id.imgView_preview);
+
+       /* btn_start = findViewById(R.id.button_start);
         radioGroup = findViewById(R.id.group_button);
-        btn_capture = findViewById(R.id.btnCapture);
-        imgView = findViewById(R.id.imgView);
-        btn_select = findViewById(R.id.button_select);
+
+
         btn_send = findViewById(R.id.sendImageButton);
+*/
 
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,16 +88,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int selectedRadio = radioGroup.getCheckedRadioButtonId();
-                selectedButton = findViewById(selectedRadio);
-
-                Toast.makeText(MainActivity.this, "You selected " + selectedButton.getText(), Toast.LENGTH_LONG).show();
-
-            }
-        });
 
         btn_capture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,12 +106,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+/*        btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int selectedRadio = radioGroup.getCheckedRadioButtonId();
+                selectedButton = findViewById(selectedRadio);
+
+                Toast.makeText(MainActivity.this, "You selected " + selectedButton.getText(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 connectServer(null);
             }
-        });
+        });*/
     }
 
     private void openGallery(){
@@ -234,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 is = getContentResolver().openInputStream(image_uri);
                 Bitmap imgBitmap = BitmapFactory.decodeStream(is);
-                connectServer(BitMapToString(imgBitmap));
+               // connectServer(BitMapToString(imgBitmap));
             } catch (FileNotFoundException e) {
                 Toast.makeText(MainActivity.this, "Oops", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -265,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         InputStream is = getContentResolver().openInputStream(imageURI);
                         Bitmap newBitmap = BitmapFactory.decodeStream(is);
-                        connectServer(BitMapToString(newBitmap));
+                      //  connectServer(BitMapToString(newBitmap));
                         bitmaps.add(newBitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
