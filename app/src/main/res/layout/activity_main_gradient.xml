@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,28 +8,45 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imgView_preview"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="295dp"
+        android:layout_height="400dp"
         android:contentDescription="@string/app_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+
         app:srcCompat="@drawable/logo" />
 
     <Button
         android:id="@+id/camera_button"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="@drawable/camera_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.20" />
+        android:layout_below="@+id/imgView_preview"
+        android:layout_marginTop="111dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/camera_button" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/gallery_button"
+        android:layout_width="157dp"
+        android:layout_height="114dp"
+        android:layout_below="@+id/imgView_preview"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="111dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/gallery" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gallery_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="71dp"
+        android:layout_marginRight="71dp"
+        android:background="@drawable/button_background_handler"
+        android:text="Next" />
+
+</RelativeLayout>
