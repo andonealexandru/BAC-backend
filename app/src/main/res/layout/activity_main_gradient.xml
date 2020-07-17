@@ -20,7 +20,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_below="@+id/imgView_preview"
-        android:layout_marginTop="111dp"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:background="@drawable/camera_button" />
 
@@ -31,22 +31,74 @@
         android:layout_below="@+id/imgView_preview"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="111dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:background="@drawable/gallery" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_next"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/gallery_button"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="29dp"
-        android:layout_marginEnd="71dp"
-        android:layout_marginRight="71dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:background="@drawable/button_background_handler"
         android:text="Next" />
+
+
+    <RelativeLayout
+        android:id="@+id/layout_progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        >
+
+        <Button
+            android:id="@+id/btn_first_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/progress_bar_selected" />
+
+
+        <TextView
+            android:id="@+id/linie1"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8.5dp"
+            android:background="@drawable/progress_bar_lines"
+            android:layout_toRightOf="@id/btn_first_page"
+            android:layout_toLeftOf="@+id/btn_second_page"/>
+
+        <Button
+            android:id="@+id/btn_second_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/progress_bar_unselected"
+            android:layout_centerHorizontal="true"/>
+
+
+        <TextView
+            android:id="@+id/linie2"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8.5dp"
+            android:background="@drawable/progress_bar_lines"
+            android:layout_toRightOf="@id/btn_second_page"
+            android:layout_toLeftOf="@+id/btn_third_page"/>
+
+        <Button
+            android:id="@+id/btn_third_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/progress_bar_unselected" />
+    </RelativeLayout>
 
 </RelativeLayout>

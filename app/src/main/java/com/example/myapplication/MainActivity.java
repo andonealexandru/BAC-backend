@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int IMAGE_CAPTURE_CODE = 1001;
     public static final int GALLERY_PERMISSION_CODE = 1002;
     public static final int GALLERY_CODE = 1003;
-    Button btn_start, btn_capture, btn_select, btn_send;
+    Button btn_start, btn_capture, btn_select, btn_next, btn_send;
     RadioGroup radioGroup;
     RadioButton selectedButton;
     ImageView imgView;
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn_capture = findViewById(R.id.camera_button);
         btn_select = findViewById(R.id.gallery_button);
+        btn_next = findViewById(R.id.btn_next);
         imgView = findViewById(R.id.imgView_preview);
 
        /* btn_start = findViewById(R.id.button_start);
@@ -103,6 +104,14 @@ public class MainActivity extends AppCompatActivity {
                     else openCamera(); // deja avem acces, deschidem camera
                 }
                 else openCamera(); // nu e nevoie de acces, deschidem camera
+            }
+        });
+
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Second.class);
+                startActivity(intent);
             }
         });
 
