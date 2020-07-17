@@ -18,8 +18,8 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
         <activity android:name=".MainActivity" />
-        <activity android:name=".Second"/>
-        <activity android:name=".LogInScreen">
+        <activity android:name=".LogInScreen"/>
+        <activity android:name=".Second">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

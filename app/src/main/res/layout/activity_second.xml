@@ -7,55 +7,122 @@
     tools:context=".Second"
     android:background="@drawable/background">
 
-    <com.example.myapplication.CodeEditText
-        android:id="@+id/input_editText"
-        android:layout_width="370dp"
-        android:layout_height="377dp"
-        android:ems="10"
-        android:lines="17"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:background="@drawable/style_solid_button"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:paddingTop = "5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_centerHorizontal="true"
+
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/layout_edit_text"
+        android:layout_above="@id/layout_spinner_buton">
+
+        <com.example.myapplication.CodeEditText
+            android:id="@+id/input_editText"
+            android:layout_width="370dp"
+            android:layout_height="fill_parent"
+            android:ems="10"
+            android:lines="17"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:background="@drawable/edit_text_style"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:paddingTop = "5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_centerHorizontal="true"
         />
+    </RelativeLayout>
 
-    <Spinner
-        android:id="@+id/spinner_select_compiler"
-        android:layout_width="370dp"
-        android:layout_height="40dp"
-        android:background="@drawable/style_spinner"
-        android:spinnerMode="dropdown"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/input_editText"
-        android:layout_centerHorizontal="true"
-
-        />
-
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/layout_spinner_buton"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner_select_compiler"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Next"
-        android:background="@drawable/button_background_handler"/>
+        android:layout_above="@id/layout_progress_bar"
+        android:layout_marginBottom="10dp">
 
-    <Button
-        android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:layout_below="@+id/spinner_select_compiler"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:background="@drawable/button_background_handler"/>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner_select_compiler"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/button_background_handler"
+            android:text="Next" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner_select_compiler"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_background_handler"
+            android:text="Back" />
+
+        <Spinner
+            android:id="@+id/spinner_select_compiler"
+            android:layout_width="370dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/style_spinner"
+            android:spinnerMode="dropdown" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        >
+
+        <Button
+            android:id="@+id/btn_first_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/progress_bar_unselected" />
+
+
+        <TextView
+            android:id="@+id/linie1"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8.5dp"
+            android:background="@drawable/progress_bar_lines"
+            android:layout_toRightOf="@id/btn_first_page"
+            android:layout_toLeftOf="@+id/btn_second_page"/>
+
+        <Button
+            android:id="@+id/btn_second_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/progress_bar_selected"
+            android:layout_centerHorizontal="true"/>
+
+
+        <TextView
+            android:id="@+id/linie2"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8.5dp"
+            android:background="@drawable/progress_bar_lines"
+            android:layout_toRightOf="@id/btn_second_page"
+            android:layout_toLeftOf="@+id/btn_third_page"/>
+
+        <Button
+            android:id="@+id/btn_third_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/progress_bar_unselected" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
