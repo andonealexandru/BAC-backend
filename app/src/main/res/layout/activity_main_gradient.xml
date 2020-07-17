@@ -7,6 +7,8 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
+    <include  layout="@layout/profile_bar"/>
+
     <ImageView
         android:id="@+id/imgView_preview"
         android:layout_width="fill_parent"
