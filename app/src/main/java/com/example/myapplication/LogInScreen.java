@@ -54,9 +54,9 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null) {
             Toast.makeText(this, "You've already logged in with " + account.getDisplayName() + "!",Toast.LENGTH_LONG).show();
-            /*
+
             Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);*/
+            startActivity(intent);
 
         }
     }
@@ -114,9 +114,9 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
             // Signed in successfully, show authenticated UI.
             Toast.makeText(this, "You've logged in " + account.getDisplayName() + "!",Toast.LENGTH_LONG).show();
-            /*
+
             Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);*/
+            startActivity(intent);
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
