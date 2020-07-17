@@ -7,6 +7,7 @@
     tools:context=".Second"
     android:background="@drawable/background">
 
+    <include layout="@layout/profile_bar"/>
 
     <RelativeLayout android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -22,7 +23,7 @@
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:background="@drawable/edit_text_style"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="65dp"
             android:layout_marginLeft="10dp"
             android:paddingTop = "5dp"
             android:paddingBottom="5dp"

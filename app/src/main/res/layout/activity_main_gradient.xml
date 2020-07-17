@@ -7,7 +7,7 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
-    <include  layout="@layout/profile_bar"/>
+    <include layout="@layout/profile_bar"></include>
 
     <ImageView
         android:id="@+id/imgView_preview"
