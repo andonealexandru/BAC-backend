@@ -42,8 +42,8 @@ public class Second extends AppCompatActivity{
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
+                startActivity(intent);
 
             }
         });
