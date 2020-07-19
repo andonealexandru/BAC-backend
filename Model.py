@@ -54,11 +54,13 @@ class NeuralNetwork:
     def train(train_images, train_labels, label_length, input_length, test_images, test_labels, batch_size, epochs):
         model = retrieve_model()
         print('Compiling')
+        # keras.losses.custom_loss = {'ctc': lambda y_true, y_pred: y_pred}
         model.compile(
             optimizer=keras.optimizers.Adam(),
-            loss={'ctc': lambda y_true, y_pred: y_pred}
+            loss={'ctc': ctc_dummy_loss}
         )
         print('Done compiling')
+
         dataset_to_plot = []
         for i in range(epochs):
             samp = random.sample(range(train_images.shape[0]), batch_size)
@@ -162,9 +164,28 @@ def ctc_loss(args):
     return tf.keras.backend.ctc_batch_cost(labels, y_pred, input_length, label_length)
 
 
+def ctc_dummy_loss(y_true, y_pred):
+    return y_pred
+
+
 def save_model(model):
-    model.save('saved_model', overwrite=True)
+    model_json = model.to_json()
+    with open("model.json", "w") as json_file:
+        json_file.write(model_json)
+
+    model.save_weights("model.h5")
+    print("Saved model to disk")
 
 
 def retrieve_model():
-    return keras.models.load_model('saved_model')
+    print('retrieving model')
+
+    json_file = open('model.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    loaded_model = keras.models.model_from_json(loaded_model_json)
+    # load weights into new model
+    loaded_model.load_weights("model.h5")
+    print("Loaded model from disk")
+
+    return loaded_model

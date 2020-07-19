@@ -1,4 +1,4 @@
-from Model2 import NeuralNetwork
+from Model import NeuralNetwork
 from DataLoader import get_data
 import numpy as np
 
@@ -17,4 +17,5 @@ print(label_Lengths.shape)
 NN = NeuralNetwork()
 print('Training')
 NN.train(images, labels, label_Lengths, input_lengths, 0, 0, 32, 5000)
+print(NN.return_text_from_right_sized_image(images[1]))  # moved
 
