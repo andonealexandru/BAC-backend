@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 public class Second extends AppCompatActivity{
 
     Button btn_next, btn_back;
     CodeEditText codeEditText;
+    ImageView profilePicture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,7 @@ public class Second extends AppCompatActivity{
 
         btn_next = findViewById(R.id.btn_next);
         btn_back = findViewById(R.id.btn_back);
+        profilePicture = findViewById(R.id.profilePicture);
         codeEditText = (CodeEditText) findViewById(R.id.input_editText);
 
 
@@ -29,6 +32,14 @@ public class Second extends AppCompatActivity{
         String[] items = new String[]{"C", "C++", "Pascal"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+                startActivity(intent);
+            }
+        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override

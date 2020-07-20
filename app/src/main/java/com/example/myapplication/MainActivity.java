@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn_start, btn_capture, btn_select, btn_next, btn_send;
     RadioGroup radioGroup;
     RadioButton selectedButton;
-    ImageView imgView;
+    ImageView imgView, profilePicture;
     Uri image_uri;
 
     @Override
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         btn_select = findViewById(R.id.gallery_button);
         btn_next = findViewById(R.id.btn_next);
         imgView = findViewById(R.id.imgView_preview);
+        profilePicture = findViewById(R.id.profilePicture);
 
        /* btn_start = findViewById(R.id.button_start);
         radioGroup = findViewById(R.id.group_button);
@@ -75,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
 
         btn_send = findViewById(R.id.sendImageButton);
 */
+       profilePicture.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+               startActivity(intent);
+           }
+       });
 
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override

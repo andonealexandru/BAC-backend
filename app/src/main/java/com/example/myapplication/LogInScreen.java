@@ -24,7 +24,6 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
     private static final int RC_SIGN_IN = 1000;
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
-    Button signOutButton;
     GoogleSignInAccount account;
 
     @Override
@@ -34,9 +33,6 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
-        signOutButton = findViewById(R.id.sign_out_button);
-
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -44,7 +40,6 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
 
     }
 
@@ -67,22 +62,8 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
             case R.id.sign_in_button:
                 signIn();
                 break;
-            case R.id.sign_out_button:
-                signOut();
-                //revokeAccess();
-                break;
         }
 
-    }
-
-    private void signOut() {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "You've signed out", Toast.LENGTH_LONG).show();
-                    }
-                });
     }
 
 

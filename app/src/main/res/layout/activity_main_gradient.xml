@@ -7,16 +7,16 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
-    <include layout="@layout/profile_bar"></include>
+    <include layout="@layout/profile_bar">
+    </include>
 
     <ImageView
         android:id="@+id/imgView_preview"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="40dp"
-        android:contentDescription="@string/app_name"
-
+        android:layout_height="417dp"
         android:layout_above="@id/layout_btn_camera"
+        android:contentDescription="@string/app_name"
+        android:padding="40dp"
         app:srcCompat="@drawable/logo" />
 
 
