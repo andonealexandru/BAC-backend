@@ -12,8 +12,9 @@ from DataLoader import extract_img
 
 class NeuralNetwork:
 
-    def __init__(self):
-        self.setup_model()
+    def __init__(self, create):
+        if create == True:
+            self.setup_model()
 
     @staticmethod
     def setup_model():
