@@ -1,28 +1,23 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import java.io.Console;
-
-import javax.security.auth.login.LoginException;
+import com.squareup.picasso.Picasso;
 
 public class ProfileSettings extends AppCompatActivity {
 
@@ -30,6 +25,7 @@ public class ProfileSettings extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     ImageView profile_picture;
+    TextView profileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +34,7 @@ public class ProfileSettings extends AppCompatActivity {
         signOutBtn = findViewById(R.id.sign_out_button_profile_settings);
         exitBtn = findViewById(R.id.exit_btn);
         profile_picture = findViewById(R.id.profilePicture);
+        profileName = findViewById(R.id.profileName);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -47,8 +44,10 @@ public class ProfileSettings extends AppCompatActivity {
 
         account = GoogleSignIn.getLastSignedInAccount(this);
 
+        profileName.setText(account.getDisplayName());
+
         if(account.getPhotoUrl() != null)
-            profile_picture.setImageURI(account.getPhotoUrl());
+            Picasso.get().load(account.getPhotoUrl()).into(profile_picture);
 
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
