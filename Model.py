@@ -63,37 +63,46 @@ class NeuralNetwork:
         print('Done compiling')
 
         dataset_to_plot = []
-        for i in range(epochs):
-            samp = random.sample(range(train_images.shape[0]), batch_size)
-            x3 = [train_images[i] for i in samp]
-            x3 = np.array(x3)
-            y3 = [train_labels[i] for i in samp]
-            y3 = np.array(y3)
-            input_lengths2 = [input_length[i] for i in samp]
-            label_lengths2 = [label_length[i] for i in samp]
+        # for i in range(epochs):
+        # samp = random.sample(range(train_images.shape[0]), batch_size)
+        # x3 = [train_images[i] for i in samp]
+        # x3 = np.array(x3)
+        # y3 = [train_labels[i] for i in samp]
+        # y3 = np.array(y3)
+        # input_lengths2 = [input_length[i] for i in samp]
+        # label_lengths2 = [label_length[i] for i in samp]
+        #
+        # input_lengths2 = np.array(input_lengths2)
+        # label_lengths2 = np.array(label_lengths2)
 
-            input_lengths2 = np.array(input_lengths2)
-            label_lengths2 = np.array(label_lengths2)
+        nr = len(train_images) // batch_size * batch_size
 
-            inputs = {
-                'input': x3,
-                'truth_labels': y3,
-                'input_length': input_lengths2,
-                'label_length': label_lengths2
-            }
-            outputs = {'ctc': np.zeros([batch_size])}
-            if i % 100 == 0:
-                print(i)
-                history1 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=2)
-                dataset_to_plot.append(history1.history['loss'][0])
-            else:
-                history2 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=0)
-                dataset_to_plot.append(history2.history['loss'][0])
+        train_images = train_images[:nr]
+        train_labels = train_labels[:nr]
+        input_length = input_length[:nr]
+        label_length = label_length[:nr]
+
+        inputs = {
+            'input': train_images,
+            'truth_labels': train_labels,
+            'input_length': input_length,
+            'label_length': label_length
+        }
+        outputs = {'ctc': np.zeros([nr])}
+
+        history = model.fit(inputs, outputs, batch_size=batch_size, epochs=epochs)
+        # if i % 100 == 0:
+        #     print(i)
+        #     history1 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=2)
+        #     dataset_to_plot.append(history1.history['loss'][0])
+        # else:
+        #     history2 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=0)
+        #     dataset_to_plot.append(history2.history['loss'][0])
 
         print('Done')
 
         # show a graphic to see loss
-        plt.plot(dataset_to_plot)
+        plt.plot(history.history['loss'])
         plt.title('Training loss')
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
@@ -119,16 +128,9 @@ class NeuralNetwork:
         plt.imsave('test.jpg', prediction)
         return prediction
 
-    def return_text_from_right_sized_image(self, image):  # pentru imagini care au deja 128x32x1
+    def return_text(self, image):  # pentru imagini care au deja 128x32x1
         mat = self.predict(image)
         return ctcBeamSearch(mat, alphabet, None)
-
-    def return_text_from_random_image(self, image):
-        image = extract_img(image)
-        image = np.transpose(image, (1, 0))
-        print(image.shape)  # ???
-        strin = self.return_text_from_right_sized_image(self, image)
-        return strin
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):

@@ -5,7 +5,7 @@ from Alphabet import text_to_label
 
 path_to_file = '/home/andone/Documents/Programming/python/database for train/ascii/words.txt'  # path catre words.txt
 path_to_folder = '/home/andone/Documents/Programming/python/database for train/words/'  # path catre folderul cu cuvinte
-num_images = 50000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
+num_images = 20  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
 
 def get_x_y():
@@ -89,3 +89,19 @@ def extract_img(img):
     target[:new_x, :new_y] = img2[:, :, 0]
     target[new_x:, new_y:] = 255
     return target
+
+
+def prepare_image(path):
+    data = cv2.imread(path)
+    data = cv2.cvtColor(data, cv2.COLOR_RGB2GRAY)
+    img = extract_img(data)
+
+    img = np.asarray(img) / 255
+
+    if img.shape[0] == 32:
+        img = np.transpose(img, (1, 0))
+
+    if len(img.shape) != 3:
+        img = np.expand_dims(img, axis=2)
+
+    return img
