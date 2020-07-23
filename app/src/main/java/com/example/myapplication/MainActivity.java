@@ -1,9 +1,5 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.content.ClipData;
 import android.content.ContentValues;
@@ -16,22 +12,28 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     RadioButton selectedButton;
     ImageView imgView, profilePicture;
     Uri image_uri;
+    TextView profileName;
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         btn_next = findViewById(R.id.btn_next);
         imgView = findViewById(R.id.imgView_preview);
         profilePicture = findViewById(R.id.profilePicture);
+        profileName = findViewById(R.id.profileName);
 
        /* btn_start = findViewById(R.id.button_start);
         radioGroup = findViewById(R.id.group_button);
@@ -76,6 +82,20 @@ public class MainActivity extends AppCompatActivity {
 
         btn_send = findViewById(R.id.sendImageButton);
 */
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+       profileName.setText(account.getDisplayName());
+
+       if(account.getPhotoUrl() != null)
+           Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
+
        profilePicture.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {

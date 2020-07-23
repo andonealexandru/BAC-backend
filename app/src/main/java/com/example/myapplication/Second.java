@@ -1,10 +1,6 @@
 package com.example.myapplication;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,6 +9,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +38,10 @@ public class Second extends AppCompatActivity{
     ImageView profilePicture;
     Spinner dropdown;
 
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount account;
+    TextView profileName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,7 @@ public class Second extends AppCompatActivity{
         btn_back = findViewById(R.id.btn_back);
         profilePicture = findViewById(R.id.profilePicture);
         codeEditText = (CodeEditText) findViewById(R.id.input_editText);
+        profileName = findViewById(R.id.profileName);
 
 
         dropdown = findViewById(R.id.spinner_select_compiler);
@@ -50,6 +59,19 @@ public class Second extends AppCompatActivity{
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+        profileName.setText(account.getDisplayName());
+
+        if(account.getPhotoUrl() != null)
+            Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
