@@ -3,8 +3,8 @@ import os
 import numpy as np
 from Alphabet import text_to_label
 
-path_to_file = '/home/andone/Documents/Programming/python/database for train/ascii/words.txt'  # path catre words.txt
-path_to_folder = '/home/andone/Documents/Programming/python/database for train/words/'  # path catre folderul cu cuvinte
+path_to_file = 'D:/Handwriting DB/ascii/words.txt'  # path catre words.txt
+path_to_folder = 'D:/Handwriting DB/words/'  # path catre folderul cu cuvinte
 num_images = 20  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
 

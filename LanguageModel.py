@@ -1,6 +1,7 @@
 from __future__ import division
 import codecs
 
+
 class LanguageModel:
     """Language Model class for beam search"""
     def __init__(self, fn, classes):
