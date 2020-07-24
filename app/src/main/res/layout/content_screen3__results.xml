@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+        android:id="@+id/text_server"
+        android:layout_width="wrap_content"
+        android:layout_height="144dp"
+        android:layout_below="@id/output"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="50dp"
+        android:background="@android:color/holo_orange_light"
+
+        android:scrollbars="vertical"
+        android:text="sgn[owrngo[wrngo[wrng[owrngo[wrngowrng[oerng[onrgo[nwro[gnqwro[ngoqriwngoieqrngoqenrgnqerpigneqrpgnqprognqpeorngpqeoringoqeringpqeoirngpoeqrngopiqenropgiqnerogineqoprinAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
+
+    <TextView
+        android:id="@+id/output"
+        android:layout_below="@id/welcome"
+        android:layout_width="108dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="40dp"
+        android:text="Output"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/nota"
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_server"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="3dp"
+        android:text="Nota:"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="This is the output from your imported code. "
+        android:textSize="30sp" />
+
+</RelativeLayout>

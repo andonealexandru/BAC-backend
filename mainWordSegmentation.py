@@ -1,10 +1,19 @@
 import os
-import cv2
+import cv2 
 import numpy as np
 from WordSegmentation import wordSegmentation, prepareImg
 import DataLoader
+import Model
 
 images_for_model = []
+
+def send_words_to_nn():
+	list_word = getImages()
+	NN = Model.NeuralNetwork(create=False)
+	for word in list_word:
+		interpreted_text = NN.return_text(word)
+		print(interpreted_text)
+
 
 def getImages():
 	"""reads images from data/ and outputs the word-segmentation to out/"""
@@ -56,5 +65,6 @@ def getImages():
 		print(len(images_for_model))
 		return images_for_model
 
-#if __name__ == '__main__':
-#	main()
+if __name__ == '__main__':
+	getImages()
+	send_words_to_nn()

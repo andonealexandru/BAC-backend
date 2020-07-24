@@ -1,0 +1,89 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.myapplication"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="14"
+8-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="30" />
+9-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.CAMERA" />
+11-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:6:5-65
+11-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:6:22-62
+12    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+12-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:7:5-81
+12-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:7:22-78
+13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+13-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:8:5-80
+13-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:8:22-77
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:9:5-67
+14-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:9:22-64
+15nu te aud
+16    <application
+16-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:11:5-42:19
+17        android:allowBackup="true"
+17-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:12:9-35
+18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+18-->[androidx.core:core:1.1.0] /home/istra/.gradle/caches/transforms-2/files-2.1/03736cf4bc3669a69d502627b70a527e/core-1.1.0/AndroidManifest.xml:24:18-86
+19        android:debuggable="true"
+20        android:icon="@mipmap/ic_launcher"
+20-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:13:9-43
+21        android:label="@string/app_name"
+21-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:14:9-41
+22        android:networkSecurityConfig="@xml/network_security_config"
+22-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:15:9-69
+23        android:roundIcon="@mipmap/ic_launcher_round"
+23-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:16:9-54
+24        android:supportsRtl="true"
+24-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:17:9-35
+25        android:testOnly="true"
+26        android:theme="@style/AppTheme" >
+26-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:18:9-40
+27        <activity
+27-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:20:9-29:20
+28            android:name="com.example.myapplication.Screen3_Results"
+28-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:21:13-44
+29            android:label="@string/title_activity_screen3__results"
+29-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:22:13-68
+30            android:theme="@style/AppTheme.NoActionBar" >
+30-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:23:13-56
+31            <intent-filter>
+31-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:24:13-28:29
+32                <action android:name="android.intent.action.MAIN" />
+32-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:25:17-69
+32-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:25:25-66
+33
+34                <category android:name="android.intent.category.LAUNCHER" />
+34-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:27:17-77
+34-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:27:27-74
+35            </intent-filter>
+36        </activity>
+37
+38        <meta-data
+38-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:31:9-33:63
+39            android:name="com.google.android.actions"
+39-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:32:13-54
+40            android:resource="@xml/network_security_config" />
+40-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:33:13-60
+41
+42        <activity android:name="com.example.myapplication.MainActivity" >
+42-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:35:9-41:20
+42-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:35:19-47
+43            <intent-filter>
+43-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:24:13-28:29
+44                <action android:name="android.intent.action.MAIN" />
+44-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:25:17-69
+44-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:25:25-66
+45
+46                <category android:name="android.intent.category.LAUNCHER" />
+46-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:27:17-77
+46-->/home/istra/work/bac/test/app/src/main/AndroidManifest.xml:27:27-74
+47            </intent-filter>
+48        </activity>
+49    </application>
+50
+51</manifest>
