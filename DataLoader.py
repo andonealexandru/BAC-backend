@@ -86,7 +86,7 @@ def extract_img(img):
     new_x = int(img.shape[0] * min_xy)
     new_y = int(img.shape[1] * min_xy)
     img2 = cv2.resize(img, (new_y, new_x))
-    target[:new_x, :new_y] = img2[:, :, 0]
+    target[:new_x, :new_y] = img2[:, :]
     target[new_x:, new_y:] = 255
     return target
 
