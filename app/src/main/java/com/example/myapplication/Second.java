@@ -60,7 +60,7 @@ public class Second extends AppCompatActivity{
         dropdown.setAdapter(adapter);
 
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -79,7 +79,7 @@ public class Second extends AppCompatActivity{
                 Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,8 +104,7 @@ public class Second extends AppCompatActivity{
 
     void sendForCompile()
     {
-        String CLIENT_SECRET = "90cc525c23f99059c05da47bf9ea1de8d8a74304";
-        String http_api = "https://api.hackerearth.com/v3/code/run/";
+        String http_api = "http://192.168.1.254:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();
@@ -116,13 +115,9 @@ public class Second extends AppCompatActivity{
 
         final JSONObject data = new JSONObject();
         try {
-            data.put("client_secret", CLIENT_SECRET);
-            data.put("async", 0);
             data.put("source", code);
             //data.put("input", input);
             data.put("lang", lang);
-            data.put("time_limit", 5);
-            data.put("memory_limit", 262144);
         }catch(JSONException e){
             e.printStackTrace();
             return;
@@ -139,7 +134,7 @@ public class Second extends AppCompatActivity{
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, final IOException e) {
                 call.cancel();
 
                 // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
@@ -147,6 +142,7 @@ public class Second extends AppCompatActivity{
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(), "failed to connect", Toast.LENGTH_LONG).show();
+                        codeEditText.setText(e.getMessage());
                     }
                 });
             }
