@@ -1,9 +1,5 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.content.ClipData;
 import android.content.ContentValues;
@@ -16,22 +12,28 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,22 +54,55 @@ public class MainActivity extends AppCompatActivity {
     public static final int IMAGE_CAPTURE_CODE = 1001;
     public static final int GALLERY_PERMISSION_CODE = 1002;
     public static final int GALLERY_CODE = 1003;
-    Button btn_start, btn_capture, btn_select, btn_send;
+    Button btn_start, btn_capture, btn_select, btn_next, btn_send;
     RadioGroup radioGroup;
     RadioButton selectedButton;
-    ImageView imgView;
+    ImageView imgView, profilePicture;
     Uri image_uri;
+    TextView profileName;
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        btn_start = findViewById(R.id.button_start);
+        setContentView(R.layout.activity_main_gradient);
+
+
+        btn_capture = findViewById(R.id.camera_button);
+        btn_select = findViewById(R.id.gallery_button);
+        btn_next = findViewById(R.id.btn_next);
+        imgView = findViewById(R.id.imgView_preview);
+        profilePicture = findViewById(R.id.profilePicture);
+        profileName = findViewById(R.id.profileName);
+
+       /* btn_start = findViewById(R.id.button_start);
         radioGroup = findViewById(R.id.group_button);
-        btn_capture = findViewById(R.id.btnCapture);
-        imgView = findViewById(R.id.imgView);
-        btn_select = findViewById(R.id.button_select);
+
+
         btn_send = findViewById(R.id.sendImageButton);
+*/
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+       profileName.setText(account.getDisplayName());
+
+       if(account.getPhotoUrl() != null)
+           Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
+
+       profilePicture.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+               startActivity(intent);
+           }
+       });
 
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,16 +117,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int selectedRadio = radioGroup.getCheckedRadioButtonId();
-                selectedButton = findViewById(selectedRadio);
-
-                Toast.makeText(MainActivity.this, "You selected " + selectedButton.getText(), Toast.LENGTH_LONG).show();
-
-            }
-        });
 
         btn_capture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,12 +135,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Second.class);
+                startActivity(intent);
+            }
+        });
+
+/*        btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int selectedRadio = radioGroup.getCheckedRadioButtonId();
+                selectedButton = findViewById(selectedRadio);
+
+                Toast.makeText(MainActivity.this, "You selected " + selectedButton.getText(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 connectServer(null);
             }
-        });
+        });*/
     }
 
     private void openGallery(){
@@ -234,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 is = getContentResolver().openInputStream(image_uri);
                 Bitmap imgBitmap = BitmapFactory.decodeStream(is);
-                connectServer(BitMapToString(imgBitmap));
+               // connectServer(BitMapToString(imgBitmap));
             } catch (FileNotFoundException e) {
                 Toast.makeText(MainActivity.this, "Oops", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -265,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         InputStream is = getContentResolver().openInputStream(imageURI);
                         Bitmap newBitmap = BitmapFactory.decodeStream(is);
-                        connectServer(BitMapToString(newBitmap));
+                      //  connectServer(BitMapToString(newBitmap));
                         bitmaps.add(newBitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
