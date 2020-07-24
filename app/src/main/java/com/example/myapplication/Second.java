@@ -104,7 +104,7 @@ public class Second extends AppCompatActivity{
 
     void sendForCompile()
     {
-        String http_api = "http://192.168.1.254:5000/compile";
+        String http_api = "http://192.168.2.206:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();

@@ -2,6 +2,7 @@ from flask import Flask, request
 #from flask_pymongo import PyMongo
 #from bitmap import BitMap
 import base64
+import requests
 
 app = Flask(__name__)
 #app.config['MONGO_URI'] = "mongodb://localhost:27017/bac_test"
@@ -26,7 +27,7 @@ def handle_request():
 @app.route("/compile", methods=['POST'])
 def handle_compile():
 
-    code_data = reuest.get_json()
+    code_data = request.get_json()
     code_data = dict(code_data)
 
     RUN_URL = u'https://api.hackerearth.com/v3/code/run/'
