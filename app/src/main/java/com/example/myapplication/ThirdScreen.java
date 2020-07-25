@@ -16,6 +16,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ThirdScreen extends AppCompatActivity {
 
     Button btn_finish, btn_back;
@@ -23,7 +26,7 @@ public class ThirdScreen extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
-    TextView profileName;
+    TextView profileName, tvOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +37,11 @@ public class ThirdScreen extends AppCompatActivity {
         btn_back = findViewById(R.id.btn_back3);
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
+        tvOutput = findViewById(R.id.tvOutput);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        write_compile_result();
+
+      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -47,7 +53,7 @@ public class ThirdScreen extends AppCompatActivity {
 
         if(account.getPhotoUrl() != null)
             Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
-
+*/
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +77,35 @@ public class ThirdScreen extends AppCompatActivity {
                 Toast.makeText(ThirdScreen.this, "Wooow", Toast.LENGTH_LONG).show();
             }
         });
+
+    }
+
+    void write_compile_result()
+    {
+
+        Bundle extras = getIntent().getExtras();
+        String json_as_string = extras.getString("compile_result");
+        tvOutput.setText(json_as_string);
+        try {
+            JSONObject object = new JSONObject(json_as_string);
+            String compile_status = object.getString("compile_status");
+            if(compile_status.equals("OK"))
+            {
+                String output = object.getJSONObject("run_status").getString("output");
+                String forTV = "Compile status: OK\n" + "Output: " + output;
+                tvOutput.setText(forTV);
+            }
+            else{
+                String forTV = "Compile status: " + compile_status;
+                tvOutput.setText(forTV);
+            }
+
+        }catch(JSONException e){
+            e.printStackTrace();
+            return;
+        }
+
+
 
     }
 }

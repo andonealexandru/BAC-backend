@@ -104,7 +104,7 @@ public class Second extends AppCompatActivity{
 
     void sendForCompile()
     {
-        String http_api = "http://192.168.2.206:5000/compile";
+        String http_api = "http://192.168.1.106:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();
@@ -153,11 +153,19 @@ public class Second extends AppCompatActivity{
                     @Override
                     public void run() {
                         TextView responseText = findViewById(R.id.statusTextView);
+                        String json_as_string = null;
                         try {
-                            codeEditText.setText(response.body().string());
+                            json_as_string = response.body().string();
+                            Intent intent = new Intent(Second.this, ThirdScreen.class);
+                            intent.putExtra("compile_result", json_as_string);
+
+                            startActivity(intent);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+
+
                     }
                 });
             }
