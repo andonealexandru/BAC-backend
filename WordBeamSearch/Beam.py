@@ -17,7 +17,7 @@ class Textual:
     def __init__(self, text=''):
         self.text = text
         self.wordHist = []  # istoricul cuvintelor
-        self.wordDev = []  # cuvinte in formare
+        self.wordDev = ''  # cuvinte in formare
         self.prUnnormalized = 1.0
         self.prTotal = 1.0
 
@@ -61,6 +61,9 @@ class Beam:
 
     def get_next_chars(self):
         return self.lm.get_next_chars(self.textual.wordDev)
+
+    def get_all_chars(self):
+        return self.lm.get_all_chars()
 
     def create_child_beam(self, newChar, prBlank, prNonBlank):
         """

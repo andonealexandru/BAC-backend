@@ -6,6 +6,12 @@ import numpy as np
 from Beam import Beam, BeamList
 from LanguageModel import LanguageModel
 
+# todo: benthem dataset
+# cand adaugam:
+# self.chars = codecs.open(self.path + 'chars.txt', 'r', 'utf8').read()
+# self.wordChars = codecs.open(self.path + 'wordChars.txt', 'r', 'utf8').read()
+# self.lm = LanguageModel(codecs.open(self.path + 'corpus.txt', 'r', 'utf8').read(), self.chars, self.wordChars)
+
 
 def wordBeamSearch(mat, beamWidth, lm, useNgrams):
     """
@@ -54,6 +60,17 @@ def wordBeamSearch(mat, beamWidth, lm, useNgrams):
 
                 # salvam
                 curr.add_beam(beam.create_child_beam(c, 0, pr_non_blank))
+            # testat pt valoarea din *
+            # others = beam.get_all_chars()
+            # for c in others:
+            #     if c not in nextChars:
+            #         label_idx = chars.index(c)
+            #         if beam.get_text() != '' and beam.get_text()[-1] == c:
+            #             pr_non_blank = mat[t, label_idx] * beam.get_pr_blank() * 0.005  # caractere separate de blank
+            #         else:
+            #             pr_non_blank = mat[t, label_idx] * beam.get_pr_total() * 0.005
+            # salvam
+            # curr.add_beam(beam.create_child_beam(c, 0, pr_non_blank))
         last = curr
     last.complete_beams(lm)
     best_beams = last.get_best_beams(1)  #probabilitatea
