@@ -41,7 +41,7 @@ public class ThirdScreen extends AppCompatActivity {
 
         write_compile_result();
 
-      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+      GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -53,7 +53,7 @@ public class ThirdScreen extends AppCompatActivity {
 
         if(account.getPhotoUrl() != null)
             Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
-*/
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -60,7 +60,7 @@ public class Second extends AppCompatActivity{
         dropdown.setAdapter(adapter);
 
 
-        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -79,7 +79,7 @@ public class Second extends AppCompatActivity{
                 Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
                 startActivity(intent);
             }
-        });*/
+        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
