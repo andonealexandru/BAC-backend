@@ -3,5 +3,6 @@
     <color name="colorPrimary">#69E77F</color>
     <color name="colorPrimaryDark">#4EB560</color>
     <color name="colorBackground">#2b3138</color>
+    <color name="colorElevatedCard">#3D434A</color>
     <color name="colorWhite">#EDEDED</color>
 </resources>
