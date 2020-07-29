@@ -83,8 +83,8 @@ def wordBeamSearch(mat, beamWidth, lm, useNgrams):
 #- 0.6  0.6
 
 # test
-testLM = LanguageModel('a b aa ab ba bb', 'ab ', 'ab')
-testMat = np.array([[0.3, 0.1, 0, 0.6], [0.3, 0.1, 0, 0.6]])
-testBW = 25
-res = wordBeamSearch(testMat, testBW, testLM, False)
-print('Result: ' + res)
+# #testLM = LanguageModel('a b aa ab ba bb', 'ab ', 'ab')
+# testMat = np.array([[0.3, 0.1, 0, 0.6], [0.3, 0.1, 0, 0.6]])
+# testBW = 25
+# res = wordBeamSearch(testMat, testBW, testLM, False)
+# print('Result: ' + res)

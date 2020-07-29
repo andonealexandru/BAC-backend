@@ -2,7 +2,7 @@ from __future__ import division
 import codecs
 
 
-class LanguageModel:
+class LanguageModel2:
     """Language Model class for beam search"""
     def __init__(self, fn, classes):
         """fn = fisierul cu cuvinte

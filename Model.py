@@ -8,7 +8,9 @@ from Alphabet import alp_len, alphabet
 from BeamSearch import ctcBeamSearch
 import random
 from DataLoader import extract_img
-
+import codecs
+from WordBeamSearch import wordBeamSearch
+from LanguageModel import LanguageModel
 
 class NeuralNetwork:
 
@@ -130,7 +132,8 @@ class NeuralNetwork:
 
     def return_text(self, image):  # pentru imagini care au deja 128x32x1
         mat = self.predict(image)
-        return ctcBeamSearch(mat, alphabet, None)
+        lm = create_LM()
+        return ctcBeamSearch(mat, alphabet, None), wordBeamSearch(mat, 10, lm, False)
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):
@@ -192,3 +195,9 @@ def retrieve_model():
     print("Loaded model from disk")
 
     return loaded_model
+
+def create_LM():
+    chars = codecs.open('data_ctcWordBeam/IAM/' + 'chars.txt', 'r', 'utf8').read()
+    wordChars = codecs.open('data_ctcWordBeam/IAM/' + 'word_chars.txt', 'r', 'utf8').read()
+    lm = LanguageModel(codecs.open('data_ctcWordBeam/IAM/' + 'corpus.txt', 'r', 'utf8').read(), chars, wordChars)
+    return lm
