@@ -16,11 +16,10 @@ def test():
 
 @app.route("/upload", methods=['POST', 'GET'])
 def handle_request():
-   # img = request.get_json()
-    #mongo.db.images.insert(dict(img))
-    #img = dict(img)
-    #with open("imageToSave.png", "wb") as fh:
-     #   fh.write(base64.b64decode(str(img["key"])))
+    img = request.get_json()
+    img = dict(img)
+    with open("imageToSave.png", "wb") as fh:
+        fh.write(base64.b64decode(str(img["key"])))
     return "ok"
 
 
