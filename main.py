@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
+
 #images, labels, input_lengths, label_Lengths = get_data()
 #images = np.asarray(images)
 #labels = np.asarray(labels)

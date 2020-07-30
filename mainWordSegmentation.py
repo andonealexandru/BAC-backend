@@ -11,13 +11,19 @@ images_for_model = []
 def send_words_to_nn():
 	list_word = getImages()
 	NN = Model.NeuralNetwork(create=False)
-	for word in list_word:
-		interpreted_text = NN.return_text(word)
+	text = []
+	print(len(list_word))
+	for i in range(0,len(list_word)):
+		print(i)
+		word = DataLoader.prepare_image('out/imageToSave.png/%d.png'%i)
+		aux, interpreted_text = NN.return_text(word)
+		text.append(interpreted_text)
 		print(interpreted_text)
+	return ' '.join(text)
 
 
 def increase_contrast_and_apply_treshold():
-	img = cv2.imread('data/test_cod.jpeg', 1)
+	img = cv2.imread('data/imageToSave.png', 1)
 	img = cv2.GaussianBlur(img, (5, 5), 0)
 
 	# -----Converting image to LAB Color model-----------------------------------
@@ -101,7 +107,6 @@ def getImages():
 		cv2.imwrite('out/%s/summary.png'%f, img)
 		print(len(images_for_model))
 		return images_for_model
-#
-# if __name__ == '__main__':
-# 	getImages()
-# 	send_words_to_nn()
+
+if __name__ == '__main__':
+ 	print(send_words_to_nn())
