@@ -24,8 +24,8 @@ public class ProfileSettings extends AppCompatActivity {
     CardView signOutBtn, exitBtn;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
-    ImageView profile_picture, profile_picture_2;
-    TextView profileName, profileName2;
+    ImageView profile_picture;
+    TextView profileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +33,8 @@ public class ProfileSettings extends AppCompatActivity {
         setContentView(R.layout.activity_profile_settings);
         signOutBtn = findViewById(R.id.card_log_out);
         exitBtn = findViewById(R.id.card_exit);
-        profile_picture = findViewById(R.id.profilePicture);
-        profileName = findViewById(R.id.profileName);
-        profileName2 = findViewById(R.id.profile_name);
-        profile_picture_2 = findViewById(R.id.profile_image);
+        profileName = findViewById(R.id.profile_name);
+        profile_picture = findViewById(R.id.profile_image);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -47,12 +45,10 @@ public class ProfileSettings extends AppCompatActivity {
         account = GoogleSignIn.getLastSignedInAccount(this);
 
         profileName.setText(account.getDisplayName());
-        profileName2.setText(account.getDisplayName());
 
-        if(account.getPhotoUrl() != null) {
+        if(account.getPhotoUrl() != null)
             Picasso.get().load(account.getPhotoUrl()).into(profile_picture);
-            Picasso.get().load(account.getPhotoUrl()).into(profile_picture_2);
-        }
+
 
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
