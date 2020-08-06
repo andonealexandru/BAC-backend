@@ -60,7 +60,7 @@ public class Second extends AppCompatActivity{
         dropdown.setAdapter(adapter);
 
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+     /*   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -80,6 +80,9 @@ public class Second extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+*/
+
+        get_code_result();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +103,13 @@ public class Second extends AppCompatActivity{
             }
         });
 
+    }
+
+    void get_code_result()
+    {
+        Bundle extras = getIntent().getExtras();
+        String NN_answer = extras.getString("compiled_code");
+        codeEditText.setText(NN_answer);
     }
 
     void sendForCompile()

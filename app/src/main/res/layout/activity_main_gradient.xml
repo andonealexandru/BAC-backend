@@ -10,6 +10,14 @@
     <include layout="@layout/profile_bar">
     </include>
 
+    <TextView
+        android:id="@+id/tvDebug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/colorWhite"
+        android:text="TextView" />
+
     <ImageView
         android:id="@+id/imgView_preview"
         android:layout_width="fill_parent"

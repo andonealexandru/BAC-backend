@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -54,12 +55,13 @@ public class MainActivity extends AppCompatActivity {
     public static final int IMAGE_CAPTURE_CODE = 1001;
     public static final int GALLERY_PERMISSION_CODE = 1002;
     public static final int GALLERY_CODE = 1003;
+    String response_code = "";
     Button btn_start, btn_capture, btn_select, btn_next, btn_send;
     RadioGroup radioGroup;
     RadioButton selectedButton;
     ImageView imgView, profilePicture;
     Uri image_uri;
-    TextView profileName;
+    TextView profileName, debug;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
 
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         imgView = findViewById(R.id.imgView_preview);
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
+        debug = findViewById(R.id.tvDebug);
 
        /* btn_start = findViewById(R.id.button_start);
         radioGroup = findViewById(R.id.group_button);
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         btn_send = findViewById(R.id.sendImageButton);
 */
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+     /*   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
                startActivity(intent);
            }
-       });
+       });*/
 
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Second.class);
+                intent.putExtra("compiled_code", response_code);
                 startActivity(intent);
             }
         });
@@ -199,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
     void connectServer(String data){
 
-        String postUrl= "http://192.168.1.2:5000/upload";
+        debug.setText("connecting..");
+        String postUrl= "http://192.168.1.106:5000/upload";
 
 
         JSONObject imageJSON = new JSONObject();
@@ -209,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
 
 
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
@@ -237,8 +243,8 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView responseText = findViewById(R.id.statusTextView);
-                        responseText.setText("Failed to Connect to Server" + e.getMessage());
+                    //    Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
+                        debug.setText("failed");
                     }
                 });
             }
@@ -249,10 +255,12 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView responseText = findViewById(R.id.statusTextView);
+                        response_code = null;
                         try {
-                            responseText.setText(response.body().string());
+                            response_code = response.body().string();
+                            debug.setText(response_code);
                         } catch (IOException e) {
+                            debug.setText("cv eroare");
                             e.printStackTrace();
                         }
                     }
@@ -278,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 is = getContentResolver().openInputStream(image_uri);
                 Bitmap imgBitmap = BitmapFactory.decodeStream(is);
-               // connectServer(BitMapToString(imgBitmap));
+                connectServer(BitMapToString(imgBitmap));
             } catch (FileNotFoundException e) {
                 Toast.makeText(MainActivity.this, "Oops", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -309,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         InputStream is = getContentResolver().openInputStream(imageURI);
                         Bitmap newBitmap = BitmapFactory.decodeStream(is);
-                      //  connectServer(BitMapToString(newBitmap));
+                        connectServer(BitMapToString(newBitmap));
                         bitmaps.add(newBitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
