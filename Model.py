@@ -17,6 +17,7 @@ class NeuralNetwork:
     def __init__(self, create):
         if create == True:
             self.setup_model()
+        self.lm = create_LM()
 
     @staticmethod
     def setup_model():
@@ -115,25 +116,26 @@ class NeuralNetwork:
 
     @staticmethod
     def predict(image):
-        print('predicting')
+        # print('predicting')
         model = retrieve_model()
         model2 = keras.Model(model.get_layer('input').input, model.get_layer('time_distributed_1').output)
-        model2.summary()
+        # model2.summary()
         image = np.expand_dims(image, axis=0)
         prediction = model2.predict(image)
-        print(prediction.shape)
-        print(np.max(prediction))
-        print('done predicting')
+        # print(prediction.shape)
+        # print(np.max(prediction))
+        # print('done predicting')
         prediction = np.squeeze(prediction, axis=0)
-        print(np.max(prediction))
-        plt.imshow(prediction)
+        # print(np.max(prediction))
+        # plt.imshow(prediction)
         plt.imsave('test.jpg', prediction)
         return prediction
 
     def return_text(self, image):  # pentru imagini care au deja 128x32x1
         mat = self.predict(image)
-        lm = create_LM()
-        return ctcBeamSearch(mat, alphabet, None), wordBeamSearch(mat, 10, lm, False)
+
+        # ctcBeamSearch(mat, alphabet, None),
+        return wordBeamSearch(mat, 10, self.lm, False)
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):

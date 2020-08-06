@@ -14,11 +14,11 @@ def send_words_to_nn():
 	text = []
 	print(len(list_word))
 	for i in range(0,len(list_word)):
-		print(i)
+		#print(i)
 		word = DataLoader.prepare_image('out/imageToSave.png/%d.png'%i)
-		aux, interpreted_text = NN.return_text(word)
+		interpreted_text = NN.return_text(word)
 		text.append(interpreted_text)
-		print(interpreted_text)
+		#print(interpreted_text)
 	return ' '.join(text)
 
 
@@ -59,6 +59,7 @@ def increase_contrast_and_apply_treshold():
 
 
 def getImages():
+	images_for_model.clear()
 	"""reads images from data/ and outputs the word-segmentation to out/"""
 
 	# read input images from 'in' directory

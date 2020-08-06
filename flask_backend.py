@@ -5,6 +5,7 @@ import base64
 import requests
 from mainWordSegmentation import send_words_to_nn
 
+
 app = Flask(__name__)
 #app.config['MONGO_URI'] = "mongodb://localhost:27017/bac_test"
 #mongo = PyMongo(app)
@@ -15,13 +16,15 @@ def test():
 
 
 
-@app.route("/upload", methods=['POST', 'GET'])
+@app.route("/upload", methods=['POST'])
 def handle_request():
     img = request.get_json()
     img = dict(img)
     with open("data/imageToSave.png", "wb") as fh:
         fh.write(base64.b64decode(str(img["key"])))
-    return send_words_to_nn()
+    string = send_words_to_nn()
+    print(string)
+    return string
 
 
 @app.route("/compile", methods=['POST'])
