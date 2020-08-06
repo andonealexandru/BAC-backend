@@ -25,10 +25,9 @@ def send_words_to_nn():
 def increase_contrast_and_apply_treshold():
 	img = cv2.imread('data/imageToSave.png', 1)
 	img = cv2.GaussianBlur(img, (5, 5), 0)
-
 	# -----Converting image to LAB Color model-----------------------------------
 	lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-		# -----Splitting the LAB image to different channels-------------------------
+	# -----Splitting the LAB image to different channels-------------------------
 	l, a, b = cv2.split(lab)
 
 	# -----Applying CLAHE to L-channel-------------------------------------------
@@ -40,21 +39,59 @@ def increase_contrast_and_apply_treshold():
 
 	# -----Converting image from LAB Color model to RGB model--------------------
 	final = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
-
+	# cv2.imwrite('out/final_constrast.png', final)
 	# read
-	kernel = np.ones((3, 3))
-	img = cv2.erode(final, kernel)
-	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	# cv2.imwrite('erode.png', img)
+	image = final
+	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+	thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-	# ret, thresh1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
-	# # cv2.imwrite('treshhold.png', thresh1)
-	#
-	# th2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 61, 8)
-	# cv2.imwrite('treshhold2.png', th2)
+	# Remove horizontal
+	horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (150, 1))
+	detected_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
+	cnts = cv2.findContours(detected_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+	for c in cnts:
+		cv2.drawContours(image, [c], -1, (255, 255, 255), 2)
 
+	# Remove vertical
+	vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 150))
+	detected_lines_v = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, vertical_kernel, iterations=1)
+	cnts2 = cv2.findContours(detected_lines_v, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	cnts2 = cnts2[0] if len(cnts2) == 2 else cnts2[1]
+	for c in cnts2:
+		cv2.drawContours(image, [c], -1, (255, 255, 255), 2)
+	# cv2.imwrite('out/detected_lines_v.png', 255 - detected_lines_v)
+	# Repair image
+	# repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 6))
+	# result = 255 - cv2.morphologyEx(255 - image, cv2.MORPH_CLOSE, repair_kernel, iterations=2)
+	# cv2.imwrite('out/tresh.png', thresh)
+	# cv2.imwrite('out/detected_lines.png', 255-detected_lines)
+	# cv2.imwrite('out/image.png', image)
+	# # cv2.imwrite('out/result.png', result)
+	image_black_and_white = np.array(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
+	nr_min = np.median(image_black_and_white)
+	detected_lines = np.asarray(detected_lines)
+	img = np.minimum(image_black_and_white.astype(int) + detected_lines.astype(int),
+					 np.ones((detected_lines.shape[0], detected_lines.shape[1])) * nr_min)
+	# cv2.imwrite('out/result_minus.png', img)
+
+	detected_lines_v = np.asarray(detected_lines_v)
+	img = np.minimum(img.astype(int) + detected_lines_v.astype(int),
+					 np.ones((detected_lines.shape[0], detected_lines.shape[1])) * nr_min)
+	# cv2.imwrite('out/result_si_vertical.png', img)
+
+	img = img.astype('uint8')
+	ret, img = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
+	# cv2.imwrite('out/tresh1.png', img)
+	kernel = np.ones((3, 1))
+	img = cv2.erode(img, kernel, iterations=2)
+	kernel2 = np.ones((1, 3))
+	img = cv2.erode(img, kernel2, iterations=2)
+	# cv2.imwrite('out/eroded2.png', img)
+	kernel3 = np.ones((2, 2))
+	img = cv2.dilate(img, kernel3, iterations=1)
 	th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 61, 14)
-	# cv2.imwrite('treshold3.png', th3)
+	# cv2.imwrite('out/treshhold3.png', th3)
 	return th3
 
 
@@ -85,7 +122,7 @@ def getImages():
 		print('Segmented into %d words'%len(res))
 		for (j, w) in enumerate(res):
 			(wordBox, wordImg) = w
-			# (x, y, w, h) = wordBox
+			(x, y, w, h) = wordBox
 			cv2.imwrite('out/%s/%d.png'%(f, j), wordImg) # save word
 			# cv2.rectangle(img,(x,y),(x+w,y+h),0,1) # draw bounding box in summary image
 

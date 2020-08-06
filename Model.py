@@ -1,3 +1,5 @@
+import codecs
+
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -8,16 +10,18 @@ from Alphabet import alp_len, alphabet
 from BeamSearch import ctcBeamSearch
 import random
 from DataLoader import extract_img
-import codecs
-from WordBeamSearch import wordBeamSearch
-from LanguageModel import LanguageModel
+from WordBeamSearch import LanguageModel, wordBeamSearch
+
 
 class NeuralNetwork:
 
     def __init__(self, create):
         if create == True:
             self.setup_model()
-        self.lm = create_LM()
+        # else:
+        #     model = retrieve_model_with_create_arhitecture()
+        #     model.summary()
+        self.lm = createLM()
 
     @staticmethod
     def setup_model():
@@ -116,14 +120,13 @@ class NeuralNetwork:
 
     @staticmethod
     def predict(image):
-        # print('predicting')
+        print('predicting')
         model = retrieve_model()
-        model2 = keras.Model(model.get_layer('input').input, model.get_layer('time_distributed_1').output)
+        model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
         # model2.summary()
         image = np.expand_dims(image, axis=0)
         prediction = model2.predict(image)
         # print(prediction.shape)
-        # print(np.max(prediction))
         # print('done predicting')
         prediction = np.squeeze(prediction, axis=0)
         # print(np.max(prediction))
@@ -133,9 +136,8 @@ class NeuralNetwork:
 
     def return_text(self, image):  # pentru imagini care au deja 128x32x1
         mat = self.predict(image)
-
-        # ctcBeamSearch(mat, alphabet, None),
-        return wordBeamSearch(mat, 10, self.lm, False)
+        # print(mat.shape)
+        return '1', wordBeamSearch(mat, 40, self.lm, False)
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):
@@ -162,6 +164,31 @@ class NeuralNetwork:
             save_model(model)
             with open('acc.pickle', 'wb') as f:
                 pickle.dump(history.history['accuracy'], f)
+
+    def evaluate_model(self, images, labels, input_length, label_length):
+        model = retrieve_model()
+        nr = len(images) // 32 * 32
+
+        images = images[:nr]
+        labels = labels[:nr]
+        input_length = input_length[:nr]
+        label_length = label_length[:nr]
+
+        inputs = {
+            'input': images,
+            'truth_labels': labels,
+            'input_length': input_length,
+            'label_length': label_length
+        }
+        outputs = {'ctc': np.zeros([nr])}
+
+        model.compile(
+            optimizer=keras.optimizers.Adam(),
+            loss={'ctc': ctc_dummy_loss}
+        )
+
+        result = model.evaluate(inputs, outputs, batch_size=32)
+        print(result)
 
 
 def ctc_loss(args):
@@ -198,8 +225,44 @@ def retrieve_model():
 
     return loaded_model
 
-def create_LM():
-    chars = codecs.open('data_ctcWordBeam/IAM/' + 'chars.txt', 'r', 'utf8').read()
-    wordChars = codecs.open('data_ctcWordBeam/IAM/' + 'word_chars.txt', 'r', 'utf8').read()
-    lm = LanguageModel(codecs.open('data_ctcWordBeam/IAM/' + 'corpus.txt', 'r', 'utf8').read(), chars, wordChars)
+
+def retrieve_model_with_create_arhitecture():
+    inputs = keras.Input(shape=(128, 32, 1), name='input', dtype='float32')
+
+    # layers pentru CNN
+    conv1 = layers.Conv2D(32, 5, activation='relu', padding='SAME', name="layer1")(inputs)
+    max1 = layers.MaxPool2D(2, name='layer1pool', padding='VALID')(conv1)
+    conv2 = layers.Conv2D(64, 5, activation='relu', padding='SAME', name="layer2")(max1)
+    max2 = layers.MaxPool2D(2, name='layer2pool', padding='VALID')(conv2)
+    conv3 = layers.Conv2D(128, 3, activation='relu', padding='SAME', name="layer3")(max2)
+    max3 = layers.MaxPool2D((1, 2), name='layer3pool', padding='VALID')(conv3)
+    conv4 = layers.Conv2D(128, 3, activation='relu', padding='SAME', name="layer4")(max3)
+    max4 = layers.MaxPool2D((1, 2), name='layer4pool', padding='VALID')(conv4)
+    conv5 = layers.Conv2D(256, 3, activation='relu', padding='SAME', name="layer5")(max4)
+    max5 = layers.MaxPool2D((1, 2), name='layer5pool', padding='VALID')(conv5)
+    resh = layers.Reshape((32, 256), name='reshape')(max5)
+
+    # RNN
+    bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True), name='bidirectLayer')(resh)  # posibil
+    dense = layers.TimeDistributed(layers.Dense(alp_len + 1))(bid)
+    y_pred = layers.TimeDistributed(layers.Activation('softmax', name='softmax'))(dense)
+
+    # CTC
+    y_true = keras.Input(name='truth_labels', shape=[32])  # (samples, max_string_length)
+    input_length = keras.Input(name='input_length', shape=[1])  # lungimea cuvantului din imagine din y_pred
+    label_length = keras.Input(name='label_length', shape=[1])  # lungimea cuvantului din imaginea din y_true
+    loss_out = layers.Lambda(
+        ctc_loss, output_shape=(1,), name='ctc'
+    )([y_pred, y_true, label_length, input_length])
+
+    model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
+    model.load_weights("model.h5")
+    return model
+
+
+def createLM():
+    chars = codecs.open('data_ctcWordBeam/iam/' + 'chars.txt', 'r', 'utf8').read()
+    wordChars = codecs.open('data_ctcWordBeam/iam/' + 'word_chars.txt', 'r', 'utf8').read()
+    non_word_chars = codecs.open('data_ctcWordBeam/iam/' + 'non_word_chars.txt', 'r', 'utf8').read()
+    lm = LanguageModel(codecs.open('data_ctcWordBeam/iam/' + 'corpus.txt', 'r', 'utf8').read(), chars, wordChars, non_word_chars)
     return lm
