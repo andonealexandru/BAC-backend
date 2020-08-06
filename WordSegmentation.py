@@ -47,13 +47,13 @@ def wordSegmentation(img, kernelSize=25, sigma=11, theta=7, minArea=0):
 
 def sortRois(rois) :
 	new_rois = []
-	for current_roi in rois :
+	for current_roi in rois: # (x, y, w, h)
 		x = current_roi[0][0]
 		y = current_roi[0][1]
 		h = current_roi[0][3]
 		line = []
 		for next_roi in rois:
-			if next_roi[0][1] > y and next_roi[0][1] < y + h :
+			if next_roi[0][1] >= y-5 and next_roi[0][1] <= y + h+5 :
 				if (next_roi[0][0] < x) :
 					line.append(next_roi)
 		line.reverse()

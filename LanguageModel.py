@@ -9,7 +9,7 @@ from PrefixTree import Trie
 class LanguageModel:
     """unigram/bigram LM, add-k smoothing"""
 
-    def __init__(self, corpus, chars, wordChars):
+    def __init__(self, corpus, chars, wordChars, non_word_chars):
         """
         :param corpus: read text from filename
         :param chars: caracterele gasite in dataset
@@ -64,9 +64,7 @@ class LanguageModel:
         # liste cu car folosite, nefolosite
         self.allChars = chars
         self.wordChars = wordChars
-        self.nonWordChars = str().join(
-            set(chars) - set(re.findall(self.wordCharPattern, chars))
-        )
+        self.nonWordChars = non_word_chars
 
     def get_next_words(self, text):
         """textul trbuie sa fie prefix"""
@@ -114,10 +112,10 @@ class LanguageModel:
         return 0
 
 
-lm = LanguageModel('12 1 13 12 15 234 2526', ' ,.:0123456789', '0123456789')
-prefix = '1'
-print('getNextChars:', lm.get_next_chars(prefix))
-print('getNonWordChars:', lm.get_non_word_chars())
-print('getNextWords:', lm.get_next_words(prefix))
-print('isWord:', lm.is_word(prefix))
-print('getBigramProb:', lm.getBigramProb('12', '15'))
+# lm = LanguageModel('12 1 13 12 15 234 2526', ' ,.:0123456789', '0123456789')
+# prefix = '1'
+# print('getNextChars:', lm.get_next_chars(prefix))
+# print('getNonWordChars:', lm.get_non_word_chars())
+# print('getNextWords:', lm.get_next_words(prefix))
+# print('isWord:', lm.is_word(prefix))
+# print('getBigramProb:', lm.getBigramProb('12', '15'))
