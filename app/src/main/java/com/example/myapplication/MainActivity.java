@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -227,11 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
     void postRequest(String postUrl, RequestBody postBody) {
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(0, TimeUnit.SECONDS)
-                .writeTimeout(0, TimeUnit.SECONDS)
-                .readTimeout(0, TimeUnit.SECONDS)
-                .build();
+        OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url(postUrl)
