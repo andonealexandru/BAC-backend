@@ -105,3 +105,21 @@ def prepare_image(path):
         img = np.expand_dims(img, axis=2)
 
     return img
+
+
+def prepare_image_with_img_arg(image):
+    if len(image.shape) == 3:
+        data = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    else:
+        data = image
+    img = extract_img(data)
+
+    img = np.asarray(img) / 255
+
+    if img.shape[0] == 32:
+        img = np.transpose(img, (1, 0))
+
+    if len(img.shape) != 3:
+        img = np.expand_dims(img, axis=2)
+
+    return img
