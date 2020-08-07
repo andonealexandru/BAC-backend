@@ -49,4 +49,4 @@ def handle_compile():
     return r.json()
 
 
-app.run(debug=False)
+app.run(host='0.0.0.0', debug=False)
