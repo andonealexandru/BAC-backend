@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 from WordSegmentation import wordSegmentation, prepareImg
 import DataLoader
-from DataLoader import prepare_image_with_img_arg
-import Model
+from Model import NeuralNetwork, retrieve_model_with_create_arhitecture, retrieve_model
+from tensorflow import keras
 
 images_for_model = []
 considered_indent = 20
@@ -12,7 +12,9 @@ considered_indent = 20
 
 def send_words_to_nn():
     list_word, num_with = getImages()
-    NN = Model.NeuralNetwork(create=False)
+    NN = NeuralNetwork(create=False)
+    model = retrieve_model()
+    model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
     text = ''
     for i in range(0, num_with):
         print(i)
@@ -22,7 +24,7 @@ def send_words_to_nn():
             text = text + '  ' * (int(list_word[i].shape[0] / 10))
         else:
             word = DataLoader.prepare_image_with_img_arg(list_word[i])
-            aux, interpreted_text = NN.return_text(word)
+            aux, interpreted_text = NN.return_text(word, model2)
             text = text + interpreted_text + ' '
             print(interpreted_text)
     return text

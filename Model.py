@@ -119,10 +119,10 @@ class NeuralNetwork:
         save_model(model)
 
     @staticmethod
-    def predict(image):
+    def predict(image, model2):
         print('predicting')
-        model = retrieve_model()
-        model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
+        # model = retrieve_model_with_create_arhitecture()
+        # model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
         # model2.summary()
         image = np.expand_dims(image, axis=0)
         prediction = model2.predict(image)
@@ -134,10 +134,10 @@ class NeuralNetwork:
         plt.imsave('test.jpg', prediction)
         return prediction
 
-    def return_text(self, image):  # pentru imagini care au deja 128x32x1
-        mat = self.predict(image)
+    def return_text(self, image, model):  # pentru imagini care au deja 128x32x1
+        mat = self.predict(image, model)
         # print(mat.shape)
-        return '1', wordBeamSearch(mat, 40, self.lm, False)
+        return '1', wordBeamSearch(mat, 10, self.lm, False)
 
     @staticmethod
     def train_for_user_data(image, label, test_images, test_labels):
