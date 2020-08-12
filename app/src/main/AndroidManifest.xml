@@ -24,7 +24,6 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".Second"/>
         <activity android:name=".LogInScreen">
-
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
