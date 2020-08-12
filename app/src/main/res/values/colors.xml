@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#2c2a45</color>
     <color name="colorBackground">#1b1a2a</color>
     <color name="colorElevatedCard">#FF32304C</color>
+    <color name="colorBox">#2c2a45</color>
     <color name="colorWhite">#EDEDED</color>
 </resources>

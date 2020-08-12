@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +18,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 public class ProfileSettings extends AppCompatActivity {
 
@@ -46,8 +49,21 @@ public class ProfileSettings extends AppCompatActivity {
 
         profileName.setText(account.getDisplayName());
 
-        if(account.getPhotoUrl() != null)
-            Picasso.get().load(account.getPhotoUrl()).into(profile_picture);
+        if(account.getPhotoUrl() != null){
+            profile_picture.setImageURI(null);
+
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .borderWidthDp(0)
+                    .cornerRadiusDp(30)
+                    .oval(false)
+                    .build();
+
+
+            Picasso.get()
+                    .load(account.getPhotoUrl())
+                    .transform(transformation)
+                    .into(profile_picture);
+        }
 
 
         signOutBtn.setOnClickListener(new View.OnClickListener() {

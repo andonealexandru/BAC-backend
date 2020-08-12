@@ -30,7 +30,7 @@
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/default_user_white"/>
+                android:src="@drawable/default_user_white"/>
 
             <TextView
                 android:id="@+id/profile_name"

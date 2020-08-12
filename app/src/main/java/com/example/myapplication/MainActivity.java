@@ -97,9 +97,10 @@ public class MainActivity extends AppCompatActivity {
        profileName.setText(account.getDisplayName());
 
        if(account.getPhotoUrl() != null) {
+           profilePicture.setImageURI(null);
+
            Transformation transformation = new RoundedTransformationBuilder()
-                   .borderColor(Color.BLACK)
-                   .borderWidthDp(3)
+                   .borderWidthDp(0)
                    .cornerRadiusDp(30)
                    .oval(false)
                    .build();
