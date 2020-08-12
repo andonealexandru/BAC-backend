@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,7 +29,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,8 +96,20 @@ public class MainActivity extends AppCompatActivity {
 
        profileName.setText(account.getDisplayName());
 
-       if(account.getPhotoUrl() != null)
-           Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
+       if(account.getPhotoUrl() != null) {
+           Transformation transformation = new RoundedTransformationBuilder()
+                   .borderColor(Color.BLACK)
+                   .borderWidthDp(3)
+                   .cornerRadiusDp(30)
+                   .oval(false)
+                   .build();
+
+
+           Picasso.get()
+                   .load(account.getPhotoUrl())
+                   .transform(transformation)
+                   .into(profilePicture);
+       }
 
        profilePicture.setOnClickListener(new View.OnClickListener() {
            @Override
