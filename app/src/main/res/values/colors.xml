@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#69E77F</color>
-    <color name="colorPrimaryDark">#4EB560</color>
-    <color name="colorBackground">#2b3138</color>
-    <color name="colorElevatedCard">#3D434A</color>
+    <color name="colorPrimary">#21a4a0</color>
+    <color name="colorPrimaryDark">#2c2a45</color>
+    <color name="colorBackground">#1b1a2a</color>
+    <color name="colorElevatedCard">#FF32304C</color>
     <color name="colorWhite">#EDEDED</color>
 </resources>

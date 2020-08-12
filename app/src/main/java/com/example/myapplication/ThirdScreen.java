@@ -39,8 +39,9 @@ public class ThirdScreen extends AppCompatActivity {
         profileName = findViewById(R.id.profileName);
         tvOutput = findViewById(R.id.tvOutput);
 
-        write_compile_result();
+        //write_compile_result();
 
+      /*
       GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -53,7 +54,7 @@ public class ThirdScreen extends AppCompatActivity {
 
         if(account.getPhotoUrl() != null)
             Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
-
+        */
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +71,6 @@ public class ThirdScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         btn_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
