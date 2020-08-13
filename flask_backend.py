@@ -58,5 +58,16 @@ def handle_compile():
     r = requests.post(RUN_URL, data=data)
     return r.json()
 
+@app.route("/signin", methods=['POST', 'GET'])
+def handle_signin():
+    email = request.get_json()
+    email = dict(email)["email"]
+    existing_user = mongo.db.user.find_one({"email": email})
+    print(existing_user)
+    if existing_user == None:
+        mongo.db.user.insert_one({"email": email, "history":[]})
+        print("sal")
+    return "Am virusi in calculator"
+
 
 app.run(host='0.0.0.0', debug=False)
