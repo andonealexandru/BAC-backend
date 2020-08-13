@@ -24,7 +24,7 @@ public class CodeEditText extends androidx.appcompat.widget.AppCompatEditText {
         rect = new Rect();
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setTextSize(25);
     }
 

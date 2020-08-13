@@ -1,15 +1,23 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -56,8 +64,35 @@ public class Second extends AppCompatActivity{
 
         dropdown = findViewById(R.id.spinner_select_compiler);
         String[] items = new String[]{"C", "C++", "Pascal"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items){
+            @Override
+            public View getDropDownView(int position, View convertView,ViewGroup parent) {
+                // TODO Auto-generated method stub
+
+                View view = super.getView(position, convertView, parent);
+
+                TextView text = (TextView)view.findViewById(android.R.id.text1);
+                text.setTextColor(Color.BLACK);
+
+                return view;
+
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // TODO Auto-generated method stub
+
+                View view = super.getView(position, convertView, parent);
+
+                TextView text = (TextView)view.findViewById(android.R.id.text1);
+                text.setTextColor(Color.WHITE);
+
+                return view;
+
+            }
+        };
         dropdown.setAdapter(adapter);
+
 
 
      /*   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -82,7 +117,7 @@ public class Second extends AppCompatActivity{
         });
 */
 
-        get_code_result();
+        //get_code_result();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +131,8 @@ public class Second extends AppCompatActivity{
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendForCompile();
+                openPopup();
+                //sendForCompile();
                 //Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
                 //startActivity(intent);
 
@@ -104,6 +140,33 @@ public class Second extends AppCompatActivity{
         });
 
     }
+
+    String input_nn;
+    void openPopup()
+    {
+        final Dialog input_popup = new Dialog(this);
+        input_popup.setContentView(R.layout.input_popup);
+        input_popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        input_popup.show();
+
+        Button input_btn_next;
+        final EditText input_text;
+        input_btn_next = input_popup.findViewById(R.id.button_popup_next);
+        input_text = input_popup.findViewById(R.id.edit_text_input);
+
+        input_btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                input_nn = input_text.getText().toString();
+                input_popup.dismiss();
+                Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+
 
     void get_code_result()
     {
