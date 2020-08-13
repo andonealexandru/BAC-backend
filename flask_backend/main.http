@@ -1,6 +1,8 @@
-POST http://127.0.0.1:5000/upload
+
+POST http://127.0.0.1:5000/add_history
 Content-Type: application/json
 
 {
-    "key": "1242341234413413413"
+    "email": "andoneeratat@gmail.com",
+    "history": {"code": "cout << sunt gay", "error":"2"}
 }
