@@ -54,7 +54,7 @@ public class ProfileSettings extends AppCompatActivity {
 
             Transformation transformation = new RoundedTransformationBuilder()
                     .borderWidthDp(0)
-                    .cornerRadiusDp(30)
+                    .cornerRadiusDp(130)
                     .oval(false)
                     .build();
 
