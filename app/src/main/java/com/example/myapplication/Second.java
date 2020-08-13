@@ -131,7 +131,9 @@ public class Second extends AppCompatActivity{
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //openPopup();
+                StaticVariables app = (StaticVariables) getApplicationContext();
+                app.setCode(codeEditText.getText().toString());
+
                 sendForCompile();
                 //Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
                 //startActivity(intent);
@@ -170,14 +172,21 @@ public class Second extends AppCompatActivity{
 
     void get_code_result()
     {
-        Bundle extras = getIntent().getExtras();
-        String NN_answer = extras.getString("compiled_code");
-        codeEditText.setText(NN_answer);
+        if(getIntent().hasExtra("compiled_code")) {
+            Bundle extras = getIntent().getExtras();
+            String NN_answer = extras.getString("compiled_code");
+            codeEditText.setText(NN_answer);
+        }
+        else{
+            StaticVariables app = (StaticVariables) getApplicationContext();
+            codeEditText.setText(app.getCode());
+        }
     }
 
     void sendForCompile()
     {
-        String http_api = "http://192.168.2.206:5000/compile";
+
+        String http_api = "http://192.168.1.10:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();

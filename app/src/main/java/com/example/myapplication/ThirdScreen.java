@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,6 @@ public class ThirdScreen extends AppCompatActivity {
 
     Button btn_finish, btn_back;
     ImageView profilePicture;
-
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     TextView profileName, tvOutput;
@@ -41,8 +41,7 @@ public class ThirdScreen extends AppCompatActivity {
 
         write_compile_result();
 
-
-      GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -54,7 +53,6 @@ public class ThirdScreen extends AppCompatActivity {
 
         if(account.getPhotoUrl() != null)
             Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
-
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,6 +73,8 @@ public class ThirdScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(ThirdScreen.this, "Wooow", Toast.LENGTH_LONG).show();
+                StaticVariables app = (StaticVariables) getApplicationContext();
+                app.setMark(0);
             }
         });
 
@@ -97,7 +97,10 @@ public class ThirdScreen extends AppCompatActivity {
             }
             else{
                 String forTV = "Compile status: " + compile_status;
-                tvOutput.setText(forTV);
+                StaticVariables app = (StaticVariables) getApplicationContext();
+                app.setMark(app.getMark() - 1);
+
+                tvOutput.setText(forTV + '\n' + "Nota:" + app.getMark());
             }
 
         }catch(JSONException e){
