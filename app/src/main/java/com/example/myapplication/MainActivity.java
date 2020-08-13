@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
     void connectServer(String data){
 
-        String postUrl= "http://192.168.1.2:5000/upload";
+        String postUrl= "http://192.168.2.206:5000/upload";
 
 
         JSONObject imageJSON = new JSONObject();
@@ -257,7 +257,8 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
                 });
             }
@@ -268,7 +269,15 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        String res = null;
+                        try {
+                            res = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Intent sal = new Intent(getApplicationContext(), Second.class);
+                        sal.putExtra("compiled_code", res);
+                        startActivity(sal);
                     }
                 });
             }
@@ -292,9 +301,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 is = getContentResolver().openInputStream(image_uri);
                 Bitmap imgBitmap = BitmapFactory.decodeStream(is);
-               // connectServer(BitMapToString(imgBitmap));
-                Intent intent = new Intent(MainActivity.this, Second.class);
-                startActivity(intent);
+                connectServer(BitMapToString(imgBitmap));
+
 
             } catch (FileNotFoundException e) {
                 Toast.makeText(MainActivity.this, "Oops", Toast.LENGTH_LONG).show();
@@ -326,9 +334,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         InputStream is = getContentResolver().openInputStream(imageURI);
                         Bitmap newBitmap = BitmapFactory.decodeStream(is);
-                      //  connectServer(BitMapToString(newBitmap));
-                        Intent intent = new Intent(MainActivity.this, Second.class);
-                        startActivity(intent);
+                        connectServer(BitMapToString(newBitmap));
                         bitmaps.add(newBitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
