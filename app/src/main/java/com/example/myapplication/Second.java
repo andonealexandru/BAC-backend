@@ -95,7 +95,7 @@ public class Second extends AppCompatActivity{
 
 
 
-     /*   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
@@ -115,9 +115,9 @@ public class Second extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-*/
 
-        //get_code_result();
+
+        get_code_result();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,8 +131,8 @@ public class Second extends AppCompatActivity{
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openPopup();
-                //sendForCompile();
+                //openPopup();
+                sendForCompile();
                 //Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
                 //startActivity(intent);
 
@@ -177,7 +177,7 @@ public class Second extends AppCompatActivity{
 
     void sendForCompile()
     {
-        String http_api = "http://192.168.1.106:5000/compile";
+        String http_api = "http://192.168.2.206:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();

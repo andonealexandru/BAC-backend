@@ -4,11 +4,12 @@ from flask_pymongo import PyMongo
 import base64
 import requests
 
-#trebuie sa inseram userul nou la sign in daca nu e deja existent
+# trebuie sa inseram userul nou la sign in daca nu e deja existent
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_databse"
 mongo = PyMongo(app)
+
 
 @app.route("/add_history", methods=['POST'])
 def handle_add():
@@ -19,6 +20,7 @@ def handle_add():
     doc["history"].append(history["history"])
     mongo.db.user.insert_one(doc)
     return "ok"
+
 
 
 @app.route("/upload", methods=['POST', 'GET'])
