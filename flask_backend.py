@@ -1,18 +1,28 @@
 from flask import Flask, request
-#from flask_pymongo import PyMongo
-#from bitmap import BitMap
+from flask_pymongo import PyMongo
+from bitmap import BitMap
 import base64
 import requests
 from mainWordSegmentation import send_words_to_nn
 
 
 app = Flask(__name__)
-#app.config['MONGO_URI'] = "mongodb://localhost:27017/bac_test"
-#mongo = PyMongo(app)
+app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_databse"
+mongo = PyMongo(app)
 
 @app.route("/", methods=['GET'])
 def test():
     return "ok ok"
+
+@app.route("/add_history", methods=['POST'])
+def handle_add():
+    history = request.get_json()
+    history = dict(history)
+    doc = mongo.db.user.find_one({"email":history["email"]})
+    mongo.db.user.remove({"email":history["email"]})
+    doc["history"].append(history["history"])
+    mongo.db.user.insert_one(doc)
+    return "ok"
 
 
 
