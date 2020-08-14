@@ -125,7 +125,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
     void connectServer(String data){
 
-        String postUrl= "http://192.168.2.206:5000/signin";
+        String postUrl= "http://192.168.1.3:5000/signin";
 
 
         JSONObject emailJSON = new JSONObject();

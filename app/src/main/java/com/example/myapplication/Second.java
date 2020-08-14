@@ -50,6 +50,8 @@ public class Second extends AppCompatActivity{
     GoogleSignInAccount account;
     TextView profileName;
 
+    String input_nn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,29 +97,29 @@ public class Second extends AppCompatActivity{
 
 
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .build();
+//
+//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//
+//        account = GoogleSignIn.getLastSignedInAccount(this);
+//
+//        profileName.setText(account.getDisplayName());
+//
+//        if(account.getPhotoUrl() != null)
+//            Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
+//
+//        profilePicture.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        account = GoogleSignIn.getLastSignedInAccount(this);
-
-        profileName.setText(account.getDisplayName());
-
-        if(account.getPhotoUrl() != null)
-            Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
-
-        profilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
-                startActivity(intent);
-            }
-        });
-
-
-        get_code_result();
+        //get_code_result();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +135,8 @@ public class Second extends AppCompatActivity{
             public void onClick(View view) {
                 StaticVariables app = (StaticVariables) getApplicationContext();
                 app.setCode(codeEditText.getText().toString());
-
-                sendForCompile();
+                openPopup();
+                //sendForCompile();
                 //Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
                 //startActivity(intent);
 
@@ -143,7 +145,7 @@ public class Second extends AppCompatActivity{
 
     }
 
-    String input_nn;
+
     void openPopup()
     {
         final Dialog input_popup = new Dialog(this);
@@ -161,8 +163,7 @@ public class Second extends AppCompatActivity{
             public void onClick(View view) {
                 input_nn = input_text.getText().toString();
                 input_popup.dismiss();
-                Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
-                startActivity(intent);
+                sendForCompile();
             }
         });
 
@@ -186,7 +187,7 @@ public class Second extends AppCompatActivity{
     void sendForCompile()
     {
 
-        String http_api = "http://192.168.1.10:5000/compile";
+        String http_api = "http://192.168.1.3:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();
@@ -198,7 +199,7 @@ public class Second extends AppCompatActivity{
         final JSONObject data = new JSONObject();
         try {
             data.put("source", code);
-            //data.put("input", input);
+            data.put("input", input_nn);
             data.put("lang", lang);
         }catch(JSONException e){
             e.printStackTrace();

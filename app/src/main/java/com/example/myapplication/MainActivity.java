@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     void connectServer(String data){
 
 
-        String postUrl= "http://192.168.1.10:5000/upload";
+        String postUrl= "http://192.168.1.3:5000/upload";
 
 
         JSONObject imageJSON = new JSONObject();
