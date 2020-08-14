@@ -1,29 +1,29 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
-from bitmap import BitMap
+#from bitmap import BitMap
 import base64
 import requests
 from mainWordSegmentation import send_words_to_nn
-
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_databse"
 mongo = PyMongo(app)
 
+
 @app.route("/", methods=['GET'])
 def test():
     return "ok ok"
+
 
 @app.route("/add_history", methods=['POST'])
 def handle_add():
     history = request.get_json()
     history = dict(history)
-    doc = mongo.db.user.find_one({"email":history["email"]})
-    mongo.db.user.remove({"email":history["email"]})
+    doc = mongo.db.user.find_one({"email": history["email"]})
+    mongo.db.user.remove({"email": history["email"]})
     doc["history"].append(history["history"])
     mongo.db.user.insert_one(doc)
     return "ok"
-
 
 
 @app.route("/upload", methods=['POST'])
@@ -36,10 +36,8 @@ def handle_request():
     print(string)
     return string
 
-
 @app.route("/compile", methods=['POST'])
 def handle_compile():
-
     code_data = request.get_json()
     code_data = dict(code_data)
 
@@ -49,14 +47,18 @@ def handle_compile():
         'client_secret': CLIENT_SECRET,
         'async': 0,
         'source': code_data["source"],
-        #'input': input,
         'lang': code_data["lang"],
         'time_limit': 5,
         'memory_limit': 262144,
     }
 
+    if code_data["input"] != "":
+        data['input'] = code_data['input']
+
     r = requests.post(RUN_URL, data=data)
+    print(str(r.json()))
     return r.json()
+
 
 @app.route("/signin", methods=['POST', 'GET'])
 def handle_signin():
@@ -65,7 +67,7 @@ def handle_signin():
     existing_user = mongo.db.user.find_one({"email": email})
     print(existing_user)
     if existing_user == None:
-        mongo.db.user.insert_one({"email": email, "history":[]})
+        mongo.db.user.insert_one({"email": email, "history": []})
         print("sal")
     return "Am virusi in calculator"
 
