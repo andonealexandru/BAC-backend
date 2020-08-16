@@ -3,10 +3,11 @@ from flask_pymongo import PyMongo
 #from bitmap import BitMap
 import base64
 import requests
-from mainWordSegmentation import send_words_to_nn
+#from mainWordSegmentation import send_words_to_nn
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_databse"
+app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_database"
+app.config['MONGO_DBNAME'] ="dpit_database"
 mongo = PyMongo(app)
 
 
@@ -20,7 +21,9 @@ def handle_add():
     history = request.get_json()
     history = dict(history)
     doc = mongo.db.user.find_one({"email": history["email"]})
-    mongo.db.user.remove({"email": history["email"]})
+    print(history["email"])
+    print(type(doc))
+    mongo.db.user.delete_one({"email": history["email"]})
     doc["history"].append(history["history"])
     mongo.db.user.insert_one(doc)
     return "ok"
@@ -32,9 +35,10 @@ def handle_request():
     img = dict(img)
     with open("data/imageToSave.png", "wb") as fh:
         fh.write(base64.b64decode(str(img["key"])))
-    string = send_words_to_nn()
-    print(string)
-    return string
+    # #string = send_words_to_nn()
+    # print(string)
+    # return string
+
 
 @app.route("/compile", methods=['POST'])
 def handle_compile():
@@ -64,12 +68,22 @@ def handle_compile():
 def handle_signin():
     email = request.get_json()
     email = dict(email)["email"]
-    existing_user = mongo.db.user.find_one({"email": email})
-    print(existing_user)
-    if existing_user == None:
+    email_col = mongo.db['user']
+    a = email_col.find_one({'email': email})
+
+    if a is None:
         mongo.db.user.insert_one({"email": email, "history": []})
         print("sal")
     return "Am virusi in calculator"
+
+
+@app.route("/retrieve_history", methods=['POST','GET'])
+def retrieve_history():
+    email = request.get_json()
+    email = dict(email)["email"]
+    existing_user = mongo.db.user.find_one({"email": email})
+    print(type(existing_user["history"]))
+    return str(existing_user["history"])
 
 
 app.run(host='0.0.0.0', debug=False)
