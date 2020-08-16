@@ -1,12 +1,19 @@
 package com.example.myapplication;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.GridLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -16,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -30,27 +38,35 @@ import okhttp3.Response;
 
 public class HistoryTab extends AppCompatActivity {
 
-    TextView testHistoryTab;
-
+    TextView testHistoryTab, tv_date, tv_mark;
+    GridLayout gridLayout;
     GoogleSignInAccount account;
     GoogleSignInClient mGoogleSignInClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_tab);
 
+
+        gridLayout = findViewById(R.id.grid_layout);
         testHistoryTab = findViewById(R.id.test_history_tab);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+       /* GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        account = GoogleSignIn.getLastSignedInAccount(this);
+        account = GoogleSignIn.getLastSignedInAccount(this);*/
 
-        connectServer(account.getEmail());
+       // connectServer(account.getEmail());
+
+        addCardView("azi", "yay", "-1");
+        addCardView("maine", "y", "1");
+        addCardView("ieri", "yay", "-1");
+
     }
 
     void connectServer(String data){
@@ -118,7 +134,10 @@ public class HistoryTab extends AppCompatActivity {
                             for(int i = 0; i < historyArray.length(); ++i){
                                 JSONObject history_code = new JSONObject();
                                 history_code = historyArray.getJSONObject(i);
-                                Toast.makeText(getApplicationContext(), "yay obiect json", Toast.LENGTH_LONG).show();
+                                String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark");
+                                addCardView(date, code, mark);
+                                //Toast.makeText(getApplicationContext(), "yay obiect json", Toast.LENGTH_LONG).show();
+
                             }
                         } catch (IOException | JSONException e) {
                             e.printStackTrace();
@@ -127,6 +146,48 @@ public class HistoryTab extends AppCompatActivity {
                 });
             }
         });
+
+    }
+
+    void addCardView(String date, String code, String mark)
+    {
+        CardView cardView = new CardView(getApplicationContext());
+        LayoutParams layoutparams = new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                200
+        );
+
+        layoutparams.setMargins(30, 30, 30, 30);
+
+        cardView.setLayoutParams(layoutparams);
+
+
+        tv_date = new TextView(getApplicationContext());
+        tv_mark = new TextView(getApplicationContext());
+
+        tv_date.setTextColor(Color.WHITE);
+        tv_mark.setTextColor(Color.WHITE);
+
+        tv_date.setTextSize(20);
+        tv_mark.setTextSize(20);
+
+        tv_date.setText(date);
+        tv_mark.setText(mark);
+
+        tv_date.setPadding(20, 0, 0, 0);
+        tv_mark.setPadding(0, 0, 20, 0);
+
+
+        tv_date.setGravity(Gravity.CENTER_VERTICAL);
+        tv_mark.setGravity(Gravity.CENTER_VERTICAL);
+        tv_mark.setGravity(Gravity.END);
+
+        cardView.setCardBackgroundColor(Color.MAGENTA);
+        cardView.addView(tv_date);
+        cardView.addView(tv_mark);
+
+        gridLayout.addView(cardView);
+
     }
 
 }
