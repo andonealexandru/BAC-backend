@@ -22,7 +22,7 @@
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/app_name"
         android:padding="5dp"
-        app:srcCompat="@drawable/logo_for_screen1" />
+        />
 
 
     <RelativeLayout

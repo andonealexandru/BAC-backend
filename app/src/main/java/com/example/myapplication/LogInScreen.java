@@ -64,7 +64,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         if(account != null) {
             Toast.makeText(this, "You've already logged in with " + account.getDisplayName() + "!",Toast.LENGTH_LONG).show();
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, ThirdScreen.class);
             startActivity(intent);
 
         }
@@ -109,10 +109,10 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
             // Signed in successfully, show authenticated UI.
             Toast.makeText(this, "You've logged in " + account.getDisplayName() + "!",Toast.LENGTH_LONG).show();
-            /*
+
             connectServer(account.getEmail());
-            */
-            Intent intent = new Intent(this, MainActivity.class);
+
+            Intent intent = new Intent(this, ThirdScreen.class);
             startActivity(intent);
 
         } catch (ApiException e) {
