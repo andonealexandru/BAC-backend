@@ -1,17 +1,23 @@
 package com.example.myapplication;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RelativeLayout.LayoutParams;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -26,6 +32,8 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -42,30 +50,29 @@ public class HistoryTab extends AppCompatActivity {
     GridLayout gridLayout;
     GoogleSignInAccount account;
     GoogleSignInClient mGoogleSignInClient;
-
+    List<String> codes;
+    int tag_cardview = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_tab);
-
+        codes = new ArrayList<String>();
 
         gridLayout = findViewById(R.id.grid_layout);
         testHistoryTab = findViewById(R.id.test_history_tab);
 
-       /* GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        account = GoogleSignIn.getLastSignedInAccount(this);*/
+        account = GoogleSignIn.getLastSignedInAccount(this);
 
-       // connectServer(account.getEmail());
+        connectServer(account.getEmail());
 
-        addCardView("azi", "yay", "-1");
-        addCardView("maine", "y", "1");
-        addCardView("ieri", "yay", "-1");
+
 
     }
 
@@ -136,7 +143,6 @@ public class HistoryTab extends AppCompatActivity {
                                 history_code = historyArray.getJSONObject(i);
                                 String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark");
                                 addCardView(date, code, mark);
-                                //Toast.makeText(getApplicationContext(), "yay obiect json", Toast.LENGTH_LONG).show();
 
                             }
                         } catch (IOException | JSONException e) {
@@ -165,8 +171,8 @@ public class HistoryTab extends AppCompatActivity {
         tv_date = new TextView(getApplicationContext());
         tv_mark = new TextView(getApplicationContext());
 
-        tv_date.setTextColor(Color.WHITE);
-        tv_mark.setTextColor(Color.WHITE);
+        tv_date.setTextColor(getResources().getColor(R.color.colorWhite));
+        tv_mark.setTextColor(getResources().getColor(R.color.colorWhite));
 
         tv_date.setTextSize(20);
         tv_mark.setTextSize(20);
@@ -179,14 +185,58 @@ public class HistoryTab extends AppCompatActivity {
 
 
         tv_date.setGravity(Gravity.CENTER_VERTICAL);
-        tv_mark.setGravity(Gravity.CENTER_VERTICAL);
-        tv_mark.setGravity(Gravity.END);
+        tv_mark.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
 
-        cardView.setCardBackgroundColor(Color.MAGENTA);
+        cardView.setCardBackgroundColor(getResources().getColor(R.color.colorElevatedCard));
         cardView.addView(tv_date);
         cardView.addView(tv_mark);
+        cardView.setTag(tag_cardview);
+        tag_cardview++;
+        codes.add(code);
+
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int cardView_code_pos = (int) view.getTag();
+                openPopup(codes.get(cardView_code_pos));
+
+            }
+        });
 
         gridLayout.addView(cardView);
+
+    }
+
+    void openPopup(final String code)
+    {
+        final Dialog input_popup = new Dialog(this);
+        input_popup.setContentView(R.layout.history_popup);
+        input_popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        input_popup.show();
+
+        Button code_btn_close, code_btn_second;
+        final TextView code_tv;
+        code_btn_close = input_popup.findViewById(R.id.button_popup_close);
+        code_btn_second = input_popup.findViewById(R.id.button_popup_second);
+        code_tv = input_popup.findViewById(R.id.tv_code);
+        code_tv.setText(code);
+
+        code_btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                input_popup.dismiss();
+            }
+        });
+
+        code_btn_second.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Second.class);
+                intent.putExtra("compiled_code", code);
+                startActivity(intent);
+            }
+        });
 
     }
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="450dp"
+    android:background="@color/colorBackground"
+    android:layout_centerVertical="true"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Code:"
+        android:textSize="30dp"
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"/>
+
+    <TextView
+        android:gravity="start|top"
+        android:id="@+id/tv_code"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/edit_text_style"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@id/title_textview"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="50dp"
+        />
+
+    <Button
+        android:id="@+id/button_popup_close"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_finish"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="10dp"
+        />
+
+    <Button
+        android:id="@+id/button_popup_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="Send to second"
+        android:padding="5dp"
+        android:background="@drawable/style_solid_button"
+        />
+
+
+
+
+
+</RelativeLayout>
