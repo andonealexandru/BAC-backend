@@ -96,7 +96,6 @@ scipy==1.4.1
 setproctitle==1.1.10
 six==1.15.0
 soupsieve==2.0.1
-system-service==0.3
 systemd-python==234
 tensorboard==2.2.2
 tensorboard-plugin-wit==1.6.0.post3
