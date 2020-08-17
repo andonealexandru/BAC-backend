@@ -1,13 +1,13 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
-#from bitmap import BitMap
+# from bitmap import BitMap
 import base64
 import requests
 from mainWordSegmentation import send_words_to_nn
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_database"
-app.config['MONGO_DBNAME'] ="dpit_database"
+app.config['MONGO_DBNAME'] = "dpit_database"
 mongo = PyMongo(app)
 
 
@@ -77,7 +77,7 @@ def handle_signin():
     return "Am virusi in calculator"
 
 
-@app.route("/retrieve_history", methods=['POST','GET'])
+@app.route("/retrieve_history", methods=['POST', 'GET'])
 def retrieve_history():
     email = request.get_json()
     email = dict(email)["email"]
@@ -86,4 +86,5 @@ def retrieve_history():
     return str(existing_user["history"])
 
 
-app.run(host='0.0.0.0', debug=False)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
