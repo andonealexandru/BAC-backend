@@ -1,14 +1,14 @@
 from flask import Flask, request
-# from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo
 # from bitmap import BitMap
 import base64
 import requests
 from mainWordSegmentation import send_words_to_nn
 
 app = Flask(__name__)
-# app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_database"
-# app.config['MONGO_DBNAME'] = "dpit_database"
-# mongo = PyMongo(app)
+app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_database"
+app.config['MONGO_DBNAME'] = "dpit_database"
+mongo = PyMongo(app)
 
 
 @app.route("/", methods=['GET'])
@@ -20,12 +20,12 @@ def test():
 def handle_add():
     history = request.get_json()
     history = dict(history)
-    # doc = mongo.db.user.find_one({"email": history["email"]})
-    # print(history["email"])
-    # print(type(doc))
-    # mongo.db.user.delete_one({"email": history["email"]})
-    # doc["history"].append(history["history"])
-    # mongo.db.user.insert_one(doc)
+    doc = mongo.db.user.find_one({"email": history["email"]})
+    print(history["email"])
+    print(type(doc))
+    mongo.db.user.delete_one({"email": history["email"]})
+    doc["history"].append(history["history"])
+    mongo.db.user.insert_one(doc)
     return "ok"
 
 
@@ -68,12 +68,12 @@ def handle_compile():
 def handle_signin():
     email = request.get_json()
     email = dict(email)["email"]
-    # email_col = mongo.db['user']
-    # a = email_col.find_one({'email': email})
+    email_col = mongo.db['user']
+    a = email_col.find_one({'email': email})
 
-    # if a is None:
-    #     # mongo.db.user.insert_one({"email": email, "history": []})
-    #     print("sal")
+    if a is None:
+        # mongo.db.user.insert_one({"email": email, "history": []})
+        print("sal")
     return "Am virusi in calculator"
 
 
@@ -81,9 +81,9 @@ def handle_signin():
 def retrieve_history():
     email = request.get_json()
     email = dict(email)["email"]
-    # existing_user = mongo.db.user.find_one({"email": email})
-    # print(type(existing_user["history"]))
-    # return str(existing_user["history"])
+    existing_user = mongo.db.user.find_one({"email": email})
+    print(type(existing_user["history"]))
+    return str(existing_user["history"])
 
 
 if __name__ == "__main__":
