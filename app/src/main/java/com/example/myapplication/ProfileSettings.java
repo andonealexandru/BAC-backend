@@ -24,7 +24,7 @@ import com.squareup.picasso.Transformation;
 
 public class ProfileSettings extends AppCompatActivity {
 
-    CardView signOutBtn, exitBtn;
+    CardView signOutBtn, exitBtn, historyBtn;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     ImageView profile_picture;
@@ -36,6 +36,7 @@ public class ProfileSettings extends AppCompatActivity {
         setContentView(R.layout.activity_profile_settings);
         signOutBtn = findViewById(R.id.card_log_out);
         exitBtn = findViewById(R.id.card_exit);
+        historyBtn = findViewById(R.id.card_history);
         profileName = findViewById(R.id.profile_name);
         profile_picture = findViewById(R.id.profile_image);
 
@@ -83,6 +84,14 @@ public class ProfileSettings extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), HistoryTab.class);
                 startActivity(intent);
             }
         });

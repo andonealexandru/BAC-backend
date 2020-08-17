@@ -20,6 +20,17 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class ThirdScreen extends AppCompatActivity {
 
     Button btn_finish, btn_back;
@@ -39,7 +50,7 @@ public class ThirdScreen extends AppCompatActivity {
         profileName = findViewById(R.id.profileName);
         tvOutput = findViewById(R.id.tvOutput);
 
-        write_compile_result();
+//        write_compile_result();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -74,10 +85,96 @@ public class ThirdScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(ThirdScreen.this, "Wooow", Toast.LENGTH_LONG).show();
                 StaticVariables app = (StaticVariables) getApplicationContext();
+                connectServer();
                 app.setMark(0);
             }
         });
 
+    }
+
+    void connectServer(){
+
+
+        String postUrl= "http://192.168.1.3:5000/add_history";
+
+        StaticVariables app = (StaticVariables) getApplicationContext();
+
+
+        JSONObject historyJSON = new JSONObject();
+        JSONObject history_data = new JSONObject();
+
+        try{
+            history_data.put("code", "aa");
+            history_data.put("mark", "-1");
+            history_data.put("date", "azi");
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        try {
+            historyJSON.put("email", account.getEmail());
+            historyJSON.put("history", history_data);
+
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
+
+
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+        RequestBody postBody = RequestBody.create(mediaType, historyJSON.toString());
+
+
+        postRequest(postUrl, postBody);
+    }
+
+    void postRequest(String postUrl, RequestBody postBody) {
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(0, TimeUnit.SECONDS)
+                .writeTimeout(0, TimeUnit.SECONDS)
+                .readTimeout(0, TimeUnit.SECONDS)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(postBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, final IOException e) {
+                // Cancel the post on failure.
+                call.cancel();
+
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*String res = null;
+                        try {
+                            res = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Intent sal = new Intent(getApplicationContext(), Second.class);
+                        sal.putExtra("compiled_code", res);
+                        startActivity(sal);*/
+                    }
+                });
+            }
+        });
     }
 
     void write_compile_result()
