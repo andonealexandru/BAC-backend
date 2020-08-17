@@ -119,7 +119,7 @@ public class Second extends AppCompatActivity{
 //        });
 
 
-        //get_code_result();
+        get_code_result();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +187,7 @@ public class Second extends AppCompatActivity{
     void sendForCompile()
     {
 
-        String http_api = "http://192.168.1.3:5000/compile";
+        String http_api = "http://192.168.1.12:5000/compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();

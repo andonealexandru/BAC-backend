@@ -16,6 +16,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     TextView profileName;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         imgView = findViewById(R.id.imgView_preview);
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
+        progressBar = findViewById(R.id.progressBar);
+
+        progressBar.setVisibility(View.INVISIBLE);
+
 
        /* btn_start = findViewById(R.id.button_start);
         radioGroup = findViewById(R.id.group_button);
@@ -216,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     void connectServer(String data){
 
 
-        String postUrl= "http://192.168.1.3:5000/upload";
+        String postUrl= "http://192.168.1.12:5000/upload";
 
 
         JSONObject imageJSON = new JSONObject();
@@ -237,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
 
     void postRequest(String postUrl, RequestBody postBody) {
 
+        progressBar.setVisibility(View.VISIBLE);
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
                 .writeTimeout(0, TimeUnit.SECONDS)
@@ -254,10 +262,12 @@ public class MainActivity extends AppCompatActivity {
                 // Cancel the post on failure.
                 call.cancel();
 
+
                 // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
@@ -271,6 +281,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         String res = null;
+                        progressBar.setVisibility(View.INVISIBLE);
+
                         try {
                             res = response.body().string();
                         } catch (IOException e) {
