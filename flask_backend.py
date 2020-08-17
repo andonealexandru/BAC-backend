@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 #from bitmap import BitMap
 import base64
 import requests
-#from mainWordSegmentation import send_words_to_nn
+from mainWordSegmentation import send_words_to_nn
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_database"
@@ -35,9 +35,9 @@ def handle_request():
     img = dict(img)
     with open("data/imageToSave.png", "wb") as fh:
         fh.write(base64.b64decode(str(img["key"])))
-    # #string = send_words_to_nn()
-    # print(string)
-    # return string
+    string = send_words_to_nn()
+    print(string)
+    return string
 
 
 @app.route("/compile", methods=['POST'])
