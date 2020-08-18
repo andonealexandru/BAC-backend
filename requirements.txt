@@ -42,7 +42,7 @@ mnist==0.2.2
 netifaces==0.10.4
 numpy==1.18.5
 oauthlib==3.1.0
-opencv-python==4.4.0.42
+opencv-python==3.1.0
 opt-einsum==3.2.1
 packaging==20.4
 pexpect==4.2.1
