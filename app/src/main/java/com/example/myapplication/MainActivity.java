@@ -77,46 +77,38 @@ public class MainActivity extends AppCompatActivity {
 
         btn_capture = findViewById(R.id.camera_button);
         btn_select = findViewById(R.id.gallery_button);
-        //btn_next = findViewById(R.id.btn_next);
         imgView = findViewById(R.id.imgView_preview);
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
         progressBar = findViewById(R.id.progressBar);
-
         progressBar.setVisibility(View.INVISIBLE);
 
-
-       /* btn_start = findViewById(R.id.button_start);
-        radioGroup = findViewById(R.id.group_button);
-
-
-        btn_send = findViewById(R.id.sendImageButton);
-*/
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account != null) {
+            profileName.setText(account.getDisplayName());
 
-       profileName.setText(account.getDisplayName());
+            if (account.getPhotoUrl() != null) {
+                profilePicture.setImageURI(null);
 
-       if(account.getPhotoUrl() != null) {
-           profilePicture.setImageURI(null);
-
-           Transformation transformation = new RoundedTransformationBuilder()
-                   .borderWidthDp(0)
-                   .cornerRadiusDp(30)
-                   .oval(false)
-                   .build();
+                Transformation transformation = new RoundedTransformationBuilder()
+                        .borderWidthDp(0)
+                        .cornerRadiusDp(30)
+                        .oval(false)
+                        .build();
 
 
-           Picasso.get()
-                   .load(account.getPhotoUrl())
-                   .transform(transformation)
-                   .into(profilePicture);
-       }
+                Picasso.get()
+                        .load(account.getPhotoUrl())
+                        .transform(transformation)
+                        .into(profilePicture);
+            }
+        }
+
 
        profilePicture.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -157,31 +149,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*btn_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Second.class);
-                startActivity(intent);
-            }
-        });
-*/
-/*        btn_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int selectedRadio = radioGroup.getCheckedRadioButtonId();
-                selectedButton = findViewById(selectedRadio);
-
-                Toast.makeText(MainActivity.this, "You selected " + selectedButton.getText(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-        btn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectServer(null);
-            }
-        });*/
     }
 
     private void openGallery(){
@@ -205,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // vedem daca a fost permis sau nu accesul la camera
-        //Toast.makeText(MainActivity.this, "Result " + requestCode, Toast.LENGTH_LONG).show();
         if(requestCode == PERMISSION_CODE){
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     openCamera();

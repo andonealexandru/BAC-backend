@@ -2,9 +2,15 @@ package com.example.myapplication;
 
 import android.app.Application;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class StaticVariables extends Application {
-    private int mark = 0;
+    private int mark = 10;
     private String code = "";
+
+    public void reseetMark(){ mark = 10; }
 
     public int getMark(){
         return mark;
@@ -20,5 +26,12 @@ public class StaticVariables extends Application {
 
     public void setCode(String str){
         code = str;
+    }
+
+    public String getDate()
+    {
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        String date = df.format(Calendar.getInstance().getTime());
+        return date;
     }
 }

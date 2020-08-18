@@ -24,7 +24,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,30 +98,44 @@ public class Second extends AppCompatActivity{
         dropdown.setAdapter(adapter);
 
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
 
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
-//                .build();
-//
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-//
-//        account = GoogleSignIn.getLastSignedInAccount(this);
-//
-//        profileName.setText(account.getDisplayName());
-//
-//        if(account.getPhotoUrl() != null)
-//            Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
-//
-//        profilePicture.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
-//                startActivity(intent);
-//            }
-//        });
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if(account != null) {
+            profileName.setText(account.getDisplayName());
+
+            if (account.getPhotoUrl() != null) {
+                profilePicture.setImageURI(null);
+
+                Transformation transformation = new RoundedTransformationBuilder()
+                        .borderWidthDp(0)
+                        .cornerRadiusDp(30)
+                        .oval(false)
+                        .build();
+
+
+                Picasso.get()
+                        .load(account.getPhotoUrl())
+                        .transform(transformation)
+                        .into(profilePicture);
+            }
+        }
 
 
         get_code_result();
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+                startActivity(intent);
+            }
+        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,12 +149,12 @@ public class Second extends AppCompatActivity{
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String code_from_et = codeEditText.getText().toString();
                 StaticVariables app = (StaticVariables) getApplicationContext();
-                app.setCode(codeEditText.getText().toString());
-                openPopup();
-                //sendForCompile();
-                //Intent intent = new Intent(getApplicationContext(), ThirdScreen.class);
-                //startActivity(intent);
+                app.setCode(code_from_et);
+                if(code_from_et.equals(""))
+                    Toast.makeText(getApplicationContext(), "Please write some code.", Toast.LENGTH_LONG).show();
+                else openPopup();
 
             }
         });

@@ -74,6 +74,7 @@ public class ProfileSettings extends AppCompatActivity {
 
                 Intent i=new Intent(getApplicationContext(), LogInScreen.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
                 startActivity(i);
             }
         });

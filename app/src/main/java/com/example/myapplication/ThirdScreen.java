@@ -15,7 +15,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +52,7 @@ public class ThirdScreen extends AppCompatActivity {
         profileName = findViewById(R.id.profileName);
         tvOutput = findViewById(R.id.tvOutput);
 
-//        write_compile_result();
+        write_compile_result();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -59,11 +61,25 @@ public class ThirdScreen extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account != null) {
 
-        profileName.setText(account.getDisplayName());
+            profileName.setText(account.getDisplayName());
+            if (account.getPhotoUrl() != null) {
+                profilePicture.setImageURI(null);
 
-        if(account.getPhotoUrl() != null)
-            Picasso.get().load(account.getPhotoUrl()).into(profilePicture);
+                Transformation transformation = new RoundedTransformationBuilder()
+                        .borderWidthDp(0)
+                        .cornerRadiusDp(30)
+                        .oval(false)
+                        .build();
+
+                Picasso.get()
+                        .load(account.getPhotoUrl())
+                        .transform(transformation)
+                        .into(profilePicture);
+            }
+        }
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +102,7 @@ public class ThirdScreen extends AppCompatActivity {
                 Toast.makeText(ThirdScreen.this, "Wooow", Toast.LENGTH_LONG).show();
                 StaticVariables app = (StaticVariables) getApplicationContext();
                 connectServer();
-                app.setMark(0);
+                app.reseetMark();
             }
         });
 
@@ -98,15 +114,16 @@ public class ThirdScreen extends AppCompatActivity {
         String postUrl= "http://192.168.1.3:5000/add_history";
 
         StaticVariables app = (StaticVariables) getApplicationContext();
+        String code = app.getCode(), mark = app.getMark() + "", date = app.getDate();
 
 
         JSONObject historyJSON = new JSONObject();
         JSONObject history_data = new JSONObject();
 
         try{
-            history_data.put("code", "aa");
-            history_data.put("mark", "-1");
-            history_data.put("date", "azi");
+            history_data.put("code", code);
+            history_data.put("mark", mark);
+            history_data.put("date", date);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -162,15 +179,7 @@ public class ThirdScreen extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        /*String res = null;
-                        try {
-                            res = response.body().string();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Intent sal = new Intent(getApplicationContext(), Second.class);
-                        sal.putExtra("compiled_code", res);
-                        startActivity(sal);*/
+
                     }
                 });
             }
@@ -193,6 +202,7 @@ public class ThirdScreen extends AppCompatActivity {
                 tvOutput.setText(forTV);
             }
             else{
+
                 String forTV = "Compile status: " + compile_status;
                 StaticVariables app = (StaticVariables) getApplicationContext();
                 app.setMark(app.getMark() - 1);
