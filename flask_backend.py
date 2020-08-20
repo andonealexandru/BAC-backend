@@ -6,8 +6,8 @@ import requests
 from mainWordSegmentation import send_words_to_nn
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = "mongodb://localhost:27017/dpit_database"
-app.config['MONGO_DBNAME'] = "dpit_database"
+app.config['MONGO_URI'] = "mongodb+srv://mirela:parola1234@dpitcluster.t2xz8.mongodb.net/DPIT_TEST?retryWrites=true&w=majority"
+app.config['MONGO_DBNAME'] = "DPIT_TEST"
 mongo = PyMongo(app)
 
 
