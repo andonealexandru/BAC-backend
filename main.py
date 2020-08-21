@@ -18,12 +18,12 @@ label_Lengths = np.asarray(label_Lengths)
 # print(input_lengths.shape)
 # print(label_Lengths.shape)
 
-nn = NeuralNetwork(create=False, batch_norm=True, dropout=0.5)
+nn = NeuralNetwork(create=True, batch_norm=True, dropout=0.5)
 # nn.evaluate_model(images, labels, input_lengths, label_Lengths)
 
-# nn.train(train_images=images, train_labels=labels,
-#          validation_split=0.15,
-#          input_length=input_lengths, label_length=label_Lengths,
-#          batch_size=32, epochs=5)
+nn.train(train_images=images, train_labels=labels,
+         validation_split=0.15,
+         input_length=input_lengths, label_length=label_Lengths,
+         batch_size=32, epochs=5)
 
 print(send_words_to_nn())

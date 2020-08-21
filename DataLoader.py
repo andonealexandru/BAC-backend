@@ -5,7 +5,7 @@ from Alphabet import text_to_label
 
 path_to_file = '/home/andone/Documents/Programming/python/database for train/ascii/words.txt'  # path catre words.txt
 path_to_folder = '/home/andone/Documents/Programming/python/database for train/words/'  # path catre folderul cu cuvinte
-num_images = 100000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
+num_images = 115000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
 
 def get_x_y(evaluate, nr_img):
