@@ -1,5 +1,5 @@
-include iostream
-#include the localhosts
+# include iostream
+the localhosts
 using namespace std
 int main()
 cout

@@ -12,9 +12,9 @@ considered_indent = 20
 
 def send_words_to_nn():
     list_word, num_with = getImages()
-    NN = NeuralNetwork(create=False)
+    NN = NeuralNetwork(create=False, batch_norm=True, dropout=0.5)
     model = retrieve_model()
-    model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
+    model2 = keras.Model(model.get_layer('input').input, model.get_layer("time_distributed_last").output)
     text = ''
     for i in range(0, num_with):
         print(i)

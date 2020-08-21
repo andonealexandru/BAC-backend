@@ -3,12 +3,12 @@ import os
 import numpy as np
 from Alphabet import text_to_label
 
-path_to_file = 'D:/Handwriting DB/ascii/words.txt'  # path catre words.txt
-path_to_folder = 'D:/Handwriting DB/words/'  # path catre folderul cu cuvinte
-num_images = 20  # pe cate imagini sa se ia din words (pe cate sa antrenam)
+path_to_file = '/home/andone/Documents/Programming/python/database for train/ascii/words.txt'  # path catre words.txt
+path_to_folder = '/home/andone/Documents/Programming/python/database for train/words/'  # path catre folderul cu cuvinte
+num_images = 100000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
 
-def get_x_y():
+def get_x_y(evaluate, nr_img):
     f = open(path_to_file)
     count = 0
     x = []  # imaginile
@@ -17,11 +17,17 @@ def get_x_y():
     chars = set()
     im_path = []
     for line in f:
-        if count > num_images:
+        if count > num_images and not evaluate:
+            break
+        if count > num_images + nr_img:
             break
         if not line or line[0] == '#':
             continue
         try:
+            if evaluate and count < num_images:
+                count += 1
+                continue
+
             lineSplit = line.strip().split(' ')
             fileNameSplit = lineSplit[0].split('-')
             img_path = path_to_folder + fileNameSplit[0] + '/' + fileNameSplit[
@@ -42,11 +48,16 @@ def get_x_y():
     return x, x_new, y
 
 
-def create_input_label_length_and_labels(y):
+def create_input_label_length_and_labels(y, evaluate, nr_img):
     y2 = []
     input_lengths = np.ones((num_images, 1)) * 32
     label_lengths = np.zeros((num_images, 1))
-    for i in range(num_images):
+
+    maxim = num_images
+    if evaluate:
+        maxim = nr_img
+
+    for i in range(maxim):
         val = text_to_label(y[i])
         if i == 5:
             print(val)
@@ -57,23 +68,27 @@ def create_input_label_length_and_labels(y):
     return input_lengths, label_lengths, y2
 
 
-def get_data():
-    x, x_new, y = get_x_y()
-    input_lengths, label_lengths, y2 = create_input_label_length_and_labels(y)
+def get_data(evaluate, nr_img):
+    x, x_new, y = get_x_y(evaluate, nr_img)
+    input_lengths, label_lengths, y2 = create_input_label_length_and_labels(y, evaluate, nr_img)
 
-    x = np.asarray(x_new[:num_images])  # pastrez doar de cate am nevoie
+    maxim = num_images
+    if evaluate:
+        maxim = nr_img
+
+    x = np.asarray(x_new[:maxim])  # pastrez doar de cate am nevoie
     x = x[:, :, :, np.newaxis]  # Bx32x128 -> Bx32x128x1
     x = np.transpose(x, (0, 2, 1, 3))  # Bx32x128x1 -> Bx128x32x1
 
     # normalize images -> toate val intre 0 si 1
-    x2 = np.array(x[:num_images]) / 255
+    x2 = np.array(x[:maxim]) / 255
 
     y2 = np.asarray(y2)
-    y2 = np.array(y2[:num_images])
+    y2 = np.array(y2[:maxim])
     y2 = np.array(y2)
 
-    input_lengths = input_lengths[:num_images]
-    label_lengths = label_lengths[:num_images]
+    input_lengths = input_lengths[:maxim]
+    label_lengths = label_lengths[:maxim]
 
     return x2, y2, input_lengths, label_lengths
 
@@ -86,7 +101,12 @@ def extract_img(img):
     new_x = int(img.shape[0] * min_xy)
     new_y = int(img.shape[1] * min_xy)
     img2 = cv2.resize(img, (new_y, new_x))
-    target[:new_x, :new_y] = img2[:, :]
+
+    if len(img2.shape) == 3:
+        target[:new_x, :new_y] = img2[:, :, 0]
+    else:
+        target[:new_x, :new_y] = img2[:, :]
+
     target[new_x:, new_y:] = 255
     return target
 

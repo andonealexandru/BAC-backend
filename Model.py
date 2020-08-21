@@ -13,37 +13,77 @@ from DataLoader import extract_img
 from WordBeamSearch import LanguageModel, wordBeamSearch
 
 
+class LossHistory(keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.history = {'loss':[],'val_loss':[]}
+
+    def on_batch_end(self, batch, logs={}):
+        self.history['loss'].append(logs.get('loss'))
+
+    def on_epoch_end(self, epoch, logs={}):
+        self.history['val_loss'].append(logs.get('val_loss'))
+
 class NeuralNetwork:
 
-    def __init__(self, create):
-        if create == True:
-            self.setup_model()
+    def __init__(self, create, batch_norm, dropout):
+        if create:
+            self.setup_model(batch_norm=batch_norm, dropout=dropout)
         # else:
         #     model = retrieve_model_with_create_arhitecture()
         #     model.summary()
         self.lm = createLM()
 
     @staticmethod
-    def setup_model():
+    def setup_model(batch_norm, dropout):
         inputs = keras.Input(shape=(128, 32, 1), name='input', dtype='float32')
 
         # layers pentru CNN
-        conv1 = layers.Conv2D(32, 5, activation='relu', padding='SAME', name="layer1")(inputs)
-        max1 = layers.MaxPool2D(2, name='layer1pool', padding='VALID')(conv1)
-        conv2 = layers.Conv2D(64, 5, activation='relu', padding='SAME', name="layer2")(max1)
-        max2 = layers.MaxPool2D(2, name='layer2pool', padding='VALID')(conv2)
-        conv3 = layers.Conv2D(128, 3, activation='relu', padding='SAME', name="layer3")(max2)
-        max3 = layers.MaxPool2D((1, 2), name='layer3pool', padding='VALID')(conv3)
-        conv4 = layers.Conv2D(128, 3, activation='relu', padding='SAME', name="layer4")(max3)
-        max4 = layers.MaxPool2D((1, 2), name='layer4pool', padding='VALID')(conv4)
-        conv5 = layers.Conv2D(256, 3, activation='relu', padding='SAME', name="layer5")(max4)
-        max5 = layers.MaxPool2D((1, 2), name='layer5pool', padding='VALID')(conv5)
+        conv1 = layers.Conv2D(32, 5, activation=None, padding='SAME', name="layer1")(inputs)
+        if batch_norm:
+            batch_norm1 = layers.BatchNormalization()(conv1)
+            activation1 = layers.ReLU()(batch_norm1)
+        else:
+            activation1 = layers.ReLU()(conv1)
+        max1 = layers.MaxPool2D(2, name='layer1pool', padding='VALID')(activation1)
+
+        conv2 = layers.Conv2D(64, 5, activation=None, padding='SAME', name="layer2")(max1)
+        if batch_norm:
+            batch_norm2 = layers.BatchNormalization()(conv2)
+            activation2 = layers.ReLU()(batch_norm2)
+        else:
+            activation2 = layers.ReLU()(conv2)
+        max2 = layers.MaxPool2D(2, name='layer2pool', padding='VALID')(activation2)
+
+        conv3 = layers.Conv2D(128, 3, activation=None, padding='SAME', name="layer3")(max2)
+        if batch_norm:
+            batch_norm3 = layers.BatchNormalization()(conv3)
+            activation3 = layers.ReLU()(batch_norm3)
+        else:
+            activation3 = layers.ReLU()(conv3)
+        max3 = layers.MaxPool2D((1, 2), name='layer3pool', padding='VALID')(activation3)
+
+        conv4 = layers.Conv2D(128, 3, activation=None, padding='SAME', name="layer4")(max3)
+        if batch_norm:
+            batch_norm4 = layers.BatchNormalization()(conv4)
+            activation4 = layers.ReLU()(batch_norm4)
+        else:
+            activation4 = layers.ReLU()(conv4)
+        max4 = layers.MaxPool2D((1, 2), name='layer4pool', padding='VALID')(activation4)
+
+        conv5 = layers.Conv2D(256, 3, activation=None, padding='SAME', name="layer5")(max4)
+        if batch_norm:
+            batch_norm5 = layers.BatchNormalization()(conv5)
+            activation5 = layers.ReLU()(batch_norm5)
+        else:
+            activation5 = layers.ReLU()(conv5)
+        max5 = layers.MaxPool2D((1, 2), name='layer5pool', padding='VALID')(activation5)
+
         resh = layers.Reshape((32, 256), name='reshape')(max5)
 
         # RNN
-        bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True), name='bidirectLayer')(resh)  # posibil
+        bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True, dropout=dropout), name='bidirectLayer')(resh)  # posibil
         dense = layers.TimeDistributed(layers.Dense(alp_len + 1))(bid)
-        y_pred = layers.TimeDistributed(layers.Activation('softmax', name='softmax'))(dense)
+        y_pred = layers.TimeDistributed(layers.Activation('softmax'), name="time_distributed_last")(dense)
 
         # CTC
         y_true = keras.Input(name='truth_labels', shape=[32])  # (samples, max_string_length)
@@ -59,7 +99,7 @@ class NeuralNetwork:
         save_model(model)
 
     @staticmethod
-    def train(train_images, train_labels, label_length, input_length, test_images, test_labels, batch_size, epochs):
+    def train(train_images, train_labels, label_length, input_length, validation_split, batch_size, epochs):
         model = retrieve_model()
         print('Compiling')
         # keras.losses.custom_loss = {'ctc': lambda y_true, y_pred: y_pred}
@@ -97,7 +137,12 @@ class NeuralNetwork:
         }
         outputs = {'ctc': np.zeros([nr])}
 
-        history = model.fit(inputs, outputs, batch_size=batch_size, epochs=epochs)
+        loss_history = LossHistory()
+        model.fit(inputs, outputs,
+                    batch_size=batch_size, epochs=epochs,
+                    validation_split=validation_split,
+                    callbacks=[loss_history])
+
         # if i % 100 == 0:
         #     print(i)
         #     history1 = model.fit(inputs, outputs, batch_size=32, epochs=1, verbose=2)
@@ -107,14 +152,26 @@ class NeuralNetwork:
         #     dataset_to_plot.append(history2.history['loss'][0])
 
         print('Done')
+        # print(loss_history.losses)
+        # print(loss_history.val_losses)
 
         # show a graphic to see loss
-        plt.plot(history.history['loss'])
-        plt.title('Training loss')
-        plt.xlabel('Epochs')
-        plt.ylabel('Loss')
-        plt.legend()
-        plt.grid('off')
+        # plt.plot(history.history['loss'])
+        # plt.title('Training loss')
+        # plt.xlabel('Epochs')
+        # plt.ylabel('Loss')
+        # plt.legend()
+        # plt.grid('off')
+        # plt.show()
+
+        y1 = loss_history.history['loss']
+        y2 = loss_history.history['val_loss']
+        x1 = np.arange(len(y1))
+        k = len(y1) / len(y2)
+        x2 = np.arange(k, len(y1) + 1, k)
+        fig, ax = plt.subplots()
+        line1, = ax.plot(x1, y1, label='loss')
+        line2, = ax.plot(x2, y2, label='val_loss')
         plt.show()
         save_model(model)
 
