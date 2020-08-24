@@ -7,7 +7,7 @@
     tools:context=".Second"
     android:background="@drawable/background">
 
-    <include layout="@layout/profile_bar"/>
+    <include layout="@layout/profile_bar2"/>
 
     <RelativeLayout android:layout_height="fill_parent"
         android:layout_width="fill_parent"

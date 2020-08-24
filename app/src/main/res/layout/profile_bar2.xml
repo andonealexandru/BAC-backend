@@ -13,4 +13,26 @@
         android:adjustViewBounds="true"
         />
 
+    <ImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/default_user_white"
+        android:adjustViewBounds="true"
+        android:layout_alignParentEnd="true"
+        />
+
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/profilePicture"
+        android:layout_toLeftOf="@+id/profilePicture"
+        android:text="Andone Alexandru"
+        android:textColor="@color/colorWhite"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp" />
+
 </RelativeLayout>
