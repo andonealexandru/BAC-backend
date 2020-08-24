@@ -76,7 +76,8 @@ public class Second extends AppCompatActivity{
                 View view = super.getView(position, convertView, parent);
 
                 TextView text = (TextView)view.findViewById(android.R.id.text1);
-                text.setTextColor(Color.BLACK);
+                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                text.setTextColor(Color.WHITE);
 
                 return view;
 

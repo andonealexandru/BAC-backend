@@ -30,18 +30,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo_for_screen1"
+        android:padding="35dp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="99dp"
         android:layout_marginLeft="99dp"
         android:layout_marginTop="410dp"
         android:layout_marginEnd="78dp"
         android:layout_marginRight="78dp"
-        android:layout_marginBottom="259dp" />
+        android:layout_marginBottom="266dp" />
 
 </RelativeLayout>

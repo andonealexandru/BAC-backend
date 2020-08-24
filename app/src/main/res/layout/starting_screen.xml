@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background">
+
+    <ImageView
+        android:id="@+id/splashscreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/green_logo"
+         />
+
+    <ImageView
+        android:id="@+id/gif_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/splashscreen"
+        android:src="@drawable/test_loading_gif"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp">
+
+    </ImageView>
+
+    <!---<TextView
+        android:id="@+id/greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/splashscreen"
+        android:layout_centerHorizontal="true"
+        android:text="Wait a little bit, please."
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="30dp"
+        android:textSize="30dp">
+
+    </TextView>-->
+
+</RelativeLayout>
