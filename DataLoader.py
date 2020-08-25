@@ -3,12 +3,12 @@ import os
 import numpy as np
 from Alphabet import text_to_label
 
-path_to_file = 'D:/Handwriting DB/ascii/words.txt'  # path catre words.txt
-path_to_folder = 'D:/Handwriting DB/words/'  # path catre folderul cu cuvinte
-num_images = 1000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
+path_to_file = '/home/andone/Documents/Programming/python/database for train/ascii/words.txt'  # path catre words.txt
+path_to_folder = '/home/andone/Documents/Programming/python/database for train/words/'  # path catre folderul cu cuvinte
+num_images = 90000  # pe cate imagini sa se ia din words (pe cate sa antrenam)
 
-path_to_file_math = 'D:/dpit2020/jungomi-datasets-crohme-png-1/groundtruth_train.tsv'
-path_to_folder_math = 'D:/dpit2020/jungomi-datasets-crohme-png-1/train/'
+path_to_file_math = '/home/andone/Documents/Programming/python/database for train/jungomi-datasets-crohme-png-1/groundtruth_train.tsv'
+path_to_folder_math = '/home/andone/Documents/Programming/python/database for train/jungomi-datasets-crohme-png-1/train/'
 
 
 def get_x_y_math():
@@ -19,6 +19,10 @@ def get_x_y_math():
     y = []  # in y sunt labelurile
     x_new = []
     im_path = []
+
+    if not os.path.exists("data_out_mate"):
+        os.mkdir("data_out_mate")
+
     for i, line in enumerate(f):
         try:
             # if i>27:
@@ -32,8 +36,8 @@ def get_x_y_math():
 
             img = np.asarray(img)
             # trim image to only contain the text:
-            non_empty_columns = np.where(img.min(axis=0) <255)[0]
-            non_empty_rows = np.where(img.min(axis=1) <255)[0]
+            non_empty_columns = np.where(img.min(axis=0) < 255)[0]
+            non_empty_rows = np.where(img.min(axis=1) < 255)[0]
             cropBox = (min(non_empty_rows), max(non_empty_rows), min(non_empty_columns), max(non_empty_columns))
 
             image_data_new = img[cropBox[0]:cropBox[1] + 1, cropBox[2]:cropBox[3] + 1]
@@ -55,8 +59,9 @@ def get_x_y_math():
                 ret, img = cv2.threshold(img, 250, 255, cv2.THRESH_BINARY)
             else:
                 img = cv2.adaptiveThreshold(img2.astype('uint8'), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 5, 2)
-                kernel = np.ones((2, 2))
-                img = cv2.erode(img, kernel, iterations=1)
+                if folder_img[0] != "expressmatch":
+                    kernel = np.ones((2, 2))
+                    img = cv2.erode(img, kernel, iterations=1)
             # img = cv2.erode(th3, (2, 2), iterations=1)
             # print(folder_img[0] +' '+ folder_img[1])
             cv2.imwrite('umm.png', img)
@@ -122,14 +127,17 @@ def get_x_y(evaluate, nr_img):
     return x, x_new, y
 
 
-def create_input_label_length_and_labels(y, evaluate, nr_img):
+def create_input_label_length_and_labels(y, evaluate, math, nr_img):
     y2 = []
-    input_lengths = np.ones((num_images, 1)) * 64
-    label_lengths = np.zeros((num_images, 1))
 
     maxim = num_images
     if evaluate:
         maxim = nr_img
+    if math:
+        maxim = len(y)
+
+    input_lengths = np.ones((maxim, 1)) * 32
+    label_lengths = np.zeros((maxim, 1))
 
     for i in range(maxim):
         val = text_to_label(y[i])
@@ -137,7 +145,7 @@ def create_input_label_length_and_labels(y, evaluate, nr_img):
             print(val)
         y2.append(val)
         label_lengths[i] = len(y[i])
-        input_lengths[i] = 64
+        input_lengths[i] = 32
     y2 = np.asarray(y2)
     return input_lengths, label_lengths, y2
 
@@ -145,8 +153,8 @@ def create_input_label_length_and_labels(y, evaluate, nr_img):
 def get_data(evaluate, nr_img):
     x, x_new, y = get_x_y(evaluate, nr_img)
     x_mate, y_mate = get_x_y_math()
-    input_lengths, label_lengths, y2 = create_input_label_length_and_labels(y, evaluate, nr_img)
-    input_lengths2, label_lengths2, y22 = create_input_label_length_and_labels(y_mate, evaluate, nr_img)
+    input_lengths, label_lengths, y2 = create_input_label_length_and_labels(y, evaluate, False, nr_img)
+    input_lengths2, label_lengths2, y22 = create_input_label_length_and_labels(y_mate, evaluate, True, nr_img)
 
     maxim = num_images
     if evaluate:

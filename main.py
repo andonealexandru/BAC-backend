@@ -22,4 +22,15 @@ label_Lengths = np.asarray(label_Lengths)
 
 num = len(images)
 places = np.arange(num)
+print(num)
+
+np.random.shuffle(places)
 images = images[places]
+labels = labels[places]
+input_lengths = input_lengths[places]
+label_Lengths = label_Lengths[places]
+
+nn = NeuralNetwork(create=True, batch_norm=True, dropout=0.5)
+nn.train(train_images=images, train_labels=labels,
+         label_length=label_Lengths, input_length=input_lengths,
+         validation_split=0.15, batch_size=32, epochs=5)
