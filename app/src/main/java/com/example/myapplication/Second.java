@@ -115,7 +115,7 @@ public class Second extends AppCompatActivity{
 
                 Transformation transformation = new RoundedTransformationBuilder()
                         .borderWidthDp(0)
-                        .cornerRadiusDp(30)
+                        .cornerRadiusDp(130)
                         .oval(false)
                         .build();
 
@@ -204,7 +204,7 @@ public class Second extends AppCompatActivity{
     void sendForCompile()
     {
 
-        String http_api = "http://192.168.1.12:5000/compile";
+        String http_api = "http://bac-advanced-compiler.herokuapp.com//compile";
 
         String code = codeEditText.getText().toString();
         String lang = dropdown.getSelectedItem().toString();

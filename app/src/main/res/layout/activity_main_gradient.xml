@@ -7,8 +7,9 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
-    <include layout="@layout/profile_bar"
-        android:id="@+id/profile_bar"></include>
+    <include
+        layout="@layout/profile_bar"
+        android:id="@+id/profile_bar" />
 
     <ImageView
         android:id="@+id/imgView_preview"
@@ -23,7 +24,9 @@
         android:contentDescription="@string/app_name"
         android:padding="35dp"
         android:src="@drawable/logo_for_screen1"
-        />
+        >
+
+    </ImageView>
 
 
     <ProgressBar

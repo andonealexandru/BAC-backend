@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Transformation transformation = new RoundedTransformationBuilder()
                         .borderWidthDp(0)
-                        .cornerRadiusDp(30)
+                        .cornerRadiusDp(130)
                         .oval(false)
                         .build();
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     void connectServer(String data){
 
 
-        String postUrl= "http://192.168.1.12:5000/upload";
+        String postUrl= "http://bac-advanced-compiler.herokuapp.com//upload";
 
 
         JSONObject imageJSON = new JSONObject();

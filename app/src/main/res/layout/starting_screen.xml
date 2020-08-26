@@ -6,22 +6,28 @@
 
     <ImageView
         android:id="@+id/splashscreen"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingHorizontal="20dp"
+        android:layout_above="@id/gif_loading"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/green_logo"
-         />
+        android:contentDescription="@string/app_name"
+        android:padding="35dp"
+        android:src="@drawable/logo_for_screen1"
+        >
+
+    </ImageView>
 
     <ImageView
         android:id="@+id/gif_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/splashscreen"
-        android:src="@drawable/test_loading_gif"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/test_loading_gif">
 
     </ImageView>
 

@@ -69,7 +69,7 @@ public class ThirdScreen extends AppCompatActivity {
 
                 Transformation transformation = new RoundedTransformationBuilder()
                         .borderWidthDp(0)
-                        .cornerRadiusDp(30)
+                        .cornerRadiusDp(130)
                         .oval(false)
                         .build();
 
@@ -111,7 +111,7 @@ public class ThirdScreen extends AppCompatActivity {
     void connectServer(){
 
 
-        String postUrl= "http://192.168.1.3:5000/add_history";
+        String postUrl= "http://bac-advanced-compiler.herokuapp.com//add_history";
 
         StaticVariables app = (StaticVariables) getApplicationContext();
         String code = app.getCode(), mark = app.getMark() + "", date = app.getDate();
