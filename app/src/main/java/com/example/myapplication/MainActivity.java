@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     void connectServer(String data){
 
 
-        String postUrl= "http://bac-advanced-compiler.herokuapp.com//upload";
+        String postUrl= "https://bac-advanced-compiler.herokuapp.com/upload";
 
 
         JSONObject imageJSON = new JSONObject();

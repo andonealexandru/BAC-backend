@@ -111,7 +111,7 @@ public class ThirdScreen extends AppCompatActivity {
     void connectServer(){
 
 
-        String postUrl= "http://bac-advanced-compiler.herokuapp.com//add_history";
+        String postUrl= "https://bac-advanced-compiler.herokuapp.com/add_history";
 
         StaticVariables app = (StaticVariables) getApplicationContext();
         String code = app.getCode(), mark = app.getMark() + "", date = app.getDate();
