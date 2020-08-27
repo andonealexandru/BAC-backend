@@ -147,6 +147,10 @@ def getImages():
             # # increase line width
             # kernel = np.ones((3, 3), np.uint8)
             # imgMorph = cv2.erode(imgContrast, kernel, iterations=1)
+
+            if indent < 0:
+                indent = 0
+
             if j != 0:
                 lastWB, last_img = res[j - 1]
                 if y >= lastWB[1] + lastWB[3]:
