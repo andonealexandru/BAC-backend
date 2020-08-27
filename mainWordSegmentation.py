@@ -10,8 +10,8 @@ images_for_model = []
 considered_indent = 20
 
 
-def send_words_to_nn():
-    list_word, num_with = getImages()
+def send_words_to_nn(img):
+    list_word, num_with = getImages(img)
     NN = NeuralNetwork(create=False)
     model = retrieve_model()
     model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
@@ -30,8 +30,8 @@ def send_words_to_nn():
     return text
 
 
-def increase_contrast_and_apply_treshold():
-    img = cv2.imread('data/imageToSave.png', 1)
+def increase_contrast_and_apply_treshold(image):
+    img = image
     img = cv2.GaussianBlur(img, (5, 5), 0)
     # -----Converting image to LAB Color model-----------------------------------
     lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
@@ -103,7 +103,7 @@ def increase_contrast_and_apply_treshold():
     return th3
 
 
-def getImages():
+def getImages(img):
     """reads images from data/ and outputs the word-segmentation to out/"""
 
     # read input images from 'in' directory
@@ -112,7 +112,7 @@ def getImages():
         print('Segmenting words of sample %s' % f)
 
         # read image, prepare it by resizing it to fixed height and converting it to grayscale
-        img = increase_contrast_and_apply_treshold()
+        img = increase_contrast_and_apply_treshold(img)
         img = prepareImg(img, 270)
         # execute segmentation with given parameters
         # -kernelSize: size of filter kernel (odd integer)

@@ -1,12 +1,17 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
+from PIL import Image
 # from bitmap import BitMap
+import numpy as np
+import codecs
 import base64
+import cv2
 import requests
 from mainWordSegmentation import send_words_to_nn
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = "mongodb+srv://mirela:parola1234@dpitcluster.t2xz8.mongodb.net/DPIT_TEST?retryWrites=true&w=majority"
+app.config[
+    'MONGO_URI'] = "mongodb+srv://mirela:parola1234@dpitcluster.t2xz8.mongodb.net/DPIT_TEST?retryWrites=true&w=majority"
 app.config['MONGO_DBNAME'] = "DPIT_TEST"
 mongo = PyMongo(app)
 
@@ -33,9 +38,13 @@ def handle_add():
 def handle_request():
     img = request.get_json()
     img = dict(img)
-    with open("data/imageToSave.png", "wb") as fh:
-        fh.write(base64.b64decode(str(img["key"])))
-    string = send_words_to_nn()
+
+    message = base64.b64decode(img["key"])
+
+    npimg = np.fromstring(message, np.uint8)
+    img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+
+    string = send_words_to_nn(img)
     print(string)
     return string
 

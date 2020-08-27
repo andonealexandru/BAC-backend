@@ -18,5 +18,5 @@ import cv2
 # print(input_lengths.shape)
 # print(label_Lengths.shape)
 
-
-print(send_words_to_nn())
+image = cv2.imread("imageToSave.png", 1)
+print(send_words_to_nn(image))
