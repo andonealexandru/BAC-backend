@@ -344,6 +344,7 @@ def retrieve_model_with_create_arhitecture(batch_norm=True, dropout=0.5):
     )([y_pred, y_true, label_length, input_length])
 
     model = keras.Model(inputs=[inputs, y_true, input_length, label_length], outputs=loss_out)
+    model.load_weights("model.h5")
     return model
 
 
