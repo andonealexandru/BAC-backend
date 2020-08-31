@@ -97,7 +97,7 @@ def increase_contrast_and_apply_treshold():
     img = cv2.erode(img, kernel2, iterations=2)
     # cv2.imwrite('out/eroded2.png', img)
     kernel3 = np.ones((2, 2))
-    img = cv2.dilate(img, kernel3, iterations=1)
+    img = cv2.dilate(img, kernel3, iterations=3)
     th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 61, 14)
     # cv2.imwrite('out/treshhold3.png', th3)
     return th3
@@ -113,7 +113,7 @@ def getImages():
 
         # read image, prepare it by resizing it to fixed height and converting it to grayscale
         img = increase_contrast_and_apply_treshold()
-        img = prepareImg(img, 270)
+        img = prepareImg(img, 600)
         # execute segmentation with given parameters
         # -kernelSize: size of filter kernel (odd integer)
         # -sigma: standard deviation of Gaussian function used for filter kernel
@@ -147,6 +147,10 @@ def getImages():
             # # increase line width
             # kernel = np.ones((3, 3), np.uint8)
             # imgMorph = cv2.erode(imgContrast, kernel, iterations=1)
+
+            if indent < 0:
+                indent = 0
+
             if j != 0:
                 lastWB, last_img = res[j - 1]
                 if y >= lastWB[1] + lastWB[3]:
