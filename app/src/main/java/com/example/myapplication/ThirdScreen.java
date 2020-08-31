@@ -83,6 +83,7 @@ public class ThirdScreen extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
                 Intent intent = new Intent(ThirdScreen.this, Second.class);
                 startActivity(intent);
 
@@ -100,6 +101,9 @@ public class ThirdScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(ThirdScreen.this, "Wooow", Toast.LENGTH_LONG).show();
+                finish();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
                 StaticVariables app = (StaticVariables) getApplicationContext();
                 connectServer();
                 app.reseetMark();

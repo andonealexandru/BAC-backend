@@ -24,6 +24,7 @@
         <activity android:name=".ThirdScreen" />
         <activity android:name=".Second" />
         <activity android:name=".MainActivity"/>
+        <activity android:name=".HistoryTab"/>
         <activity android:name=".LogInScreen"/>
         <activity android:name=".StartingScreen">
         <intent-filter>

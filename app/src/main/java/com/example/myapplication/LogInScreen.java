@@ -127,7 +127,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
     void connectServer(String data){
 
-        String postUrl= "http://bac-advanced-compiler.herokuapp.com//signin";
+        String postUrl= "https://bac-advanced-compiler.herokuapp.com/signin";
 
 
         JSONObject emailJSON = new JSONObject();
