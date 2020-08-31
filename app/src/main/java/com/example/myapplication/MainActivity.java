@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     ProgressBar progressBar;
+    Dialog myDialogProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
         imgView = findViewById(R.id.imgView_preview);
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -209,7 +210,17 @@ public class MainActivity extends AppCompatActivity {
 
     void postRequest(String postUrl, RequestBody postBody) {
 
+        //progressBar.setVisibility(View.VISIBLE);
+        myDialogProgress= new Dialog(this);
+        myDialogProgress.setCancelable(false);
+        myDialogProgress.setCanceledOnTouchOutside(false);
+        myDialogProgress.setContentView(R.layout.progress_bar);
+        myDialogProgress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialogProgress.show();
+
+        progressBar = myDialogProgress.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
@@ -233,7 +244,8 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressBar.setVisibility(View.INVISIBLE);
+                        myDialogProgress.dismiss();
+                        //progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
@@ -247,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         String res = null;
-                        progressBar.setVisibility(View.INVISIBLE);
+                        myDialogProgress.dismiss();
 
                         try {
                             res = response.body().string();
