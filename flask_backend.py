@@ -81,7 +81,7 @@ def handle_signin():
     a = email_col.find_one({'email': email})
 
     if a is None:
-        # mongo.db.user.insert_one({"email": email, "history": []})
+        mongo.db.user.insert_one({"email": email, "history": []})
         print("sal")
     return "Am virusi in calculator"
 
