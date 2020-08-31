@@ -195,19 +195,19 @@ public class ThirdScreen extends AppCompatActivity {
         try {
             JSONObject object = new JSONObject(json_as_string);
             String compile_status = object.getString("compile_status");
+            StaticVariables app = (StaticVariables) getApplicationContext();
             if(compile_status.equals("OK"))
             {
                 String output = object.getJSONObject("run_status").getString("output");
-                String forTV = "Compile status: OK\n" + "Output: " + output;
+                String forTV = "Compile status: OK\n" + "Output: " + output + "\n Mark:" + app.getMark();
                 tvOutput.setText(forTV);
             }
             else{
 
                 String forTV = "Compile status: " + compile_status;
-                StaticVariables app = (StaticVariables) getApplicationContext();
                 app.setMark(app.getMark() - 1);
 
-                tvOutput.setText(forTV + '\n' + "Nota:" + app.getMark());
+                tvOutput.setText(forTV + '\n' + "Mark:" + app.getMark());
             }
 
         }catch(JSONException e){
