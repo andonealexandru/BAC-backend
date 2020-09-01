@@ -32,17 +32,50 @@
             android:padding="10dp"
             android:id="@+id/tvOutput"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="300dp"
             android:layout_below="@+id/tvTitluOutput"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:height="500dp"
             android:textSize="24dp"
             android:background="@drawable/edit_text_style"
             android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/editMarkTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editeaza nota:"
+            android:textColor="@color/colorWhite"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:textSize="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_below="@+id/tvOutput"
+            />
+
+        <EditText
+            android:id="@+id/edit_mark"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/editMarkTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/edit_text_style"
+            android:gravity="start|top"
+            android:inputType="number"
+            android:lines="1"
+            android:paddingVertical="10dp"
+            android:paddingLeft="8dp"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"
+            />
 
     </RelativeLayout>
 

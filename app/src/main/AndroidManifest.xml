@@ -11,7 +11,7 @@
     <application
         android:name="com.example.myapplication.StaticVariables"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/icon_launcher"
         android:label="B.A.C."
         android:largeHeap="true"

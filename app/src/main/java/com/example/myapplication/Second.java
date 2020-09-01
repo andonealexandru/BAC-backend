@@ -182,6 +182,8 @@ public class Second extends AppCompatActivity{
         input_text.setText(app.getInput());
         maxMark.setText(app.getMaxMark().toString());
 
+        input_nn = input_text.getText() + "";
+
         input_btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
