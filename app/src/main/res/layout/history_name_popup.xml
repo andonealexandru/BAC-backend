@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="180dp"
+    android:background="@color/colorBackground"
+    android:layout_centerVertical="true"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:id="@+id/name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textSize="30dp"
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"/>
+
+    <EditText
+        android:gravity="start|top"
+
+        android:id="@+id/edit_text_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_style"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@id/name_textview"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="50dp"
+        android:textSize="25dp"
+        />
+
+    <Button
+        android:id="@+id/button_popup_next"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_finish"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="10dp"
+        />
+
+</RelativeLayout>

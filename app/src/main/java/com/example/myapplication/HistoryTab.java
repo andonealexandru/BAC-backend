@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,12 +50,14 @@ import okhttp3.Response;
 
 public class HistoryTab extends AppCompatActivity {
 
-    TextView testHistoryTab, tv_date, tv_mark;
+    TextView testHistoryTab, tv_date, tv_mark, tv_name;
     GridLayout gridLayout;
     GoogleSignInAccount account;
     GoogleSignInClient mGoogleSignInClient;
     List<String> codes;
     int tag_cardview = 0;
+    TextView profileName;
+    ImageView profilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,8 @@ public class HistoryTab extends AppCompatActivity {
 
         gridLayout = findViewById(R.id.grid_layout);
         testHistoryTab = findViewById(R.id.test_history_tab);
+        profilePicture = findViewById(R.id.profilePicture);
+        profileName = findViewById(R.id.profileName);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -69,6 +77,36 @@ public class HistoryTab extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if(account != null) {
+            profileName.setText(account.getDisplayName());
+
+            if (account.getPhotoUrl() != null) {
+                profilePicture.setImageURI(null);
+
+                Transformation transformation = new RoundedTransformationBuilder()
+                        .borderWidthDp(0)
+                        .cornerRadiusDp(130)
+                        .oval(false)
+                        .build();
+
+
+                Picasso.get()
+                        .load(account.getPhotoUrl())
+                        .transform(transformation)
+                        .into(profilePicture);
+            }
+        }
+
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+                startActivity(intent);
+            }
+        });
+
 
         connectServer(account.getEmail());
 
@@ -127,6 +165,7 @@ public class HistoryTab extends AppCompatActivity {
                 });
             }
 
+
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
@@ -136,13 +175,12 @@ public class HistoryTab extends AppCompatActivity {
                         String res = null;
                         try {
                             res = response.body().string();
-                            testHistoryTab.setText(res);
                             JSONArray historyArray = new JSONArray(res);
                             for(int i = 0; i < historyArray.length(); ++i){
                                 JSONObject history_code = new JSONObject();
                                 history_code = historyArray.getJSONObject(i);
-                                String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark");
-                                addCardView(date, code, mark);
+                                String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark"), name = history_code.getString("name");
+                                addCardView(date, code, mark, name);
 
                             }
                         } catch (IOException | JSONException e) {
@@ -155,7 +193,7 @@ public class HistoryTab extends AppCompatActivity {
 
     }
 
-    void addCardView(String date, String code, String mark)
+    void addCardView(String date, String code, String mark, String name)
     {
         CardView cardView = new CardView(getApplicationContext());
         LayoutParams layoutparams = new LayoutParams(
@@ -170,26 +208,32 @@ public class HistoryTab extends AppCompatActivity {
 
         tv_date = new TextView(getApplicationContext());
         tv_mark = new TextView(getApplicationContext());
+        tv_name = new TextView(getApplicationContext());
 
         tv_date.setTextColor(getResources().getColor(R.color.colorWhite));
         tv_mark.setTextColor(getResources().getColor(R.color.colorWhite));
+        tv_name.setTextColor(getResources().getColor(R.color.colorWhite));
 
         tv_date.setTextSize(20);
         tv_mark.setTextSize(20);
+        tv_name.setTextSize(24);
 
         tv_date.setText(date);
-        tv_mark.setText(mark);
+        tv_mark.setText("Mark: " + mark);
+        tv_name.setText(name);
 
-        tv_date.setPadding(20, 0, 0, 0);
+        tv_date.setPadding(20, 0, 0, 20);
         tv_mark.setPadding(0, 0, 20, 0);
+        tv_name.setPadding(20, 20, 0, 0);
 
 
-        tv_date.setGravity(Gravity.CENTER_VERTICAL);
         tv_mark.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        tv_date.setGravity(Gravity.BOTTOM);
 
         cardView.setCardBackgroundColor(getResources().getColor(R.color.colorElevatedCard));
         cardView.addView(tv_date);
         cardView.addView(tv_mark);
+        cardView.addView(tv_name);
         cardView.setTag(tag_cardview);
         tag_cardview++;
         codes.add(code);

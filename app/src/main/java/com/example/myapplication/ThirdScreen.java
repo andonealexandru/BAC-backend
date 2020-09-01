@@ -1,10 +1,14 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,7 +104,29 @@ public class ThirdScreen extends AppCompatActivity {
         btn_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ThirdScreen.this, "Wooow", Toast.LENGTH_LONG).show();
+                openPopup();
+            }
+        });
+
+    }
+    String history_name = "";
+    void openPopup()
+    {
+        final Dialog input_popup = new Dialog(this);
+        input_popup.setContentView(R.layout.history_name_popup);
+        input_popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        input_popup.show();
+
+        Button input_btn_next;
+        final EditText input_text;
+        input_btn_next = input_popup.findViewById(R.id.button_popup_next);
+        input_text = input_popup.findViewById(R.id.edit_text_input);
+
+        input_btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                history_name = input_text.getText().toString();
+                input_popup.dismiss();
                 finish();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -109,11 +135,13 @@ public class ThirdScreen extends AppCompatActivity {
                 app.reseetMark();
             }
         });
-
     }
+
 
     void connectServer(){
 
+        if(history_name.equals(""))
+            history_name = "Unnamed";
 
         String postUrl= "https://bac-advanced-compiler.herokuapp.com/add_history";
 
@@ -128,6 +156,7 @@ public class ThirdScreen extends AppCompatActivity {
             history_data.put("code", code);
             history_data.put("mark", mark);
             history_data.put("date", date);
+            history_data.put("name", history_name);
         } catch(JSONException e){
             e.printStackTrace();
         }
