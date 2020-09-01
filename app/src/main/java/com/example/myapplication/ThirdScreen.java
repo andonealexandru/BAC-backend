@@ -149,7 +149,7 @@ public class ThirdScreen extends AppCompatActivity {
         String postUrl= "https://bac-advanced-compiler.herokuapp.com/add_history";
 
         StaticVariables app = (StaticVariables) getApplicationContext();
-        String code = app.getCode(), mark = app.getMark() + "", date = app.getDate();
+        String code = app.getCode(), mark = app.getMark() + "", date = app.getDate(), maxMark = app.getMaxMark() + "";
 
 
         JSONObject historyJSON = new JSONObject();
@@ -158,6 +158,7 @@ public class ThirdScreen extends AppCompatActivity {
         try{
             history_data.put("code", code);
             history_data.put("mark", mark);
+            history_data.put("maxMark", maxMark);
             history_data.put("date", date);
             history_data.put("name", history_name);
         } catch(JSONException e){
