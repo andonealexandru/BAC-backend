@@ -132,7 +132,10 @@ public class ThirdScreen extends AppCompatActivity {
                 startActivity(intent);
                 StaticVariables app = (StaticVariables) getApplicationContext();
                 connectServer();
-                app.reseetMark();
+
+                app.resetMark();
+                app.resetInput();
+                app.resetMaxMark();
             }
         });
     }

@@ -8,9 +8,13 @@ import java.util.Calendar;
 
 public class StaticVariables extends Application {
     private int mark = 10;
+    private Integer maxMark = 10;
     private String code = "";
+    private String input = "";
 
-    public void reseetMark(){ mark = 10; }
+    public void resetMark() {
+        mark = 10;
+    }
 
     public int getMark(){
         return mark;
@@ -20,6 +24,18 @@ public class StaticVariables extends Application {
         mark = mar;
     }
 
+    public void resetMaxMark() {
+        maxMark = 10;
+    }
+
+    public Integer getMaxMark() {
+        return maxMark;
+    }
+
+    public void setMaxMark(Integer maxMark) {
+        this.maxMark = maxMark;
+    }
+
     public String getCode(){
         return code;
     }
@@ -27,6 +43,19 @@ public class StaticVariables extends Application {
     public void setCode(String str){
         code = str;
     }
+
+    public void resetInput() {
+        input = "";
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
+    }
+
 
     public String getDate()
     {
