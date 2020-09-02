@@ -1,0 +1,143 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.myapplication"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="14"
+8-->E:\Repo\test\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="30" />
+9-->E:\Repo\test\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+11-->E:\Repo\test\app\src\main\AndroidManifest.xml:6:5-80
+11-->E:\Repo\test\app\src\main\AndroidManifest.xml:6:22-77
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->E:\Repo\test\app\src\main\AndroidManifest.xml:7:5-67
+12-->E:\Repo\test\app\src\main\AndroidManifest.xml:7:22-64
+13    <uses-permission android:name="android.permission.CAMERA" />
+13-->E:\Repo\test\app\src\main\AndroidManifest.xml:8:5-65
+13-->E:\Repo\test\app\src\main\AndroidManifest.xml:8:22-62
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->E:\Repo\test\app\src\main\AndroidManifest.xml:9:5-81
+14-->E:\Repo\test\app\src\main\AndroidManifest.xml:9:22-78
+15
+16    <application
+16-->E:\Repo\test\app\src\main\AndroidManifest.xml:11:5-40:19
+17        android:name="com.example.myapplication.StaticVariables"
+17-->E:\Repo\test\app\src\main\AndroidManifest.xml:12:9-65
+18        android:allowBackup="true"
+18-->E:\Repo\test\app\src\main\AndroidManifest.xml:13:9-35
+19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+19-->[androidx.core:core:1.3.1] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\ae3468b444d41a56f261ecbb8448fe17\core-1.3.1\AndroidManifest.xml:24:18-86
+20        android:debuggable="true"
+21        android:hardwareAccelerated="false"
+21-->E:\Repo\test\app\src\main\AndroidManifest.xml:14:9-44
+22        android:icon="@mipmap/icon_launcher"
+22-->E:\Repo\test\app\src\main\AndroidManifest.xml:15:9-45
+23        android:label="B.A.C."
+23-->E:\Repo\test\app\src\main\AndroidManifest.xml:16:9-31
+24        android:largeHeap="true"
+24-->E:\Repo\test\app\src\main\AndroidManifest.xml:17:9-33
+25        android:networkSecurityConfig="@xml/network_security_config"
+25-->E:\Repo\test\app\src\main\AndroidManifest.xml:18:9-69
+26        android:roundIcon="@mipmap/icon_launcher_round"
+26-->E:\Repo\test\app\src\main\AndroidManifest.xml:19:9-56
+27        android:supportsRtl="true"
+27-->E:\Repo\test\app\src\main\AndroidManifest.xml:20:9-35
+28        android:testOnly="true"
+29        android:theme="@style/AppTheme" >
+29-->E:\Repo\test\app\src\main\AndroidManifest.xml:21:9-40
+30        <activity android:name="com.example.myapplication.ProfileSettings" />
+30-->E:\Repo\test\app\src\main\AndroidManifest.xml:23:9-52
+30-->E:\Repo\test\app\src\main\AndroidManifest.xml:23:19-50
+31        <activity android:name="com.example.myapplication.ThirdScreen" />
+31-->E:\Repo\test\app\src\main\AndroidManifest.xml:24:9-49
+31-->E:\Repo\test\app\src\main\AndroidManifest.xml:24:19-46
+32        <activity android:name="com.example.myapplication.Second" />
+32-->E:\Repo\test\app\src\main\AndroidManifest.xml:25:9-44
+32-->E:\Repo\test\app\src\main\AndroidManifest.xml:25:19-41
+33        <activity android:name="com.example.myapplication.MainActivity" />
+33-->E:\Repo\test\app\src\main\AndroidManifest.xml:26:9-49
+33-->E:\Repo\test\app\src\main\AndroidManifest.xml:26:19-47
+34        <activity android:name="com.example.myapplication.HistoryTab" />
+34-->E:\Repo\test\app\src\main\AndroidManifest.xml:27:9-47
+34-->E:\Repo\test\app\src\main\AndroidManifest.xml:27:19-45
+35        <activity android:name="com.example.myapplication.LogInScreen" />
+35-->E:\Repo\test\app\src\main\AndroidManifest.xml:28:9-48
+35-->E:\Repo\test\app\src\main\AndroidManifest.xml:28:19-46
+36        <activity android:name="com.example.myapplication.StartingScreen" >
+36-->E:\Repo\test\app\src\main\AndroidManifest.xml:29:9-35:20
+36-->E:\Repo\test\app\src\main\AndroidManifest.xml:29:19-49
+37            <intent-filter>
+37-->E:\Repo\test\app\src\main\AndroidManifest.xml:30:9-34:25
+38                <action android:name="android.intent.action.MAIN" />
+38-->E:\Repo\test\app\src\main\AndroidManifest.xml:31:13-65
+38-->E:\Repo\test\app\src\main\AndroidManifest.xml:31:21-62
+39
+40                <category android:name="android.intent.category.LAUNCHER" />
+40-->E:\Repo\test\app\src\main\AndroidManifest.xml:33:13-73
+40-->E:\Repo\test\app\src\main\AndroidManifest.xml:33:23-70
+41            </intent-filter>
+42        </activity>
+43
+44        <meta-data
+44-->E:\Repo\test\app\src\main\AndroidManifest.xml:37:9-39:63
+45            android:name="com.google.android.actions"
+45-->E:\Repo\test\app\src\main\AndroidManifest.xml:38:13-54
+46            android:resource="@xml/network_security_config" />
+46-->E:\Repo\test\app\src\main\AndroidManifest.xml:39:13-60
+47
+48        <activity
+48-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:23:9-27:75
+49            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+49-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:24:13-93
+50            android:excludeFromRecents="true"
+50-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:25:13-46
+51            android:exported="false"
+51-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:26:13-37
+52            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+52-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:27:13-72
+53        <!--
+54            Service handling Google Sign-In user revocation. For apps that do not integrate with
+55            Google Sign-In, this service will never be started.
+56        -->
+57        <service
+57-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:33:9-37:51
+58            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+58-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:34:13-89
+59            android:exported="true"
+59-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:35:13-36
+60            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+60-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:36:13-107
+61            android:visibleToInstantApps="true" />
+61-->[com.google.android.gms:play-services-auth:18.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\b04f3d1ae40e13c7594d8ed337399605\jetified-play-services-auth-18.1.0\AndroidManifest.xml:37:13-48
+62
+63        <provider
+63-->[com.squareup.picasso:picasso:2.71828] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\9deda04d038d946b107b913e12d7a58f\jetified-picasso-2.71828\AndroidManifest.xml:8:9-11:40
+64            android:name="com.squareup.picasso.PicassoProvider"
+64-->[com.squareup.picasso:picasso:2.71828] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\9deda04d038d946b107b913e12d7a58f\jetified-picasso-2.71828\AndroidManifest.xml:9:13-64
+65            android:authorities="com.example.myapplication.com.squareup.picasso"
+65-->[com.squareup.picasso:picasso:2.71828] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\9deda04d038d946b107b913e12d7a58f\jetified-picasso-2.71828\AndroidManifest.xml:10:13-72
+66            android:exported="false" />
+66-->[com.squareup.picasso:picasso:2.71828] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\9deda04d038d946b107b913e12d7a58f\jetified-picasso-2.71828\AndroidManifest.xml:11:13-37
+67
+68        <activity
+68-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\07044138e4e874d0d569dd1deb5492bd\jetified-play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
+69            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+69-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\07044138e4e874d0d569dd1deb5492bd\jetified-play-services-base-17.1.0\AndroidManifest.xml:24:13-79
+70            android:exported="false"
+70-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\07044138e4e874d0d569dd1deb5492bd\jetified-play-services-base-17.1.0\AndroidManifest.xml:25:13-37
+71            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+71-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\07044138e4e874d0d569dd1deb5492bd\jetified-play-services-base-17.1.0\AndroidManifest.xml:26:13-72
+72
+73        <meta-data
+73-->[com.google.android.gms:play-services-basement:17.1.1] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\383001b624764acd96c3a6474c2aa54f\jetified-play-services-basement-17.1.1\AndroidManifest.xml:23:9-25:69
+74            android:name="com.google.android.gms.version"
+74-->[com.google.android.gms:play-services-basement:17.1.1] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\383001b624764acd96c3a6474c2aa54f\jetified-play-services-basement-17.1.1\AndroidManifest.xml:24:13-58
+75            android:value="@integer/google_play_services_version" />
+75-->[com.google.android.gms:play-services-basement:17.1.1] C:\Users\skybu\.gradle\caches\transforms-2\files-2.1\383001b624764acd96c3a6474c2aa54f\jetified-play-services-basement-17.1.1\AndroidManifest.xml:25:13-66
+76    </application>
+77
+78</manifest>
