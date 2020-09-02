@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
-    android:layout_height="350dp"
+    android:layout_height="470dp"
     android:background="@color/colorBackground"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true">
@@ -10,7 +10,7 @@
         android:id="@+id/input_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Input:"
+        android:text="Date de intrare:"
         android:textSize="30dp"
         android:textColor="@color/colorWhite"
         android:layout_marginTop="15dp"
@@ -27,9 +27,38 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorWhite"
         android:layout_below="@id/input_textview"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="50dp"
         />
+
+    <TextView
+        android:id="@+id/points_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nota maxima:"
+        android:textSize="30dp"
+        android:textColor="@color/colorWhite"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/edit_text_input"/>
+
+    <EditText
+        android:id="@+id/edit_points"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/points_textview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_style"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="number"
+        android:lines="1"
+        android:paddingVertical="13dp"
+        android:paddingLeft="8dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite" />
 
     <Button
         android:id="@+id/button_popup_next"

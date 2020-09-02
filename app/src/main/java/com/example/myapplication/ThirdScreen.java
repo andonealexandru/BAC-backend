@@ -44,6 +44,7 @@ public class ThirdScreen extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     TextView profileName, tvOutput;
+    EditText mark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class ThirdScreen extends AppCompatActivity {
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
         tvOutput = findViewById(R.id.tvOutput);
+        mark = findViewById(R.id.edit_mark);
 
         write_compile_result();
 
@@ -88,6 +90,10 @@ public class ThirdScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+
+                StaticVariables app = (StaticVariables) getApplicationContext();
+                app.setMark(Integer.parseInt(mark.getText() + ""));
+
                 Intent intent = new Intent(ThirdScreen.this, Second.class);
                 startActivity(intent);
 
@@ -104,6 +110,8 @@ public class ThirdScreen extends AppCompatActivity {
         btn_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                StaticVariables app = (StaticVariables) getApplicationContext();
+                app.setMark(Integer.parseInt(mark.getText() + ""));
                 openPopup();
             }
         });
@@ -132,7 +140,10 @@ public class ThirdScreen extends AppCompatActivity {
                 startActivity(intent);
                 StaticVariables app = (StaticVariables) getApplicationContext();
                 connectServer();
-                app.reseetMark();
+
+                app.resetMark();
+                app.resetInput();
+                app.resetMaxMark();
             }
         });
     }
@@ -146,7 +157,7 @@ public class ThirdScreen extends AppCompatActivity {
         String postUrl= "https://bac-advanced-compiler.herokuapp.com/add_history";
 
         StaticVariables app = (StaticVariables) getApplicationContext();
-        String code = app.getCode(), mark = app.getMark() + "", date = app.getDate();
+        String code = app.getCode(), mark = app.getMark() + "", date = app.getDate(), maxMark = app.getMaxMark() + "";
 
 
         JSONObject historyJSON = new JSONObject();
@@ -155,6 +166,7 @@ public class ThirdScreen extends AppCompatActivity {
         try{
             history_data.put("code", code);
             history_data.put("mark", mark);
+            history_data.put("maxMark", maxMark);
             history_data.put("date", date);
             history_data.put("name", history_name);
         } catch(JSONException e){
@@ -232,13 +244,18 @@ public class ThirdScreen extends AppCompatActivity {
             if(compile_status.equals("OK"))
             {
                 String output = object.getJSONObject("run_status").getString("output");
-                String forTV = "Compile status: OK\n" + "Output: " + output + "\n Mark:" + app.getMark();
+                String forTV = "Compile status: OK\n" + "Output: " + output;
+                String forMark = app.getMark() + "";
                 tvOutput.setText(forTV);
+                mark.setText(forMark);
+
             }
             else{
 
                 String forTV = "Compile status: " + compile_status;
                 app.setMark(app.getMark() - 1);
+                String forMark = app.getMark() + "";
+                mark.setText(forMark);
 
                 tvOutput.setText(forTV + '\n' + "Mark:" + app.getMark());
             }

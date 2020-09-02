@@ -163,22 +163,32 @@ public class Second extends AppCompatActivity{
     }
 
 
-    void openPopup()
-    {
+    void openPopup() {
+
+        final StaticVariables app = (StaticVariables) getApplicationContext();
+
         final Dialog input_popup = new Dialog(this);
         input_popup.setContentView(R.layout.input_popup);
         input_popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         input_popup.show();
 
         Button input_btn_next;
+        final EditText maxMark;
         final EditText input_text;
         input_btn_next = input_popup.findViewById(R.id.button_popup_next);
         input_text = input_popup.findViewById(R.id.edit_text_input);
+        maxMark = input_popup.findViewById(R.id.edit_points);
+
+        input_text.setText(app.getInput());
+        maxMark.setText(app.getMaxMark().toString());
+
+        input_nn = input_text.getText() + "";
 
         input_btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                input_nn = input_text.getText().toString();
+                app.setInput(input_text.getText().toString());
+                app.setMaxMark(Integer.parseInt(maxMark.getText().toString()));
                 input_popup.dismiss();
                 sendForCompile();
             }
