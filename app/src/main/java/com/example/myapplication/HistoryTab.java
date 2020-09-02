@@ -134,7 +134,7 @@ public class HistoryTab extends AppCompatActivity {
     void connectServer(String data){
 
 
-        String postUrl= "http://bac-advanced-compiler.herokuapp.com//retrieve_history";
+        String postUrl= "http://bac-advanced-compiler.herokuapp.com/retrieve_history";
 
 
         JSONObject imageJSON = new JSONObject();

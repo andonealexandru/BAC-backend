@@ -19,18 +19,25 @@
         android:textSize="30dp">
     </TextView>
 
-    <GridLayout
-        android:id="@+id/grid_layout"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="35dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:rowCount="3"
-        android:columnCount="1"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_below="@id/profile_bar"
-        android:alignmentMode="alignMargins">
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="false">
+        <GridLayout
+            android:id="@+id/grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:rowCount="3"
+            android:columnCount="1"
+            android:layout_below="@id/scrollView"
+            android:alignmentMode="alignMargins">
 <!--
         <androidx.cardview.widget.CardView
             android:id="@+id/card_history0"
@@ -160,7 +167,8 @@
 -->
 
 
-    </GridLayout>
+        </GridLayout>
+    </ScrollView>
 
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
