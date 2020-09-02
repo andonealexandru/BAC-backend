@@ -28,6 +28,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInAccount account;
     ProgressBar progressBar;
     Dialog myDialogProgress;
+    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +90,17 @@ public class MainActivity extends AppCompatActivity {
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
 
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
+        // initialize ads
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null) {
@@ -219,8 +232,11 @@ public class MainActivity extends AppCompatActivity {
         myDialogProgress.show();
 
         progressBar = myDialogProgress.findViewById(R.id.progressBar);
+        mAdView = myDialogProgress.findViewById(R.id.adViewProgress);
         progressBar.setVisibility(View.VISIBLE);
 
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
