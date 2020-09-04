@@ -24,7 +24,7 @@ import com.squareup.picasso.Transformation;
 
 public class ProfileSettings extends AppCompatActivity {
 
-    CardView signOutBtn, exitBtn, historyBtn;
+    CardView signOutBtn, exitBtn, historyBtn, premiumBtn;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     ImageView profile_picture;
@@ -37,6 +37,7 @@ public class ProfileSettings extends AppCompatActivity {
         signOutBtn = findViewById(R.id.card_log_out);
         exitBtn = findViewById(R.id.card_exit);
         historyBtn = findViewById(R.id.card_history);
+        premiumBtn = findViewById(R.id.card_premium);
         profileName = findViewById(R.id.profile_name);
         profile_picture = findViewById(R.id.profile_image);
 
@@ -66,6 +67,12 @@ public class ProfileSettings extends AppCompatActivity {
                     .into(profile_picture);
         }
 
+        StaticVariables app = (StaticVariables) getApplicationContext();
+        Toast.makeText(getApplicationContext(), app.getAccountType(), Toast.LENGTH_LONG).show();
+        if(app.getAccountType().equals("premium"))
+        {
+            premiumBtn.setVisibility(View.INVISIBLE);
+        }
 
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +104,13 @@ public class ProfileSettings extends AppCompatActivity {
             }
         });
 
+        premiumBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), GetPremiumActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void signOut() {
@@ -110,4 +124,14 @@ public class ProfileSettings extends AppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        StaticVariables app = (StaticVariables) getApplicationContext();
+        if(app.getAccountType().equals("premium"))
+        {
+            premiumBtn.setVisibility(View.INVISIBLE);
+        }
+
+    }
 }

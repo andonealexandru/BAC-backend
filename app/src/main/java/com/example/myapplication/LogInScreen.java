@@ -57,6 +57,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+        Log.d("Test message", "yayay");
 
     }
 
@@ -66,6 +67,8 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null) {
             Toast.makeText(this, "You've already logged in with " + account.getDisplayName() + "!",Toast.LENGTH_LONG).show();
+
+            connectServer(account.getEmail());
 
             Intent intent = new Intent(this, MainActivity.class);
             finish();
@@ -130,7 +133,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
     void connectServer(String data){
 
-        String postUrl= "https://bac-advanced-compiler.herokuapp.com/signin";
+        String postUrl= "http://bac-advanced-compiler.herokuapp.com/signin";
 
 
         JSONObject emailJSON = new JSONObject();
@@ -168,7 +171,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "Failed something", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Failed to add to mongo.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -176,12 +179,22 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+
+                StaticVariables app = (StaticVariables) getApplicationContext();
+                String toSet = "";
+                toSet = response.body().string();
+                app.setAccountType(toSet);
+
+                String finalToSet = toSet;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "I did it.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Added to mongo.", Toast.LENGTH_SHORT).show();
+                        Log.d("Test response: ", finalToSet);
+
                     }
                 });
+
             }
         });
     }

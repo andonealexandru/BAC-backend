@@ -84,8 +84,12 @@ public class HistoryTab extends AppCompatActivity {
             }
         });
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        StaticVariables app = (StaticVariables) getApplicationContext();
+        if(app.getAccountType().equals("basic"))
+        {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -193,7 +197,13 @@ public class HistoryTab extends AppCompatActivity {
                         try {
                             res = response.body().string();
                             JSONArray historyArray = new JSONArray(res);
-                            for(int i = 0; i < historyArray.length(); ++i){
+                            StaticVariables app = (StaticVariables) getApplicationContext();
+                            int n = 0;
+                            if(app.getAccountType().equals("basic"))
+                                n = Math.min(3, historyArray.length());
+                            else n = historyArray.length();
+
+                            for(int i = 0; i < n; ++i){
                                 JSONObject history_code = new JSONObject();
                                 history_code = historyArray.getJSONObject(i);
                                 String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark"), name = history_code.getString("name");

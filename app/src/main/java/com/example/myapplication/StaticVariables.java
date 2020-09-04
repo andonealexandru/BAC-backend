@@ -11,6 +11,7 @@ public class StaticVariables extends Application {
     private Integer maxMark = 10;
     private String code = "";
     private String input = "";
+    private String accountType = "";
 
     public void resetMark() {
         mark = 10;
@@ -56,6 +57,15 @@ public class StaticVariables extends Application {
         this.input = input;
     }
 
+    public String getAccountType()
+    {
+        return accountType;
+    }
+
+    public void setAccountType(String str)
+    {
+        accountType = str;
+    }
 
     public String getDate()
     {

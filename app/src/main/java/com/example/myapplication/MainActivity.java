@@ -235,8 +235,13 @@ public class MainActivity extends AppCompatActivity {
         mAdView = myDialogProgress.findViewById(R.id.adViewProgress);
         progressBar.setVisibility(View.VISIBLE);
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        StaticVariables app = (StaticVariables) getApplicationContext();
+        if(app.getAccountType().equals("basic"))
+        {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
+
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)

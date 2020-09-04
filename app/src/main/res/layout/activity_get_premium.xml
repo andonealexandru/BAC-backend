@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <RelativeLayout
+        android:id="@+id/layout_premium"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:layout_above="@id/layout_pay">
+
+
+        <TextView
+        android:id="@+id/tv_titlu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Get premium for:"
+        android:textSize="24dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_no_ads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="No ads"
+            android:textSize="24dp"
+            android:textAlignment="center"
+            android:layout_below="@id/tv_titlu"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_graf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Grade graph"
+            android:textSize="24dp"
+            android:textAlignment="center"
+            android:layout_below="@id/tv_no_ads"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_all_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Show your history"
+            android:textSize="24dp"
+            android:textAlignment="center"
+            android:layout_below="@id/tv_graf"
+            android:textColor="@color/colorWhite"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp">
+
+    <com.stripe.android.view.CardInputWidget
+        android:id="@+id/cardInputWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorWhite"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <Button
+        android:text="Pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/payButton"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_below="@id/cardInputWidget"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>
