@@ -1,5 +1,5 @@
 
-alphabet = ' {}[]!"#&’()*+,-./|\\0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+alphabet = ' <>={}[]!"#&’()*+,-./|\\0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 alp_len = len(alphabet)
 
 

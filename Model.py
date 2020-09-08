@@ -283,26 +283,57 @@ def retrieve_model():
     return loaded_model
 
 
-def retrieve_model_with_create_arhitecture():
+def retrieve_model_with_create_arhitecture(batch_norm=True, dropout=0.5):
     inputs = keras.Input(shape=(128, 32, 1), name='input', dtype='float32')
 
     # layers pentru CNN
-    conv1 = layers.Conv2D(32, 5, activation='relu', padding='SAME', name="layer1")(inputs)
-    max1 = layers.MaxPool2D(2, name='layer1pool', padding='VALID')(conv1)
-    conv2 = layers.Conv2D(64, 5, activation='relu', padding='SAME', name="layer2")(max1)
-    max2 = layers.MaxPool2D(2, name='layer2pool', padding='VALID')(conv2)
-    conv3 = layers.Conv2D(128, 3, activation='relu', padding='SAME', name="layer3")(max2)
-    max3 = layers.MaxPool2D((1, 2), name='layer3pool', padding='VALID')(conv3)
-    conv4 = layers.Conv2D(128, 3, activation='relu', padding='SAME', name="layer4")(max3)
-    max4 = layers.MaxPool2D((1, 2), name='layer4pool', padding='VALID')(conv4)
-    conv5 = layers.Conv2D(256, 3, activation='relu', padding='SAME', name="layer5")(max4)
-    max5 = layers.MaxPool2D((1, 2), name='layer5pool', padding='VALID')(conv5)
+    conv1 = layers.Conv2D(32, 5, activation=None, padding='SAME', name="layer1")(inputs)
+    if batch_norm:
+        batch_norm1 = layers.BatchNormalization()(conv1)
+        activation1 = layers.ReLU()(batch_norm1)
+    else:
+        activation1 = layers.ReLU()(conv1)
+    max1 = layers.MaxPool2D(2, name='layer1pool', padding='VALID')(activation1)
+
+    conv2 = layers.Conv2D(64, 5, activation=None, padding='SAME', name="layer2")(max1)
+    if batch_norm:
+        batch_norm2 = layers.BatchNormalization()(conv2)
+        activation2 = layers.ReLU()(batch_norm2)
+    else:
+        activation2 = layers.ReLU()(conv2)
+    max2 = layers.MaxPool2D(2, name='layer2pool', padding='VALID')(activation2)
+
+    conv3 = layers.Conv2D(128, 3, activation=None, padding='SAME', name="layer3")(max2)
+    if batch_norm:
+        batch_norm3 = layers.BatchNormalization()(conv3)
+        activation3 = layers.ReLU()(batch_norm3)
+    else:
+        activation3 = layers.ReLU()(conv3)
+    max3 = layers.MaxPool2D((1, 2), name='layer3pool', padding='VALID')(activation3)
+
+    conv4 = layers.Conv2D(128, 3, activation=None, padding='SAME', name="layer4")(max3)
+    if batch_norm:
+        batch_norm4 = layers.BatchNormalization()(conv4)
+        activation4 = layers.ReLU()(batch_norm4)
+    else:
+        activation4 = layers.ReLU()(conv4)
+    max4 = layers.MaxPool2D((1, 2), name='layer4pool', padding='VALID')(activation4)
+
+    conv5 = layers.Conv2D(256, 3, activation=None, padding='SAME', name="layer5")(max4)
+    if batch_norm:
+        batch_norm5 = layers.BatchNormalization()(conv5)
+        activation5 = layers.ReLU()(batch_norm5)
+    else:
+        activation5 = layers.ReLU()(conv5)
+    max5 = layers.MaxPool2D((1, 2), name='layer5pool', padding='VALID')(activation5)
+
     resh = layers.Reshape((32, 256), name='reshape')(max5)
 
     # RNN
-    bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True), name='bidirectLayer')(resh)  # posibil
+    bid = layers.Bidirectional(layers.LSTM(256, return_sequences=True, dropout=dropout), name='bidirectLayer')(
+        resh)  # posibil
     dense = layers.TimeDistributed(layers.Dense(alp_len + 1))(bid)
-    y_pred = layers.TimeDistributed(layers.Activation('softmax', name='softmax'))(dense)
+    y_pred = layers.TimeDistributed(layers.Activation('softmax'), name="time_distributed_last")(dense)
 
     # CTC
     y_true = keras.Input(name='truth_labels', shape=[32])  # (samples, max_string_length)
