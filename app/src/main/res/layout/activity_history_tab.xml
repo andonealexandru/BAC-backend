@@ -23,6 +23,7 @@
         android:id="@+id/scrollView"
         android:layout_below="@id/profile_bar"
         android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="false">
@@ -30,13 +31,11 @@
             android:id="@+id/grid_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
             android:layout_marginBottom="35dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:rowCount="3"
             android:columnCount="1"
-            android:layout_below="@id/scrollView"
             android:alignmentMode="alignMargins">
 <!--
         <androidx.cardview.widget.CardView
