@@ -25,148 +25,22 @@
         android:layout_marginTop="60dp"
         android:layout_marginBottom="60dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="false">
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        >
         <GridLayout
             android:id="@+id/grid_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="35dp"
             android:layout_marginLeft="15dp"
+            android:orientation="vertical"
             android:layout_marginRight="15dp"
             android:rowCount="3"
             android:columnCount="1"
             android:alignmentMode="alignMargins">
-<!--
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_history0"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_margin="10dp"
-            app:cardElevation="8dp"
-            app:cardCornerRadius="4dp"
-            app:cardBackgroundColor="@color/colorElevatedCard">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/tv_data_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="dd/mm/yyyy hh:mm"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="20dp"
-                    android:textColor="@color/colorWhite"
-                    android:layout_centerVertical="true"/>
-
-                <TextView
-                    android:id="@+id/tv_mark_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mark: xx"
-                    android:textSize="20dp"
-                    android:layout_marginRight="20dp"
-                    android:textColor="@color/colorWhite"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"/>
-
-            </RelativeLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_history1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_margin="10dp"
-            app:cardElevation="8dp"
-            app:cardCornerRadius="4dp"
-            app:cardBackgroundColor="@color/colorElevatedCard">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/tv_data_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="dd/mm/yyyy hh:mm"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="20dp"
-                    android:textColor="@color/colorWhite"
-                    android:layout_centerVertical="true"/>
-
-                <TextView
-                    android:id="@+id/tv_mark_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mark: xx"
-                    android:textSize="20dp"
-                    android:layout_marginRight="20dp"
-                    android:textColor="@color/colorWhite"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"/>
-
-            </RelativeLayout>
-
-
-        </androidx.cardview.widget.CardView> <androidx.cardview.widget.CardView
-        android:id="@+id/card_history2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_columnWeight="1"
-        android:layout_rowWeight="1"
-        android:layout_margin="10dp"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="4dp"
-        app:cardBackgroundColor="@color/colorElevatedCard">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/tv_data_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="dd/mm/yyyy hh:mm"
-                android:layout_marginLeft="20dp"
-                android:textSize="20dp"
-                android:textColor="@color/colorWhite"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:id="@+id/tv_mark_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mark: xx"
-                android:textSize="20dp"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/colorWhite"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
-
-        </RelativeLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
--->
-
-
         </GridLayout>
+
     </ScrollView>
 
     <com.google.android.gms.ads.AdView
