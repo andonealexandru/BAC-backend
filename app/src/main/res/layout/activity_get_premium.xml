@@ -15,32 +15,31 @@
         android:id="@+id/tv_titlu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Get premium for:"
-        android:textSize="24dp"
+        android:layout_marginTop="40dp"
+        android:text="B.A.C. Premium"
+        android:textSize="34dp"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"/>
 
         <TextView
-            android:id="@+id/tv_no_ads"
+            android:id="@+id/tv_upgrade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="No ads"
+            android:layout_marginTop="100dp"
+            android:text="Upgrade your account and get : "
             android:textSize="24dp"
-            android:textAlignment="center"
             android:layout_below="@id/tv_titlu"
             android:textColor="@color/colorWhite"/>
 
         <TextView
-            android:id="@+id/tv_graf"
+            android:id="@+id/tv_ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Grade graph"
-            android:textSize="24dp"
+            android:layout_marginTop="20dp"
+            android:text="- Ad free experience"
+            android:textSize="20dp"
             android:textAlignment="center"
-            android:layout_below="@id/tv_no_ads"
+            android:layout_below="@id/tv_upgrade"
             android:textColor="@color/colorWhite"/>
 
         <TextView
@@ -48,10 +47,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Show your history"
-            android:textSize="24dp"
+            android:text="- Full history not just the last 3 codes"
+            android:textSize="20dp"
             android:textAlignment="center"
-            android:layout_below="@id/tv_graf"
+            android:layout_below="@id/tv_ad"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_graf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="- A graph that shows how much your grades improve over time"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:layout_below="@+id/tv_all_history"
             android:textColor="@color/colorWhite"/>
     </RelativeLayout>
 
@@ -60,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="80dp">
 
     <com.stripe.android.view.CardInputWidget
         android:id="@+id/cardInputWidget"
@@ -72,7 +82,7 @@
         android:layout_marginRight="30dp"/>
 
     <Button
-        android:text="Pay"
+        android:text="Pay 5 dollars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/payButton"
