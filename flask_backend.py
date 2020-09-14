@@ -1,3 +1,4 @@
+import stripe
 from flask import Flask, request
 from flask_pymongo import PyMongo
 from PIL import Image
@@ -81,9 +82,12 @@ def handle_signin():
     a = email_col.find_one({'email': email})
 
     if a is None:
-        mongo.db.user.insert_one({"email": email, "history": []})
-        print("sal")
-    return "Am virusi in calculator"
+        mongo.db.user.insert_one({"email": email, "accountType": "basic", "history": []})
+        print("basic")
+        return "basic"
+    else:
+        print(a["accountType"])
+        return a["accountType"]
 
 
 @app.route("/retrieve_history", methods=['POST', 'GET'])
@@ -94,6 +98,26 @@ def retrieve_history():
     print(type(existing_user["history"]))
     return str(existing_user["history"])
 
+@app.route("/get_payment_secret", methods=['GET'])
+def get_client_secret():
+    stripe.api_key = 'sk_test_51HNFe4AqwyEMhL7IEvRyQbiM6ppsxllw24cjEptBZWdUbpQav04q0Lc6OTYelnGazW4vYPp3lEYshhcwu2cDj9Fe00uVwgw2Qo'
+
+    intent = stripe.PaymentIntent.create(
+        amount=500,
+        currency='usd',
+    )
+    client_secret = intent.client_secret
+    return client_secret
+
+@app.route("/got_premium", methods=['POST'])
+def handle_premium():
+    email = request.get_json()
+    email = dict(email)["email"]
+    existing_user = mongo.db.user.find_one({"email": email})
+    mongo.db.user.delete_one({"email": email})
+    existing_user["accountType"] = "premium"
+    mongo.db.user.insert_one(existing_user)
+    return "yay?"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
