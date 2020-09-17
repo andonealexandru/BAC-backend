@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -201,14 +202,16 @@ public class HistoryTab extends AppCompatActivity {
                             int n = 0;
                             if(app.getAccountType().equals("basic"))
                                 n = Math.min(3, historyArray.length());
-                            else n = historyArray.length();
+                            else {
+                                n = historyArray.length();
+                            }
 
-                            for(int i = 0; i < n; ++i){
+                            for(int i = historyArray.length() - 1; i >= historyArray.length() - n; --i){
                                 JSONObject history_code = new JSONObject();
                                 history_code = historyArray.getJSONObject(i);
                                 String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark"), name = history_code.getString("name");
                                 addCardView(date, code, mark, name);
-
+                                Log.d("history", i+"");
                             }
                         } catch (IOException | JSONException e) {
                             e.printStackTrace();

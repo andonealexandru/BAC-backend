@@ -36,7 +36,6 @@
             android:layout_marginLeft="15dp"
             android:orientation="vertical"
             android:layout_marginRight="15dp"
-            android:rowCount="3"
             android:columnCount="1"
             android:alignmentMode="alignMargins">
         </GridLayout>
