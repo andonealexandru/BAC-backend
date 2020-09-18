@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,10 +43,20 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -53,6 +64,18 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+class GraphData{
+    float mark;
+    String date;
+
+    public GraphData() {}
+    public GraphData(float m, String d){
+        mark = m;
+        date = d;
+    }
+}
+
 
 public class HistoryTab extends AppCompatActivity {
 
@@ -65,6 +88,8 @@ public class HistoryTab extends AppCompatActivity {
     TextView profileName;
     ImageView profilePicture;
     AdView mAdView;
+    Button btn_grafic;
+    List<GraphData> graphDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +102,7 @@ public class HistoryTab extends AppCompatActivity {
         profilePicture = findViewById(R.id.profilePicture);
         profileName = findViewById(R.id.profileName);
         mAdView = findViewById(R.id.adView);
+        btn_grafic = findViewById(R.id.btn_grafic);
 
         // initialize ads
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -121,16 +147,83 @@ public class HistoryTab extends AppCompatActivity {
         }
 
 
-        profilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
-                startActivity(intent);
-            }
+        profilePicture.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), ProfileSettings.class);
+            startActivity(intent);
         });
 
+        btn_grafic.setOnClickListener(view -> {
+                openPopup_grafic();
+        });
 
         connectServer(account.getEmail());
+
+
+
+    }
+
+    void openPopup_grafic() {
+        for(int i = 0; i < graphDataList.size()-1; ++i)
+            for(int j = i+1; j < graphDataList.size(); ++j)
+                if(cmp(graphDataList.get(i).date, graphDataList.get(j).date))
+                {
+                    GraphData data = graphDataList.get(i);
+                    graphDataList.get(i).date = graphDataList.get(j).date;
+                    graphDataList.get(i).mark = graphDataList.get(j).mark;
+
+                    graphDataList.get(j).date = data.date;
+                    graphDataList.get(j).mark = data.mark;
+                }
+
+        final Dialog grafic = new Dialog(this);
+        grafic.setContentView(R.layout.grafic_popup);
+        grafic.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        grafic.show();
+
+        Button btn_grafic_finish;
+        TextView text_grafic;
+        LineChartView chart;
+
+        btn_grafic_finish = grafic.findViewById(R.id.btn_grafic_finish);
+        text_grafic = grafic.findViewById(R.id.text_view_grafic);
+        chart = grafic.findViewById(R.id.chart);
+
+        List marks = new ArrayList();
+        List dates = new ArrayList();
+
+        for(int i = 0; i < graphDataList.size(); ++i){
+            marks.add(new PointValue(i, graphDataList.get(i).mark));
+            dates.add(i, new AxisValue(i).setLabel(graphDataList.get(i).date));
+        }
+
+        Line line = new Line(marks).setColor(Color.parseColor("#000000"));
+        List lines = new ArrayList();
+        lines.add(line);
+
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+
+        chart.setLineChartData(data);
+
+        Axis axis = new Axis();
+        axis.setValues(dates);
+        data.setAxisXBottom(axis);
+        axis.setTextColor(Color.parseColor("#000000"));
+        axis.setName("Dates");
+
+        Axis yAxis = new Axis();
+        data.setAxisYLeft(yAxis);
+        yAxis.setTextColor(Color.parseColor("#000000"));
+        yAxis.setName("Marks %");
+
+
+
+        btn_grafic_finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                grafic.dismiss();//easy
+            }
+        });
 
 
 
@@ -196,6 +289,7 @@ public class HistoryTab extends AppCompatActivity {
                     public void run() {
                         String res = null;
                         try {
+                            graphDataList = new ArrayList<GraphData>();
                             res = response.body().string();
                             JSONArray historyArray = new JSONArray(res);
                             StaticVariables app = (StaticVariables) getApplicationContext();
@@ -210,6 +304,10 @@ public class HistoryTab extends AppCompatActivity {
                                 JSONObject history_code = new JSONObject();
                                 history_code = historyArray.getJSONObject(i);
                                 String date = history_code.getString("date"), code = history_code.getString("code"), mark = history_code.getString("mark"), name = history_code.getString("name");
+                                String maxMark = history_code.getString("maxMark");
+
+                                graphDataList.add(new GraphData(procentaj(mark, maxMark), date));
+
                                 addCardView(date, code, mark, name);
                                 Log.d("history", i+"");
                             }
@@ -284,6 +382,7 @@ public class HistoryTab extends AppCompatActivity {
 
     void openPopup(final String code)
     {
+
         final Dialog input_popup = new Dialog(this);
         input_popup.setContentView(R.layout.history_popup);
         input_popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -295,6 +394,10 @@ public class HistoryTab extends AppCompatActivity {
         code_btn_second = input_popup.findViewById(R.id.button_popup_second);
         code_tv = input_popup.findViewById(R.id.tv_code);
         code_tv.setText(code);
+
+
+
+
 
         code_btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,6 +414,26 @@ public class HistoryTab extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    float procentaj(String mark, String maxMark)
+    {
+        float i_mark = Float.parseFloat(mark);
+        float i_maxMark = Float.parseFloat(maxMark);
+        return (i_mark*100)/i_maxMark;
+    }
+
+    boolean cmp(String s1, String s2){
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        try {
+            Date date1 = format.parse(s1);
+            Date date2 = format.parse(s2);
+            return date1.after(date2);
+        }catch (ParseException e){
+            e.printStackTrace();
+            return false;
+        }
 
     }
 
