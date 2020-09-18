@@ -21,40 +21,26 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="468dp"
         android:layout_below="@id/profile_bar"
         android:layout_marginTop="60dp"
-        android:fillViewport="true">
-
+        android:layout_marginBottom="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        >
         <GridLayout
             android:id="@+id/grid_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="35dp"
-            android:layout_below="@id/scrollView"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="25dp"
+            android:orientation="vertical"
             android:layout_marginRight="15dp"
             android:columnCount="1"
-            android:alignmentMode="alignMargins"
-            android:orientation="vertical"
-            android:rowCount="3">
+            android:alignmentMode="alignMargins">
         </GridLayout>
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/btn_grafic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/adView"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Vezi graficul"
-        />
 
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
