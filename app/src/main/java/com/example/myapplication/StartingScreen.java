@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +18,8 @@ public class StartingScreen extends Activity {
     private final int SPLASH_DISPLAY_LENGTH = 5000;
     ImageView gifLoading;
     ProgressBar pb;
+    TextView greeting;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
@@ -24,6 +27,7 @@ public class StartingScreen extends Activity {
         setContentView(R.layout.starting_screen);
         pb = findViewById(R.id.progressBar2);
         pb.setVisibility(View.VISIBLE);
+        greeting = findViewById(R.id.greeting);
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
