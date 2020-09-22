@@ -30,7 +30,7 @@
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/default_user_white"/>
+                android:src="@drawable/userv2"/>
 
             <TextView
                 android:id="@+id/profile_name"
@@ -82,10 +82,10 @@
 
                 <ImageView
                     android:id="@+id/icon_card_premium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="fill_parent"
-                    android:src = "@drawable/history_white"
-                    android:layout_marginLeft="25dp"/>
+                    android:src = "@drawable/premium"
+                    android:layout_marginLeft="20dp"/>
 
                 <TextView
                     android:id="@+id/textView_premium"
@@ -122,9 +122,9 @@
 
                 <ImageView
                     android:id="@+id/icon_card0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="fill_parent"
-                    android:src = "@drawable/history_white"
+                    android:src = "@drawable/historyv2"
                     android:layout_marginLeft="25dp"/>
 
                 <TextView
@@ -162,10 +162,10 @@
 
                 <ImageView
                     android:id="@+id/icon_card1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="25dp"
-                    android:src="@drawable/log_out_white"/>
+                    android:src="@drawable/logoutv2"/>
 
                 <TextView
                     android:id="@+id/textView1"
@@ -202,9 +202,9 @@
 
                 <ImageView
                     android:id="@+id/icon_card2"
-                    android:layout_width="64dp"
+                    android:layout_width="70dp"
                     android:layout_height="fill_parent"
-                    android:src="@drawable/exit_white"
+                    android:src="@drawable/exitv2"
                     android:layout_marginLeft="25dp"/>
 
                 <TextView
