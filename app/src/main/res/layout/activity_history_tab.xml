@@ -53,7 +53,7 @@
         android:layout_above="@id/adView"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:text="Vezi graficul"
+        android:text="See diagram"
         />
 
     <com.google.android.gms.ads.AdView

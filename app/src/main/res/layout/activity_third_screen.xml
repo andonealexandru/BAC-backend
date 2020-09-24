@@ -47,7 +47,7 @@
             android:id="@+id/editMarkTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Editeaza nota:"
+            android:text="Edit grade:"
             android:textColor="@color/colorWhite"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"

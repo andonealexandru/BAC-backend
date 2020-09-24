@@ -165,7 +165,7 @@
                     android:layout_width="70dp"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="25dp"
-                    android:src="@drawable/logoutv2"/>
+                    android:src="@drawable/logoutV2"/>
 
                 <TextView
                     android:id="@+id/textView1"
