@@ -7,7 +7,7 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/no_back_logo_with_text_near"
+        android:src="@drawable/premium_logo2"
         android:background="@drawable/background"
         android:scaleType="fitStart"
         android:adjustViewBounds="true"

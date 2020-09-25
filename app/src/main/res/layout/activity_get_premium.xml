@@ -11,21 +11,19 @@
         android:layout_above="@id/layout_pay">
 
 
-        <TextView
-        android:id="@+id/tv_titlu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="B.A.C. Premium"
-        android:textSize="34dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorWhite"/>
+        <ImageView
+            android:id="@+id/tv_titlu"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/premium_logo1" />
 
         <TextView
             android:id="@+id/tv_upgrade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="20dp"
             android:text="Upgrade your account and get : "
             android:textSize="24dp"
             android:layout_below="@id/tv_titlu"
@@ -70,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="80dp">
+        android:layout_marginBottom="60dp">
 
     <com.stripe.android.view.CardInputWidget
         android:id="@+id/cardInputWidget"
