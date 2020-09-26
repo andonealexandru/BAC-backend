@@ -30,7 +30,7 @@
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/userv2"/>
+                android:src="@drawable/butonuser"/>
 
             <TextView
                 android:id="@+id/profile_name"
@@ -84,7 +84,7 @@
                     android:id="@+id/icon_card_premium"
                     android:layout_width="70dp"
                     android:layout_height="fill_parent"
-                    android:src = "@drawable/premium"
+                    android:src = "@drawable/butonpremium"
                     android:layout_marginLeft="20dp"/>
 
                 <TextView
@@ -124,7 +124,7 @@
                     android:id="@+id/icon_card0"
                     android:layout_width="70dp"
                     android:layout_height="fill_parent"
-                    android:src = "@drawable/historyv2"
+                    android:src = "@drawable/butonistorie"
                     android:layout_marginLeft="25dp"/>
 
                 <TextView
@@ -165,7 +165,7 @@
                     android:layout_width="70dp"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="25dp"
-                    android:src="@drawable/logoutV2"/>
+                    android:src="@drawable/butonlogout"/>
 
                 <TextView
                     android:id="@+id/textView1"
@@ -204,7 +204,7 @@
                     android:id="@+id/icon_card2"
                     android:layout_width="70dp"
                     android:layout_height="fill_parent"
-                    android:src="@drawable/exitv2"
+                    android:src="@drawable/butonexit"
                     android:layout_marginLeft="25dp"/>
 
                 <TextView

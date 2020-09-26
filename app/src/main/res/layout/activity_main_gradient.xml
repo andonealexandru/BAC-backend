@@ -53,7 +53,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="35dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/camera_buttonV2"/>
+            android:background="@drawable/butoncamera"/>
 
         <Button
             android:id="@+id/gallery_button"
@@ -63,7 +63,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="35dp"
-            android:background="@drawable/gallery_buttonV2" />
+            android:background="@drawable/butongalerie" />
     </RelativeLayout>
 
 
