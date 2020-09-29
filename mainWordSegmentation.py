@@ -7,7 +7,7 @@ from Model import NeuralNetwork, retrieve_model_with_create_arhitecture, retriev
 from tensorflow import keras
 
 images_for_model = []
-considered_indent = 20
+considered_indent = 60
 
 
 def send_words_to_nn():
@@ -77,6 +77,10 @@ def increase_contrast_and_apply_treshold(path):
     # cv2.imwrite('out/detected_lines.png', 255-detected_lines)
     # cv2.imwrite('out/image.png', image)
     # # cv2.imwrite('out/result.png', result)
+    if len(detected_lines) == 0:
+        # kernel = np.ones((2, 2))
+        # img = cv2.erode(thresh, kernel, iterations=2)
+        return thresh
     image_black_and_white = np.array(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
     nr_min = np.median(image_black_and_white)
     detected_lines = np.asarray(detected_lines)
@@ -124,7 +128,7 @@ def getImages():
         # -sigma: standard deviation of Gaussian function used for filter kernel
         # -theta: approximated width/height ratio of words, filter function is distorted by this factor
         # - minArea: ignore word candidates smaller than specified area
-        res = wordSegmentation(img, kernelSize=151, sigma=23, theta=5, minArea=100)
+        res = wordSegmentation(img, kernelSize=151, sigma=50, theta=7, minArea=2500)
         # minimum_x = np.amin(res[0], axis=0)  151
         # write output to 'out/inputFileName' directory
         if not os.path.exists('out/%s' % f):
@@ -143,7 +147,7 @@ def getImages():
             # cv2.imwrite('umm.png', wordImg)
 
             # cv2.imwrite('out/%s/%d.png'%(f, j), wordImg) # save word
-            cv2.rectangle(img,(x,y),(x+wi,y+h),0,1) # draw bounding box in summary image
+            # cv2.rectangle(img,(x,y),(x+wi,y+h),0,1) # draw bounding box in summary image
 
             img_resized = DataLoader.extract_img(wordImg)
 
@@ -198,8 +202,8 @@ def getImages():
         # output summary image with bounding boxes around words
         cv2.imwrite('out/%s/summary.png' % f, img)
         print(len(images_for_model))
-    return images_for_model, k
+        return images_for_model, k
 
 
 if __name__ == '__main__':
-    getImages()
+    print(send_words_to_nn())

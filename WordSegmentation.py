@@ -71,7 +71,7 @@ def sortare(words):
 	n = len(words)
 	for i in range(n):
 		for j in range(i+1, n):
-			if get_x(words[i]) > get_x(words[j]) and (get_y(words[i])-10 < get_y(words[j]) < get_y(words[i])+10 or get_y(words[i]) + get_h(words[i]) -10 < get_y(words[j])+get_h(words[j]) < get_y(words[i])+ get_h(words[i])+10):
+			if get_x(words[i]) > get_x(words[j]) and (get_y(words[i])-50 < get_y(words[j]) < get_y(words[i])+50 or get_y(words[i]) + get_h(words[i]) - 50 < get_y(words[j])+get_h(words[j]) < get_y(words[i])+get_h(words[i])+50 ):
 				aux = words[i]
 				words[i] = words[j]
 				words[j] = aux
@@ -88,7 +88,7 @@ def sortRois(rois) :
 		h = current_roi[0][3]
 		line = []
 		for next_roi in rois:
-			if next_roi[0][1] >= y-10 and next_roi[0][1] <= y + h+10 :
+			if next_roi[0][1] >= y-20 and next_roi[0][1] <= y + h+50 :
 				if (next_roi[0][0] < x) :
 					line.append(next_roi)
 		line.reverse()

@@ -1,9 +1,10 @@
-# include iostream
+# include iostream 0
 the localhosts
 using namespace std
 int main()
 cout
 Hello world if n aux i
 return
-
+<iostream> 0; #include
+;
 
