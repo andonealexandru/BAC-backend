@@ -93,6 +93,7 @@ scipy==1.4.1
 Send2Trash==1.5.0
 setuptools==49.2.0
 six==1.15.0
+stripe==2.51.0
 tensorboard==2.1.1
 tensorboard-plugin-wit==1.7.0
 tensorflow-cpu==2.1.0
