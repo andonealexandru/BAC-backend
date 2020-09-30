@@ -10,11 +10,11 @@ images_for_model = []
 considered_indent = 60
 
 
-def send_words_to_nn():
-    list_word, num_with = getImages()
-    NN = NeuralNetwork(create=False, batch_norm=True, dropout=0.5)
-    model = retrieve_model_with_create_arhitecture()
-    model2 = keras.Model(model.get_layer('input').input, model.get_layer("time_distributed_last").output)
+def send_words_to_nn(img):
+    list_word, num_with = getImages(img)
+    NN = NeuralNetwork(create=False)
+    model = retrieve_model()
+    model2 = keras.Model(model.get_layer('input').input, model.layers[14].output)
     text = ''
     for i in range(0, num_with):
         print(i)
@@ -30,9 +30,8 @@ def send_words_to_nn():
     return text
 
 
-def increase_contrast_and_apply_treshold(path):
-    img = cv2.imread('data/'+path, 1)
-    # cv2.imwrite('help.jpg', img)
+def increase_contrast_and_apply_treshold(image):
+    img = image
     img = cv2.GaussianBlur(img, (5, 5), 0)
     # -----Converting image to LAB Color model-----------------------------------
     lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
@@ -91,28 +90,28 @@ def increase_contrast_and_apply_treshold(path):
     detected_lines_v = np.asarray(detected_lines_v)
     img = np.minimum(img.astype(int) + detected_lines_v.astype(int),
                      np.ones((detected_lines.shape[0], detected_lines.shape[1])) * nr_min)
-    cv2.imwrite('out/result_si_vertical.png', img)
+    # cv2.imwrite('out/result_si_vertical.png', img)
 
 
     img = img.astype('uint8')
     ret, img = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
-    cv2.imwrite('out/tresh1.png', img)
+    # cv2.imwrite('out/tresh1.png', img)
     kernel = np.ones((3, 1))
     img = cv2.erode(img, kernel, iterations=2)
     kernel2 = np.ones((1, 3))
     img = cv2.erode(img, kernel2, iterations=2)
-    cv2.imwrite('out/%s/eroded2.png' % path, img)
+    # cv2.imwrite('out/%s/eroded2.png' % path, img)
     # img = cv2.morphologyEx(255-img, cv2.MORPH_CLOSE, kernel)
     # cv2.imwrite('out/close1.png', img)
     # cv2.waitKey(0)
     kernel3 = np.ones((2, 2))
     img = cv2.dilate(img, kernel3, iterations=3)
     th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 61, 14)
-    cv2.imwrite('out/treshhold3.png', th3)
+    # cv2.imwrite('out/treshhold3.png', th3)
     return th3
 
 
-def getImages():
+def getImages(img):
     """reads images from data/ and outputs the word-segmentation to out/"""
 
     # read input images from 'in' directory
@@ -121,7 +120,7 @@ def getImages():
         print('Segmenting words of sample %s' % f)
 
         # read image, prepare it by resizing it to fixed height and converting it to grayscale
-        img = increase_contrast_and_apply_treshold(f)
+        img = increase_contrast_and_apply_treshold(img)
         img = prepareImg(img, img.shape[0])
         # execute segmentation with given parameters
         # -kernelSize: size of filter kernel (odd integer)
@@ -173,7 +172,7 @@ def getImages():
                     if last_new_line_word[0] != -1:
                         if x > last_new_line_word[0] + considered_indent:
                             indent += 1
-                            if indent>0:
+                            if indent > 0:
                                 indent_ = np.ones((indent * 10, 32, 3)) * (0, 255, 0)
                                 images_for_model.append(indent_.astype('uint8'))
                                 cv2.imwrite('out/%s/%d.png' % (f, k), indent_.astype('uint8'))
