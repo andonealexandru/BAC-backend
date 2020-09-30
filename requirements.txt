@@ -66,7 +66,7 @@ Pillow==7.1.2
 pip==20.0.2
 prometheus-client==0.8.0
 prompt-toolkit==3.0.5
-protobuf==3.12.3
+protobuf==3.12.4
 pyasn1==0.4.8
 pyasn1-modules==0.2.7
 pycparser==2.20
@@ -97,7 +97,7 @@ setuptools==49.2.0.post20200714
 six==1.15.0
 tensorboard==2.2.2
 tensorboard-plugin-wit==1.6.0
-tensorflow==2.1.0
+tensorflow-cpu==2.1.0
 tensorflow-estimator==2.2.0
 termcolor==1.1.0
 terminado==0.8.3
